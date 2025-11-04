@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj": {}
+    "C:\\Users\\vilde\\OneDrive\\Documents\\Homecare React\\React-Homecare\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj": {
+    "C:\\Users\\vilde\\OneDrive\\Documents\\Homecare React\\React-Homecare\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\vilde\\OneDrive\\Documents\\Homecare React\\React-Homecare\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\B\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\obj\\",
+        "projectPath": "C:\\Users\\vilde\\OneDrive\\Documents\\Homecare React\\React-Homecare\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\vilde\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\vilde\\OneDrive\\Documents\\Homecare React\\React-Homecare\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\B\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\vilde\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -123,7 +123,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
