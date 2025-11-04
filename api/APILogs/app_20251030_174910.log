@@ -1,0 +1,11 @@
+2025-10-30 17:49:10.714 +01:00 [INF] Applying migration '20251030164553_InitialCreate'.
+2025-10-30 17:49:10.826 +01:00 [INF] Applying migration '20251030164604_InitialAuth'.
+2025-10-30 17:49:11.255 +01:00 [INF] User profile is available. Using 'C:\Users\B\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-30 17:49:11.312 +01:00 [INF] Now listening on: http://localhost:5090
+2025-10-30 17:49:11.314 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-30 17:49:11.315 +01:00 [INF] Hosting environment: Development
+2025-10-30 17:49:11.317 +01:00 [INF] Content root path: C:\Users\B\Documents\ITPE3200\React-Homecare\api
+2025-10-30 17:49:11.467 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/ - null null
+2025-10-30 17:49:11.598 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/ - 404 0 null 131.2204ms
+2025-10-30 17:49:11.604 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/, Response status code: 404
+2025-10-30 17:50:24.467 +01:00 [INF] Application is shutting down...

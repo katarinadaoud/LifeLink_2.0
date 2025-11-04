@@ -1,0 +1,59 @@
+2025-10-30 18:09:23.361 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-30 18:09:23.405 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-30 18:09:23.693 +01:00 [INF] User profile is available. Using 'C:\Users\B\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-30 18:09:23.736 +01:00 [INF] Now listening on: http://localhost:5090
+2025-10-30 18:09:23.738 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-30 18:09:23.739 +01:00 [INF] Hosting environment: Development
+2025-10-30 18:09:23.739 +01:00 [INF] Content root path: C:\Users\B\Documents\ITPE3200\React-Homecare\api
+2025-10-30 18:13:24.827 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/tacos.jpg - null null
+2025-10-30 18:13:24.827 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/pizza.jpg - null null
+2025-10-30 18:13:24.827 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/fishandchips.jpg - null null
+2025-10-30 18:13:24.884 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/pizza.jpg - 404 0 null 59.1818ms
+2025-10-30 18:13:24.884 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/fishandchips.jpg - 404 0 null 59.1851ms
+2025-10-30 18:13:24.884 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/tacos.jpg - 404 0 null 59.1819ms
+2025-10-30 18:13:24.886 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/tacos.jpg, Response status code: 404
+2025-10-30 18:13:24.886 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/pizza.jpg, Response status code: 404
+2025-10-30 18:13:24.886 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/fishandchips.jpg, Response status code: 404
+2025-10-30 18:13:25.130 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/pizza.jpg - null null
+2025-10-30 18:13:25.130 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/fishandchips.jpg - null null
+2025-10-30 18:13:25.130 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/tacos.jpg - null null
+2025-10-30 18:13:25.134 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/tacos.jpg - 404 0 null 4.1845ms
+2025-10-30 18:13:25.134 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/fishandchips.jpg - 404 0 null 4.1846ms
+2025-10-30 18:13:25.134 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/pizza.jpg - 404 0 null 4.1844ms
+2025-10-30 18:13:25.134 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/tacos.jpg, Response status code: 404
+2025-10-30 18:13:25.135 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/fishandchips.jpg, Response status code: 404
+2025-10-30 18:13:25.135 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/pizza.jpg, Response status code: 404
+2025-10-30 18:18:44.388 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/homevisit.jpeg - null null
+2025-10-30 18:18:44.388 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/stetscope.jpeg - null null
+2025-10-30 18:18:44.388 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/sickperson.jpeg - null null
+2025-10-30 18:18:44.389 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/sickperson.jpeg - 404 0 null 0.4174ms
+2025-10-30 18:18:44.389 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/homevisit.jpeg - 404 0 null 0.782ms
+2025-10-30 18:18:44.389 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/stetscope.jpeg - 404 0 null 0.6816ms
+2025-10-30 18:18:44.389 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/sickperson.jpeg, Response status code: 404
+2025-10-30 18:18:44.389 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/stetscope.jpeg, Response status code: 404
+2025-10-30 18:18:44.389 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/homevisit.jpeg, Response status code: 404
+2025-10-30 18:18:51.645 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/sickperson.jpeg - null null
+2025-10-30 18:18:51.645 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/stetscope.jpeg - null null
+2025-10-30 18:18:51.645 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/homevisit.jpeg - null null
+2025-10-30 18:18:51.645 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/sickperson.jpeg - 404 0 null 0.7223ms
+2025-10-30 18:18:51.645 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/stetscope.jpeg - 404 0 null 0.7223ms
+2025-10-30 18:18:51.645 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/homevisit.jpeg - 404 0 null 0.7224ms
+2025-10-30 18:18:51.645 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/stetscope.jpeg, Response status code: 404
+2025-10-30 18:18:51.645 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/homevisit.jpeg, Response status code: 404
+2025-10-30 18:18:51.645 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/sickperson.jpeg, Response status code: 404
+2025-10-30 18:19:19.450 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/images/homevisit.jpg - null null
+2025-10-30 18:19:19.451 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/images/homevisit.jpg - 404 0 null 0.853ms
+2025-10-30 18:19:19.451 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/images/homevisit.jpg, Response status code: 404
+2025-10-30 18:20:46.237 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/appointmentapi/appointmentlist - null null
+2025-10-30 18:20:46.239 +01:00 [INF] CORS policy execution successful.
+2025-10-30 18:20:46.241 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/appointmentapi/appointmentlist - 404 0 null 3.526ms
+2025-10-30 18:20:46.241 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/api/appointmentapi/appointmentlist, Response status code: 404
+2025-10-30 18:20:46.242 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/appointmentapi/appointmentlist - null null
+2025-10-30 18:20:46.242 +01:00 [INF] CORS policy execution successful.
+2025-10-30 18:20:46.242 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/appointmentapi/appointmentlist - 404 0 null 0.7198ms
+2025-10-30 18:20:46.242 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/api/appointmentapi/appointmentlist, Response status code: 404
+2025-10-30 18:21:11.530 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/appointmentapi/appointmentlist - null null
+2025-10-30 18:21:11.531 +01:00 [INF] CORS policy execution successful.
+2025-10-30 18:21:11.531 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/appointmentapi/appointmentlist - 404 0 null 1.3787ms
+2025-10-30 18:21:11.531 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5090/api/appointmentapi/appointmentlist, Response status code: 404
+2025-10-30 18:25:22.929 +01:00 [INF] Application is shutting down...
