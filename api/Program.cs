@@ -68,6 +68,7 @@ builder.Services.AddCors(options =>
 // Add your repositories here
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>

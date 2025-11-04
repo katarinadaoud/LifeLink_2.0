@@ -152,3 +152,4 @@ C:\Users\B\Documents\ITPE3200\React-Homecare\api\obj\Debug\net8.0\refint\api.dll
 C:\Users\B\Documents\ITPE3200\React-Homecare\api\obj\Debug\net8.0\api.pdb
 C:\Users\B\Documents\ITPE3200\React-Homecare\api\obj\Debug\net8.0\api.genruntimeconfig.cache
 C:\Users\B\Documents\ITPE3200\React-Homecare\api\obj\Debug\net8.0\ref\api.dll
+C:\Users\B\Documents\ITPE3200\React-Homecare\api\obj\Debug\net8.0\api.sourcelink.json

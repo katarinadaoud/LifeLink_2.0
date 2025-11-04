@@ -60,6 +60,31 @@ public class PatientController : ControllerBase
         return Ok(patientDto);
     }
 
+    // GET: api/patient/user/{userId}
+    [HttpGet("user/{userId}")]
+    public async Task<ActionResult<PatientDto>> GetPatientByUserId(string userId)
+    {
+        var patients = await _patientRepository.GetAll();
+        var patient = patients.FirstOrDefault(p => p.UserId == userId);
+        
+        if (patient == null)
+            return NotFound($"Patient with UserId {userId} not found");
+
+        var patientDto = new PatientDto
+        {
+            PatientId = patient.PatientId,
+            FullName = patient.FullName,
+            Address = patient.Address,
+            DateOfBirth = patient.DateOfBirth,
+            phonenumber = patient.phonenumber,
+            HealthRelated_info = patient.HealthRelated_info,
+            UserId = patient.UserId,
+            User = patient.User
+        };
+
+        return Ok(patientDto);
+    }
+
     // POST: api/patient
     [HttpPost]
     public async Task<ActionResult<PatientDto>> CreatePatient(PatientDto patientDto)
