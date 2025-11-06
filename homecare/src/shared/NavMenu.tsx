@@ -14,17 +14,16 @@ const NavMenu: React.FC = () => {
         <Nav className="me-auto">
           <Nav.Link href="/">Home</Nav.Link>
           
-          {/* Show appointments for all authenticated users */}
-          {user && <Nav.Link href="/appointments">Appointments</Nav.Link>}
-          
           {/* Profile link for all authenticated users */}
           {user && <Nav.Link href="/profile">My Profile</Nav.Link>}
           
-          {/* Employee-specific navigation - Management dropdown removed */}
-          
+          {/* Employee-specific navigation */}
+          {user?.role === 'Employee' && (
+            <Nav.Link href="/appointments">Appointments</Nav.Link>
+          )}
           {/* Patient-specific navigation */}
           {user?.role === 'Patient' && (
-            <Nav.Link href="/my-appointments">My Appointments</Nav.Link>
+            <Nav.Link href="/appointments">My Appointments</Nav.Link>
           )}
         </Nav>
       </Navbar.Collapse>

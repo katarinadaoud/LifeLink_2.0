@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, ButtonGroup } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import AppointmentTable from './AppointmentTable';
 import AppointmentGrid from './AppointmentGrid';
 import AppointmentCalendar from './AppointmentCalendar';
@@ -76,7 +76,7 @@ const AppointmentListPage: React.FC = () => {
   return (
     <div className="container-fluid">
       <div className="text-center mb-3">
-        <h1 className="fw-bold text-primary" style={{ fontSize: '2.5rem' }}>📅 My Appointments</h1>
+        <h1 className="fw-bold text-primary" style={{ fontSize: '2.5rem' }}> My Appointments</h1>
         <p className="mb-2" style={{ fontSize: '1.1rem' }}>View and manage your healthcare appointments</p>
       </div>
       <div className="mb-3">
@@ -97,7 +97,7 @@ const AppointmentListPage: React.FC = () => {
             title="List view with detailed information"
             style={{ fontSize: '1rem', padding: '8px 16px' }}
           >
-            📋 List View
+             List View
           </Button>
           <Button 
             variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
@@ -105,7 +105,7 @@ const AppointmentListPage: React.FC = () => {
             title="Card view with appointment details"
             style={{ fontSize: '1rem', padding: '8px 16px' }}
           >
-            📱 Card View
+             Card View
           </Button>
           <Button 
             variant={viewMode === 'calendar' ? 'primary' : 'outline-primary'}
@@ -113,7 +113,7 @@ const AppointmentListPage: React.FC = () => {
             title="Calendar view by month"
             style={{ fontSize: '1rem', padding: '8px 16px' }}
           >
-            📅 Calendar View
+             Calendar View
           </Button>
         </div>
       </div>
@@ -167,7 +167,7 @@ const AppointmentListPage: React.FC = () => {
             className="btn btn-success"
             style={{ fontSize: '1.1rem', padding: '10px 20px' }}
           >
-            ➕ Add New Appointment
+             Add New Appointment
           </Button>
         </div>
       )}
