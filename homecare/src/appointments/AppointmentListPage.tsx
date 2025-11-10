@@ -5,6 +5,7 @@ import AppointmentGrid from './AppointmentGrid';
 import AppointmentCalendar from './AppointmentCalendar';
 import type { Appointment } from '../types/appointment';
 import * as AppointmentService from './AppointmentService';
+import { fetchPatientByUserId } from './AppointmentService';
 import { useAuth } from '../auth/AuthContext';
 
 
@@ -23,7 +24,24 @@ const AppointmentListPage: React.FC = () => {
     setError(null);   // Clear any previous errors
 
     try {
-      const data = await AppointmentService.fetchAppointments();
+      let data: Appointment[];
+      
+      // If user is a Patient, only fetch their own appointments
+      if (user?.role === 'Patient') {
+        const userId = user.sub || user.nameid;
+        const patientData = await fetchPatientByUserId(userId);
+        
+        if (patientData?.patientId) {
+          data = await AppointmentService.fetchAppointmentsByPatientId(patientData.patientId);
+        } else {
+          data = [];
+          console.error('Patient ID not found for user');
+        }
+      } else {
+        // If user is Employee or other role, fetch all appointments
+        data = await AppointmentService.fetchAppointments();
+      }
+      
       setAppointments(data);
       console.log(data);
     } catch (error: unknown) {
@@ -45,8 +63,12 @@ const AppointmentListPage: React.FC = () => {
     if (savedViewMode && ['table', 'grid', 'calendar'].includes(savedViewMode)) {
       setViewMode(savedViewMode);
     }
-    fetchAppointments();
-  }, []);
+    
+    // Only fetch appointments when user is available
+    if (user) {
+      fetchAppointments();
+    }
+  }, [user]); // Add user as dependency
 
   // Save the view mode to local storage whenever it changes
   useEffect(() => {
@@ -56,7 +78,9 @@ const AppointmentListPage: React.FC = () => {
 
   const filteredAppointments = appointments.filter(appointment =>
     appointment.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    appointment.description.toLowerCase().includes(searchQuery.toLowerCase())
+    appointment.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    appointment.patientName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    appointment.employeeName?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleAppointmentDeleted = async (appointmentId: number) => {
@@ -126,7 +150,7 @@ const AppointmentListPage: React.FC = () => {
           </Form.Label>
           <Form.Control
             type="text"
-            placeholder="Type to search by appointment title or description..."
+            placeholder="Search by title, description, patient name, or healthcare provider..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             style={{ fontSize: '1rem' }}
