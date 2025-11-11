@@ -1,0 +1,181 @@
+2025-11-11 09:09:02.079 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 09:09:02.124 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 09:09:02.434 +01:00 [INF] User profile is available. Using 'C:\Users\nahid\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-11-11 09:09:02.474 +01:00 [INF] Now listening on: http://localhost:5090
+2025-11-11 09:09:02.476 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-11-11 09:09:02.477 +01:00 [INF] Hosting environment: Development
+2025-11-11 09:09:02.486 +01:00 [INF] Content root path: C:\Users\nahid\OneDrive\Dokumenter\GitHub\React-Homecare\api
+2025-11-11 09:09:06.176 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:09:06.176 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:09:06.209 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:09:06.209 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:09:06.212 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 37.7858ms
+2025-11-11 09:09:06.212 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 37.7857ms
+2025-11-11 09:09:06.214 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:09:06.220 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:09:06.277 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:09:06.278 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:09:06.279 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 64.7243ms
+2025-11-11 09:09:06.281 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:09:06.281 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:09:06.286 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:09:06.286 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:09:06.286 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 5.5711ms
+2025-11-11 09:10:43.356 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Appointment - null null
+2025-11-11 09:10:43.357 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:10:43.360 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:43.374 +01:00 [INF] Route matched with {action = "GetAppointments", controller = "Appointment"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAppointments() on controller HomeCareApp.Controllers.AppointmentController (api).
+2025-11-11 09:10:43.460 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Appointment, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.AppointmentDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 09:10:43.513 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 136.6331ms
+2025-11-11 09:10:43.514 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:43.516 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 656 application/json; charset=utf-8 159.7666ms
+2025-11-11 09:10:43.516 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Appointment - null null
+2025-11-11 09:10:43.517 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:10:43.517 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:43.517 +01:00 [INF] Route matched with {action = "GetAppointments", controller = "Appointment"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAppointments() on controller HomeCareApp.Controllers.AppointmentController (api).
+2025-11-11 09:10:43.523 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Appointment, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.AppointmentDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 09:10:43.524 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 6.4752ms
+2025-11-11 09:10:43.524 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:43.524 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 656 application/json; charset=utf-8 8.1011ms
+2025-11-11 09:10:54.940 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Appointment - null null
+2025-11-11 09:10:54.940 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:10:54.941 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:54.941 +01:00 [INF] Route matched with {action = "GetAppointments", controller = "Appointment"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAppointments() on controller HomeCareApp.Controllers.AppointmentController (api).
+2025-11-11 09:10:54.947 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Appointment, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.AppointmentDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 09:10:54.948 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 7.0552ms
+2025-11-11 09:10:54.948 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:54.948 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 656 application/json; charset=utf-8 8.5962ms
+2025-11-11 09:10:54.950 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Appointment - null null
+2025-11-11 09:10:54.950 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:10:54.950 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:54.950 +01:00 [INF] Route matched with {action = "GetAppointments", controller = "Appointment"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAppointments() on controller HomeCareApp.Controllers.AppointmentController (api).
+2025-11-11 09:10:54.954 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Appointment, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.AppointmentDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 09:10:54.955 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 4.2102ms
+2025-11-11 09:10:54.955 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:10:54.955 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 656 application/json; charset=utf-8 5.0977ms
+2025-11-11 09:11:58.453 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - null null
+2025-11-11 09:11:58.454 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:11:58.454 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - null null
+2025-11-11 09:11:58.454 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - 204 null null 1.1175ms
+2025-11-11 09:11:58.454 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:11:58.454 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - 204 null null 0.3065ms
+2025-11-11 09:11:58.456 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - application/json null
+2025-11-11 09:11:58.456 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:11:58.460 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:11:58.460 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:11:58.460 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - 403 0 null 4.4801ms
+2025-11-11 09:11:58.462 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - application/json null
+2025-11-11 09:11:58.462 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:11:58.463 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:11:58.463 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:11:58.463 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - 403 0 null 1.2468ms
+2025-11-11 09:12:10.900 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:12:10.901 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:12:10.901 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.8462ms
+2025-11-11 09:12:10.903 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:12:10.903 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:12:10.904 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:12:10.904 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:12:10.904 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 1.1225ms
+2025-11-11 09:12:19.522 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:12:19.522 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:12:19.522 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:12:19.522 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:12:19.523 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.6622ms
+2025-11-11 09:12:19.523 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.6646ms
+2025-11-11 09:12:19.524 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:12:19.525 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:12:19.526 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:12:19.526 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:12:19.526 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 1.4681ms
+2025-11-11 09:12:19.528 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:12:19.529 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:12:19.530 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:12:19.530 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:12:19.530 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 1.9502ms
+2025-11-11 09:14:50.903 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:14:50.903 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:14:50.904 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.7571ms
+2025-11-11 09:14:50.905 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:14:50.905 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:14:50.906 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:14:50.906 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:14:50.907 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 1.4639ms
+2025-11-11 09:16:44.369 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - null null
+2025-11-11 09:16:44.369 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - null null
+2025-11-11 09:16:44.369 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:16:44.369 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:16:44.369 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - 204 null null 0.5034ms
+2025-11-11 09:16:44.369 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracet - 204 null null 0.3018ms
+2025-11-11 09:16:44.372 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - application/json null
+2025-11-11 09:16:44.373 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:16:44.373 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:16:44.373 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:16:44.374 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - 403 0 null 1.6803ms
+2025-11-11 09:16:44.375 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - application/json null
+2025-11-11 09:16:44.376 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:16:44.376 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:16:44.376 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:16:44.376 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Paracet - 403 0 null 1.0924ms
+2025-11-11 09:20:53.759 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:20:53.759 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:20:53.759 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:20:53.759 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:20:53.759 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.3572ms
+2025-11-11 09:20:53.759 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.3924ms
+2025-11-11 09:20:53.760 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:20:53.760 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:20:53.761 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:20:53.761 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:20:53.761 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 0.5886ms
+2025-11-11 09:20:53.761 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:20:53.761 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:20:53.762 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:20:53.762 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:20:53.762 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 0.5048ms
+2025-11-11 09:20:59.554 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Appointment - null null
+2025-11-11 09:20:59.554 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:20:59.555 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:20:59.555 +01:00 [INF] Route matched with {action = "GetAppointments", controller = "Appointment"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAppointments() on controller HomeCareApp.Controllers.AppointmentController (api).
+2025-11-11 09:20:59.560 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Appointment, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.AppointmentDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 09:20:59.560 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 5.4042ms
+2025-11-11 09:20:59.560 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:20:59.560 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 656 application/json; charset=utf-8 6.2685ms
+2025-11-11 09:20:59.561 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Appointment - null null
+2025-11-11 09:20:59.561 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:20:59.562 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:20:59.562 +01:00 [INF] Route matched with {action = "GetAppointments", controller = "Appointment"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAppointments() on controller HomeCareApp.Controllers.AppointmentController (api).
+2025-11-11 09:20:59.564 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Appointment, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.AppointmentDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 09:20:59.564 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 2.1342ms
+2025-11-11 09:20:59.564 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
+2025-11-11 09:20:59.564 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 656 application/json; charset=utf-8 2.7513ms
+2025-11-11 09:21:00.921 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:21:00.921 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:21:00.922 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 09:21:00.922 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.437ms
+2025-11-11 09:21:00.922 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:21:00.922 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.2394ms
+2025-11-11 09:21:00.923 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:21:00.923 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:21:00.924 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:21:00.924 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:21:00.924 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 1.0431ms
+2025-11-11 09:21:00.926 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 09:21:00.926 +01:00 [INF] CORS policy execution successful.
+2025-11-11 09:21:00.926 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 09:21:00.926 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 09:21:00.927 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 403 0 null 0.9739ms

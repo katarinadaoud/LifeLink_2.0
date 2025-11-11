@@ -136,28 +136,10 @@ const ProfilePage: React.FC = () => {
             setSuccess(null);
             
             let endpoint = '';
-            let requestBody = {};
-            
             if (user?.role === 'Patient') {
                 endpoint = `/api/patient/${userInfo.patientId}`;
-                requestBody = {
-                    PatientId: userInfo.patientId,
-                    FullName: formData.fullName,
-                    Address: formData.address,
-                    DateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : userInfo.dateOfBirth,
-                    phonenumber: formData.phonenumber,
-                    HealthRelated_info: formData.healthRelated_info,
-                    UserId: userInfo.userId
-                };
             } else if (user?.role === 'Employee') {
                 endpoint = `/api/employee/${userInfo.employeeId}`;
-                requestBody = {
-                    EmployeeId: userInfo.employeeId,
-                    FullName: formData.fullName,
-                    Address: formData.address,
-                    Department: formData.department,
-                    UserId: userInfo.userId
-                };
             }
             
             const token = localStorage.getItem('token');
@@ -167,7 +149,15 @@ const ProfilePage: React.FC = () => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestBody)
+                body: JSON.stringify({
+                    ...userInfo,
+                    fullName: formData.fullName,
+                    address: formData.address,
+                    department: formData.department,
+                    phonenumber: formData.phonenumber,
+                    healthRelated_info: formData.healthRelated_info,
+                    dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : userInfo.dateOfBirth
+                })
             });
             
             if (response.ok) {
@@ -175,14 +165,7 @@ const ProfilePage: React.FC = () => {
                 setIsEditing(false);
                 await fetchUserProfile(); // Refresh data
             } else {
-                const errorText = await response.text();
-                console.error('Update failed:', {
-                    status: response.status,
-                    statusText: response.statusText,
-                    body: errorText,
-                    requestBody: requestBody
-                });
-                setError(`Failed to update profile: ${errorText}`);
+                setError('Failed to update profile');
             }
         } catch (err) {
             setError('Error updating profile');
@@ -340,23 +323,21 @@ const ProfilePage: React.FC = () => {
                                         </Row>
 
                                         <Row>
-                                            {user?.role === 'Employee' && (
-                                                <Col md={6}>
-                                                    <Form.Group className="mb-3">
-                                                        <Form.Label><strong>Department:</strong></Form.Label>
-                                                        {isEditing ? (
-                                                            <Form.Control
-                                                                type="text"
-                                                                name="department"
-                                                                value={formData.department}
-                                                                onChange={handleInputChange}
-                                                            />
-                                                        ) : (
-                                                            <p className="mt-1">{userInfo.department}</p>
-                                                        )}
-                                                    </Form.Group>
-                                                </Col>
-                                            )}
+                                            <Col md={6}>
+                                                <Form.Group className="mb-3">
+                                                    <Form.Label><strong>Department:</strong></Form.Label>
+                                                    {isEditing ? (
+                                                        <Form.Control
+                                                            type="text"
+                                                            name="department"
+                                                            value={formData.department}
+                                                            onChange={handleInputChange}
+                                                        />
+                                                    ) : (
+                                                        <p className="mt-1">{userInfo.department}</p>
+                                                    )}
+                                                </Form.Group>
+                                            </Col>
                                             {user?.role === 'Patient' && userInfo.patientId && (
                                                 <Col md={6}>
                                                     <div className="mb-3">

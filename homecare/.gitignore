@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# ===== BACKEND (.NET) =====
+api/bin/
+api/obj/
+*.cache
+*.pdb
+*.dll
+
+# ===== FRONTEND (React) =====
+homecare/node_modules/
+homecare/build/
+homecare/dist/
+
+# ===== MISC =====
+*.log
+.env

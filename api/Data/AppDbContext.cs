@@ -20,5 +20,5 @@ public class AppDbContext : DbContext
 	//public DbSet<EmergencyContact> EmergencyContacts { get; set; }
 	//public DbSet<EmergencyCall> EmergencyCalls { get; set; }
 	//public DbSet<Notification> Notifications { get; set; }
-	//public DbSet<Medication> Medications { get; set; }
+	public DbSet<Medication> Medications { get; set; }
 }

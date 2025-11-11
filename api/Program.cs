@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.OpenApi.Models;
 using HomeCareApp.Repositories.Interfaces;
 using HomeCareApp.Repositories.Implementations;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,7 +59,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5174") // React dev servers
+        builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://localhost:5174") // React dev servers
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
@@ -69,6 +70,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IMedicationRepository, MedicationRepository>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
@@ -93,7 +95,7 @@ builder.Services.AddAuthentication(options =>
             builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT key not found in configuration.")
         )),
         // Preserve JWT claims without mapping
-        NameClaimType = "sub",
+        NameClaimType = ClaimTypes.NameIdentifier,
         RoleClaimType = "role"
     };
 });
