@@ -3,6 +3,7 @@ import { Button, Form } from 'react-bootstrap';
 import AppointmentTable from './AppointmentTable';
 import AppointmentGrid from './AppointmentGrid';
 import AppointmentCalendar from './AppointmentCalendar';
+import './AppointmentCalendar.css';
 import type { Appointment } from '../types/appointment';
 import * as AppointmentService from './AppointmentService';
 import { fetchPatientByUserId } from './AppointmentService';

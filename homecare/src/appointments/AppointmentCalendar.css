@@ -1,0 +1,473 @@
+/* === CALENDAR LAYOUT – PROFESSIONAL HEALTHCARE UI (HN teal theme) === */
+:root {
+  --bg-page: #f3f6fb;
+  --bg-card: #ffffff;
+  --bg-card-muted: #f8fafc;
+
+  --primary: lab(47.92% -19.61 -15.42);
+  --accent: #177e8b;
+  --primary-soft: #e6f7f6;
+
+  --text-main: #0f172a;
+  --text-muted: #6b7280;
+  --border-soft: #e5e7eb;
+
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+
+  --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.10);
+
+  --transition-fast: 0.18s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* === PAGE HERO (My Appointments) === */
+.container-fluid > .text-center.mb-3 {
+  max-width: 1100px;
+  margin: 1.2rem auto 0.4rem auto;
+  text-align: left;
+}
+
+/* Heading */
+.container-fluid > .text-center.mb-3 h1 {
+  font-size: 1.85rem !important;
+  font-weight: 700;
+  color: var(--text-main) !important;
+  margin: 0;
+}
+
+/* Tagline hvis den ligger SOM EGET ELEMENT etter h1 */
+.container-fluid > .text-center.mb-3 h1 + span,
+.container-fluid > .text-center.mb-3 h1 + small {
+  display: block;
+  font-size: 0.95rem !important;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Tagline hvis den ligger INNE i h1 (small/span) */
+.container-fluid > .text-center.mb-3 h1 small,
+.container-fluid > .text-center.mb-3 h1 span {
+  display: block;
+  font-size: 0.95rem !important;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Hvis tagline er skrevet som egen p */
+.container-fluid > .text-center.mb-3 p {
+  font-size: 0.95rem !important;
+  color: var(--text-muted);
+  margin: 0.2rem 0 0 0;
+}
+
+/* === TOP TOOLBAR (Refresh + view) === */
+.container-fluid > .mb-3 {
+  max-width: 1100px;
+  margin: 0.3rem auto 0.8rem auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.container-fluid > .mb-3 > .btn {
+  background: #fff !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--border-soft) !important;
+  padding: 7px 18px !important;      /* samme som view-knappene */
+  font-size: 0.95rem !important;     /* samme som view-knappene */
+  border-radius: 999px !important;
+  box-shadow: var(--shadow-soft);
+}
+
+.container-fluid > .mb-3 > .btn:hover {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* View toggle */
+.container-fluid > .mb-3 .btn-group .btn {
+  padding: 7px 18px !important;       /* ↑ større klikkflate */
+  font-size: 0.95rem !important;      /* ↑ litt større tekst */
+  border-radius: 999px !important;
+  box-shadow: none;
+}
+.container-fluid > .mb-3 .btn-group .btn:not(.btn-primary) {
+  background: #fff !important;
+  color: var(--primary) !important;
+  border-color: var(--border-soft) !important;
+}
+.container-fluid > .mb-3 .btn-group .btn.btn-primary {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* Hover-states for view toggle buttons */
+.container-fluid > .mb-3 .btn-group .btn:hover:not(.btn-primary) {
+  background: var(--primary-soft) !important;
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+/* Hover på aktiv (valgt) visning */
+.container-fluid > .mb-3 .btn-group .btn.btn-primary:hover {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: #fff !important;
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* === CALENDAR WRAPPER === */
+.calendar-container {
+  max-width: 1100px;
+  margin: 0 auto 1.2rem auto;
+  padding: 0 0.5rem;
+  background: transparent;
+}
+
+/* === MONTH HEADER === */
+.calendar-header {
+  max-width: 1100px;
+  margin: 0 auto 0.3rem auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 0.48rem 0.9rem;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border-soft);
+}
+.calendar-title {
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--primary);
+  letter-spacing: 0.01em;
+}
+.calendar-btn {
+  background: #fff !important;
+  border: 1px solid var(--border-soft) !important;
+  color: var(--primary) !important;
+  font-weight: 500;
+  border-radius: 999px;
+  padding: 7px 18px;          /* større enn før */
+  font-size: 0.95rem;         /* matcher view-knappene */
+  line-height: 1;
+  transition: var(--transition-fast);
+}
+
+.calendar-btn:hover {
+  background: var(--primary) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 8px rgba(13, 148, 136, 0.16);
+  transform: translateY(-1px);
+}
+.calendar-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* === WEEKDAY ROW === */
+.calendar-grid:first-of-type {
+  max-width: 1100px;
+  margin: 0.05rem auto 0 auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+.calendar-grid:first-of-type .day-header {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.16rem 0 0.12rem 0;
+  background: transparent;
+  border: none !important;
+}
+
+/* === MAIN CALENDAR GRID === */
+.calendar-grid:last-of-type {
+  max-width: 1100px;
+  margin: 0.2rem auto 0 auto;
+  padding: 0.6rem;
+  background: var(--bg-card-muted);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(229, 231, 235, 0.9);
+}
+.calendar-week {
+  margin: 0 0 5px 0;
+  gap: 6px;
+}
+.calendar-week:last-child {
+  margin-bottom: 0;
+}
+.calendar-week .col {
+  padding: 0 !important;
+}
+
+/* === DAY CARD === */
+.calendar-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(229, 231, 235, 0.98);
+  box-shadow: 0 1px 1px rgba(15, 23, 42, 0.02);
+  transition: var(--transition-fast);
+  min-height: 64px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.calendar-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(13, 148, 136, 0.22);
+}
+
+/* Highlight days with appointments */
+.calendar-card:has(.appointment-item) {
+  border-color: rgba(23, 126, 139, 0.32);
+  background: #f7fcfc;
+}
+
+/* === DAY CARD HEADER === */
+.calendar-card-header {
+  padding: 4px 7px 2px 7px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: transparent !important;
+  border-bottom: none !important;
+}
+.calendar-card-date {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.calendar-badge {
+  font-size: 0.6rem;
+  background-color: #eef2f7 !important;
+  color: var(--primary) !important;
+  padding: 1px 6px;
+  border-radius: 999px !important;
+  font-weight: 500;
+  border: none !important;
+}
+
+/* === APPOINTMENTS LIST === */
+.calendar-body {
+  flex: 1;
+  padding: 2px 7px 4px 7px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+/* Appointment item */
+.appointment-item {
+  padding: 4px 7px !important;
+  font-size: 0.72rem;
+  background: #f0fbfb;
+  border-radius: var(--radius-sm);
+  color: #111827;
+  font-weight: 600;
+  border: 1px solid rgba(23, 126, 139, 0.18);
+  border-left: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.appointment-item:hover {
+  background: var(--primary-soft);
+  color: var(--text-main);
+  border-color: rgba(23, 126, 139, 0.45);
+  box-shadow: 0 2px 6px rgba(23, 126, 139, 0.16);
+  transform: translateY(-1px);
+}
+.appointment-item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.appointment-time {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.appointment-more {
+  margin-top: 1px;
+  font-size: 0.64rem;
+  cursor: pointer;
+  color: var(--primary);
+  align-self: flex-start;
+}
+.appointment-more:hover {
+  text-decoration: underline;
+}
+
+/* === TODAY & OUTSIDE DAYS === */
+.calendar-today {
+  border-color: rgba(13, 148, 136, 0.95);
+  box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.18);
+  background: #e6f7f6;
+}
+.calendar-today .calendar-card-date {
+  color: #111827;
+  font-weight: 700;
+}
+
+.calendar-outside-month {
+  background: #f9fafb;
+  color: #9ca3af;
+  opacity: 0.32;
+}
+.calendar-outside-month .appointment-item,
+.calendar-outside-month .appointment-more {
+  display: none;
+}
+
+/* === LEGEND === */
+.calendar-legend {
+  max-width: 1100px;
+  margin: 0.5rem auto 0 auto;
+  padding: 0.34rem 0.8rem;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.calendar-legend-text {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* === MODAL & CARD OVERRIDES === */
+.modal-title-custom {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+.modal-body-custom {
+  font-size: 0.93rem;
+  color: var(--text-main);
+}
+.modal-subject {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+.modal-info {
+  font-size: 0.88rem;
+  color: #374151;
+}
+.modal-btn {
+  font-size: 0.84rem;
+  padding: 0.38rem 0.95rem;
+  border-radius: 999px;
+}
+
+/* Bootstrap cards inside calendar */
+.calendar-card.card {
+  background: var(--bg-card) !important;
+  border-radius: var(--radius-md) !important;
+  border: 1px solid rgba(229, 231, 235, 0.98) !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.02) !important;
+}
+.calendar-card.card .card-header {
+  background: transparent !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+}
+.calendar-card.card .card-body {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* === RESPONSIVE TUNING === */
+@media (max-width: 992px) {
+  .calendar-header,
+  .calendar-grid:first-of-type,
+  .calendar-grid:last-of-type,
+  .calendar-legend,
+  .container-fluid > .mb-3,
+  .container-fluid > .text-center.mb-3 {
+    max-width: 100%;
+  }
+
+  .calendar-grid:last-of-type {
+    padding: 0.5rem;
+  }
+
+  .calendar-card {
+    min-height: 60px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-fluid > .text-center.mb-3 h1 {
+    font-size: 1.5rem !important;
+  }
+  .container-fluid > .text-center.mb-3 p {
+    font-size: 0.85rem !important;
+  }
+
+  .calendar-header {
+    padding: 0.4rem 0.7rem;
+  }
+  .calendar-title {
+    font-size: 0.98rem;
+  }
+  .calendar-btn {
+    padding: 3px 9px;
+    font-size: 0.72rem;
+  }
+
+  .calendar-card-header {
+    padding: 3px 5px 1px 5px !important;
+  }
+  .calendar-card-date {
+    font-size: 0.78rem;
+  }
+  .calendar-badge {
+    font-size: 0.55rem;
+  }
+
+  .appointment-item {
+    font-size: 0.68rem;
+    padding: 3px 5px !important;
+  }
+  .appointment-time {
+    font-size: 0.6rem;
+  }
+}
