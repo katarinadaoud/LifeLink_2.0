@@ -28,6 +28,14 @@ export const fetchAppointments = async () => {
   const response = await fetch(`${API_URL}/api/Appointment`);
   return handleResponse(response);
 };
+
+// Get appointments by patient ID
+export const fetchAppointmentsByPatientId = async (patientId: number) => {
+  const response = await fetch(`${API_URL}/api/Appointment/patient/${patientId}`, {
+    headers: getAuthHeaders(),
+  });
+  return handleResponse(response);
+};
 // Get appointment by id
 export const fetchAppointmentById = async (appointmentId: string) => {
   const response = await fetch(`${API_URL}/api/Appointment/${appointmentId}`);
@@ -56,6 +64,30 @@ export const deleteAppointment = async (appointmentId: number) => {
   const response = await fetch(`${API_URL}/api/Appointment/${appointmentId}`, {
     method: 'DELETE',
     headers: getAuthHeaders(), // Use the new helper here
+  });
+  return handleResponse(response);
+};
+
+// Get all employees
+export const fetchEmployees = async () => {
+  const response = await fetch(`${API_URL}/api/Employee`, {
+    headers: getAuthHeaders(),
+  });
+  return handleResponse(response);
+};
+
+// Get all patients
+export const fetchPatients = async () => {
+  const response = await fetch(`${API_URL}/api/Patient`, {
+    headers: getAuthHeaders(),
+  });
+  return handleResponse(response);
+};
+
+// Get patient by userId (for current user)
+export const fetchPatientByUserId = async (userId: string) => {
+  const response = await fetch(`${API_URL}/api/Patient/user/${userId}`, {
+    headers: getAuthHeaders(),
   });
   return handleResponse(response);
 };

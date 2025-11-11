@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 import { Card, Button, Badge, Row, Col, Modal } from 'react-bootstrap';
 import type { Appointment } from '../types/appointment';
 
+import './AppointmentCalendar.css';
 interface AppointmentCalendarProps {
-  appointments: Appointment[];
-  onAppointmentDeleted?: (appointmentId: number) => void;
-  userRole?: string;
+  appointments: Appointment[]; // Array of all appointments to be displayed
+  onAppointmentDeleted?: (appointmentId: number) => void; // Optional callback when an appointment is deleted
+  userRole?: string; // Optional string that defines user type ("Patient", "Employee", etc.)
 }
 
-const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments, onAppointmentDeleted, userRole }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
-  const [showModal, setShowModal] = useState(false);
+const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ 
+  appointments, 
+  onAppointmentDeleted, 
+  userRole 
+}) => {
+  const [currentDate, setCurrentDate] = useState(new Date()); // Holds whichever month is currently visible in the calendar view.
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null); // Tracks which appointment the user has clicked — used to populate the details modal.
+  const [showModal, setShowModal] = useState(false); // Boolean flag controlling whether the appointment details modal is visible.
 
   // Helper function to get the first day of the month
   const getFirstDayOfMonth = (date: Date) => {
@@ -82,11 +87,11 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
   };
 
   return (
-    <div>
+    <div className="calendar-container">
       {/* Calendar Header - More Compact */}
-      <div className="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded" style={{ maxWidth: '1200px', margin: '0 auto 1rem auto' }}>
-        <div>
-          <h3 className="mb-0 fw-bold text-primary" style={{ fontSize: '1.5rem' }}>
+      <div className="calendar-header">
+          <div>
+          <h3 className="calendar-title mb-0 fw-bold">
             {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
           </h3>
         </div>
@@ -94,21 +99,21 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
           <Button 
             variant="outline-primary" 
             onClick={goToPreviousMonth} 
-            style={{ fontSize: '1rem', padding: '6px 12px' }}
+            className="calendar-btn"
           >
             ← Previous
-          </Button>
+          </Button> 
           <Button 
             variant="primary" 
             onClick={goToToday}
-            style={{ fontSize: '1rem', padding: '6px 12px' }}
+            className="calendar-btn"
           >
             Today
           </Button>
           <Button 
             variant="outline-primary" 
             onClick={goToNextMonth}
-            style={{ fontSize: '1rem', padding: '6px 12px' }}
+            className="calendar-btn"
           >
             Next →
           </Button>
@@ -116,10 +121,10 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
       </div>
 
       {/* Day Headers - More Compact */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="calendar-grid">
         <Row className="mb-2">
           {dayNames.map(day => (
-            <Col key={day} className="text-center fw-bold py-2 border-bottom" style={{ fontSize: '1rem' }}>
+            <Col key={day} className="day-header text-center fw-bold py-2 border-bottom">
               {day}
             </Col>
           ))}
@@ -127,63 +132,66 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
       </div>
 
       {/* Calendar Grid - More Compact Layout */}
-      <div className="calendar-grid" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="calendar-grid">
         {Array.from({ length: Math.ceil(calendarDays.length / 7) }).map((_, weekIndex) => (
-          <Row key={weekIndex} className="mb-2" style={{ minHeight: '120px' }}>
+          <Row 
+            key={weekIndex} 
+            className="calendar-week mb-2">
             {calendarDays.slice(weekIndex * 7, (weekIndex + 1) * 7).map((date, dayIndex) => {
               const dayAppointments = getAppointmentsForDate(date);
               return (
                 <Col key={dayIndex} className="p-1">
-                  <Card 
-                    className={`h-100 ${!isCurrentMonth(date) ? 'text-muted bg-light' : ''} ${isToday(date) ? 'border-primary border-2 bg-primary bg-opacity-10' : ''}`}
-                    style={{ minHeight: '100px' }}
-                  >
-                    <Card.Header className="py-1 px-2 d-flex justify-content-between align-items-center" style={{ minHeight: '32px' }}>
-                      <strong className={`${isToday(date) ? 'text-primary' : ''}`} style={{ fontSize: '1rem' }}>
+                  <Card
+                    className={
+                      'calendar-card h-100 ' +
+                      (!isCurrentMonth(date) ? 'calendar-outside-month ' : '') +
+                      (isToday(date) ? 'calendar-today ' : '')
+  }
+>
+
+                    <Card.Header className="calendar-card-header py-1 px-2 d-flex justify-content-between align-items-center">
+                      <strong 
+                        className="calendar-card-date"
+  
+                    >
                         {date.getDate()}
                       </strong>
                       {dayAppointments.length > 0 && (
-                        <Badge bg="primary" pill style={{ fontSize: '0.8rem' }}>
+                        <Badge 
+                          bg="primary" 
+                          pill 
+                          className="calendar-badge">
                           {dayAppointments.length}
                         </Badge>
                       )}
                     </Card.Header>
-                    <Card.Body className="p-1" style={{ overflow: 'hidden' }}>
+                    <Card.Body className="calendar-body p-1">
                       {dayAppointments.slice(0, 2).map(appointment => (
                         <div key={appointment.appointmentId} className="mb-1">
                           <div 
-                            className="p-1 rounded bg-info text-white text-center"
-                            style={{ 
-                              fontSize: '0.8rem', 
-                              cursor: 'pointer',
-                              transition: 'background-color 0.2s'
-                            }}
+                            className="appointment-item p-1"
                             onClick={() => {
                               setSelectedAppointment(appointment);
                               setShowModal(true);
                             }}
-                            onMouseEnter={(e) => (e.target as HTMLElement).style.backgroundColor = '#0b5ed7'}
-                            onMouseLeave={(e) => (e.target as HTMLElement).style.backgroundColor = '#0dcaf0'}
                             title="Click to view details"
                           >
                             <div className="fw-bold text-truncate">
                               {appointment.subject}
                             </div>
-                            <div style={{ fontSize: '0.7rem' }}>
-                              {new Date(appointment.date).toLocaleTimeString([], { 
-                                hour: '2-digit', 
-                                minute: '2-digit' 
-                              })}
+                            <div className="appointment-time">
+                            {new Date(appointment.date).toLocaleTimeString([], { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
                             </div>
                           </div>
                         </div>
                       ))}
                       {dayAppointments.length > 2 && (
                         <div 
-                          className="text-center text-primary fw-bold" 
-                          style={{ fontSize: '0.7rem', cursor: 'pointer' }}
+                          className="appointment-more text-center fw-bold"
                           onClick={() => {
-                            // Create a "summary" appointment to show all appointments for this day
                             const summaryAppointment: Appointment = {
                               appointmentId: -1,
                               subject: `${dayAppointments.length} appointments today`,
@@ -210,20 +218,23 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
       </div>
 
       {/* Legend and Stats - More Compact */}
-      <div className="mt-3 p-2 bg-light rounded" style={{ maxWidth: '1200px', margin: '1rem auto 0 auto' }}>
+      <div className="calendar-legend">
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           <div>
             <Badge bg="primary" className="me-2">Today</Badge>
-            <span style={{ fontSize: '0.9rem' }}>
+            <span className="calendar-legend-text">
               <strong>Tip:</strong> Click appointments for details
             </span>
           </div>
           <div>
-            <span style={{ fontSize: '0.9rem' }}>
-              <strong>This month: {appointments.filter(apt => {
+            <span className="calendar-legend-text">
+              <strong>
+                This month: {appointments.filter(apt => {
                 const aptDate = new Date(apt.date);
-                return aptDate.getMonth() === currentDate.getMonth() && 
-                       aptDate.getFullYear() === currentDate.getFullYear();
+                return (
+                  aptDate.getMonth() === currentDate.getMonth() && 
+                  aptDate.getFullYear() === currentDate.getFullYear()
+                  );
               }).length} appointments</strong>
             </span>
           </div>
@@ -233,23 +244,23 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
       {/* Appointment Details Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
         <Modal.Header closeButton>
-          <Modal.Title style={{ fontSize: '1.4rem', fontWeight: 'bold' }}>
+          <Modal.Title className="modal-title-custom">
             📅 Appointment Details
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{ fontSize: '1.1rem' }}>
+        <Modal.Body className="modal-body-custom">
           {selectedAppointment && (
             <div>
               <div className="mb-3">
                 <strong>Subject:</strong>
-                <p className="mt-1" style={{ fontSize: '1.2rem', color: '#0d6efd' }}>
+                 <p className="modal-subject mt-1">
                   {selectedAppointment.subject}
                 </p>
               </div>
               
               <div className="mb-3">
                 <strong>Date & Time:</strong>
-                <p className="mt-1" style={{ fontSize: '1.1rem' }}>
+                <p className="modal-info mt-1">
                   {new Date(selectedAppointment.date).toLocaleDateString('en-US', {
                     weekday: 'long',
                     year: 'numeric',
@@ -270,7 +281,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
               {userRole !== 'Patient' && (
                 <div className="mb-3">
                   <strong>Patient:</strong>
-                  <p className="mt-1" style={{ fontSize: '1.1rem', color: '#0d6efd' }}>
+                   <p className="modal-info mt-1">
                     {selectedAppointment.patientName || `Patient ID: ${selectedAppointment.patientId}`}
                   </p>
                 </div>
@@ -279,7 +290,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
               {selectedAppointment.employeeName && (
                 <div className="mb-3">
                   <strong>Healthcare Provider:</strong>
-                  <p className="mt-1" style={{ fontSize: '1.1rem', color: '#0d6efd' }}>
+                   <p className="modal-info mt-1">
                     {selectedAppointment.employeeName}
                   </p>
                 </div>
@@ -294,7 +305,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
                 variant="primary" 
                 size="lg"
                 href={`/appointmentupdate/${selectedAppointment.appointmentId}`}
-                style={{ fontSize: '1.1rem' }}
+                className="modal-btn"
               >
                 ✏️ Edit Appointment
               </Button>
@@ -305,7 +316,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
                   onAppointmentDeleted(selectedAppointment.appointmentId!);
                   setShowModal(false);
                 }}
-                style={{ fontSize: '1.1rem' }}
+                className="modal-btn"
               >
                 🗑️ Delete Appointment
               </Button>
@@ -315,7 +326,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({ appointments,
             variant="secondary" 
             size="lg" 
             onClick={() => setShowModal(false)}
-            style={{ fontSize: '1.1rem' }}
+            className="modal-btn"
           >
             Close
           </Button>

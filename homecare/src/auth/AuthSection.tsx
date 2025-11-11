@@ -1,10 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { Nav, Dropdown } from 'react-bootstrap';
 
 const AuthSection: React.FC = () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/'); // Redirect to home page
+    };
 
     return (
         <Nav>
@@ -16,7 +22,7 @@ const AuthSection: React.FC = () => {
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} to="/profile">My Profile</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
+                        <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             ) : (

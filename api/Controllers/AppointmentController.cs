@@ -43,6 +43,29 @@ public class AppointmentController : ControllerBase
         });
         return Ok(appointmentDtos);
     }
+
+    // GET: api/appointment/patient/{patientId}
+    [HttpGet("patient/{patientId}")]
+    [Authorize]
+    public async Task<IActionResult> GetAppointmentsByPatientId(int patientId)
+    {
+        var appointments = await _appointmentRepository.GetAll();
+        var patientAppointments = appointments.Where(a => a.PatientId == patientId);
+        
+        var appointmentDtos = patientAppointments.Select(appointment => new AppointmentDto
+        {
+            AppointmentId = appointment.AppointmentId,
+            Subject = appointment.Subject,
+            Description = appointment.Description,
+            Date = appointment.Date,
+            PatientId = appointment.PatientId ?? 0,
+            EmployeeId = appointment.EmployeeId ?? 0,
+            PatientName = appointment.Patient?.FullName ?? "Unknown Patient",
+            EmployeeName = appointment.Employee?.FullName ?? "Unknown Employee"
+        });
+        
+        return Ok(appointmentDtos);
+    }
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AppointmentDto appointmentDto)
@@ -78,7 +101,7 @@ public class AppointmentController : ControllerBase
             _logger.LogError("[AppointmentController] Appointment not found for the AppointmentId {AppointmentId:0000}", id);
             return NotFound("Appointment not found for the AppointmentId");
         }
-        
+
         var appointmentDto = new AppointmentDto
         {
             AppointmentId = appointment.AppointmentId,
@@ -90,7 +113,7 @@ public class AppointmentController : ControllerBase
             PatientName = appointment.Patient?.FullName ?? "Unknown Patient",
             EmployeeName = appointment.Employee?.FullName ?? "Unknown Employee"
         };
-        
+
         return Ok(appointmentDto);
     }
     [Authorize]
@@ -137,4 +160,5 @@ public class AppointmentController : ControllerBase
     }
 }
 
+   
    
