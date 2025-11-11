@@ -14,7 +14,7 @@ import { AuthProvider } from './auth/AuthContext'
 import MedicationListPage from "./medications/MedicationListPage";
 import MedicationCreatePage from './medications/MedicationCreate'
 import MedicationDeletePage from './medications/MedicationDelete'
-import MedicationUpdatePage from './medications/MedicationListPage'
+import MedicationUpdatePage from './medications/MedicationUpdate'
 
 import './App.css'
 

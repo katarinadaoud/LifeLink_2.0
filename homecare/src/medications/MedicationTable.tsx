@@ -24,7 +24,6 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
           <th>Name</th>
           <th>Indication</th>
           <th>Dosage</th>
-          <th>Frequency</th>
           <th>Start Date</th>
           <th>End Date</th>
           {userRole === "Employee" && <th>Actions</th>}
@@ -33,17 +32,17 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
       <tbody>
         {rows.length === 0 ? (
           <tr>
-            <td colSpan={userRole === "Employee" ? 8 : 7} className="text-center text-muted">
+            <td colSpan={userRole === "Employee" ? 7 : 6} className="text-center text-muted">
               No medications found.
             </td>
           </tr>
         ) : (
           rows.map((m) => (
-            <tr key={m.medicineName}>
+            <tr key={m.medicationName}>
               <td>{m.patientName ?? m.patientId ?? "—"}</td>
-              <td>{m.medicineName}</td>
+              <td>{m.medicationName}</td>
+              <td>{m.indication ?? "—"}</td>
               <td>{m.dosage ?? "—"}</td>
-              <td>{m.frequency ?? "—"}</td>
               <td>{m.startDate ? m.startDate.slice(0, 10) : "—"}</td>
               <td>{m.endDate ? m.endDate.slice(0, 10) : "—"}</td>
 
@@ -52,14 +51,14 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                   <Button
                     size="sm"
                     variant="primary"
-                    onClick={() => onEdit?.(m.medicineName)}
+                    onClick={() => onEdit?.(m.medicationName)}
                   >
                     Update
                   </Button>
                   <Button
                     size="sm"
                     variant="primary"
-                    onClick={() => onDelete?.(m.medicineName)}
+                    onClick={() => onDelete?.(m.medicationName)}
                   >
                     Delete
                   </Button>

@@ -1,0 +1,20 @@
+2025-11-11 14:00:15.323 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 14:00:15.366 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 14:00:15.647 +01:00 [INF] User profile is available. Using 'C:\Users\B\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-11-11 14:00:15.684 +01:00 [INF] Now listening on: http://localhost:5090
+2025-11-11 14:00:15.686 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-11-11 14:00:15.686 +01:00 [INF] Hosting environment: Development
+2025-11-11 14:00:15.688 +01:00 [INF] Content root path: C:\Users\B\Documents\ITPE3200\React-Homecare\api
+2025-11-11 14:00:22.109 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/Auth/login - null null
+2025-11-11 14:00:22.130 +01:00 [INF] CORS policy execution failed.
+2025-11-11 14:00:22.130 +01:00 [INF] Request origin http://localhost:5174 does not have permission to access the resource.
+2025-11-11 14:00:22.132 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/Auth/login - 204 null null 24.1876ms
+2025-11-11 14:00:25.552 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/Auth/login - null null
+2025-11-11 14:00:25.556 +01:00 [INF] CORS policy execution failed.
+2025-11-11 14:00:25.556 +01:00 [INF] Request origin http://localhost:5174 does not have permission to access the resource.
+2025-11-11 14:00:25.557 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/Auth/login - 204 null null 4.3448ms
+2025-11-11 14:00:32.790 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/Auth/register - null null
+2025-11-11 14:00:32.790 +01:00 [INF] CORS policy execution failed.
+2025-11-11 14:00:32.790 +01:00 [INF] Request origin http://localhost:5174 does not have permission to access the resource.
+2025-11-11 14:00:32.791 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/Auth/register - 204 null null 1.0162ms
+2025-11-11 14:00:50.418 +01:00 [INF] Application is shutting down...

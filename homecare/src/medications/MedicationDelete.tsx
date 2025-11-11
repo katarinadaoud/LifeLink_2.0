@@ -7,7 +7,7 @@ import { getMedication, deleteMedication } from "./MedicationService";
 
 export default function MedicationDeletePage() {
   const { name } = useParams(); // route: /medications/:name/delete
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [med, setMed] = useState<Medication | null>(null);
@@ -23,13 +23,13 @@ export default function MedicationDeletePage() {
   // --- Load medication ---
   useEffect(() => {
     const load = async () => {
-      if (!token || !name) {
-        setErr("Missing token or medication name.");
+      if (!name) {
+        setErr("Missing medication name.");
         setLoading(false);
         return;
       }
       try {
-        const data = await getMedication(name, token);
+        const data = await getMedication(name);
         setMed(data);
       } catch (e: any) {
         setErr(e.message ?? "Failed to load medication.");
@@ -38,16 +38,16 @@ export default function MedicationDeletePage() {
       }
     };
     load();
-  }, [name, token]);
+  }, [name]);
 
   // Confirm delete 
   async function onConfirm() {
-    if (!med || !token) return;
+    if (!med) return;
     setDeleting(true);
     setErr(null);
 
     try {
-      await deleteMedication(med.medicineName, token);
+      await deleteMedication(med.medicationName);
       navigate("/medications");
     } catch (e: any) {
       setErr(e.message ?? "Failed to delete medication.");
@@ -84,7 +84,7 @@ export default function MedicationDeletePage() {
           </p>
 
           <ul className="list-unstyled mb-4">
-            <li><strong>Name:</strong> {med.medicineName}</li>
+            <li><strong>Name:</strong> {med.medicationName}</li>
             <li><strong>Patient:</strong> {med.patientName ?? med.patientId ?? "—"}</li>
             <li><strong>Dosage:</strong> {med.dosage}</li>
             <li><strong>Frequency:</strong> {med.frequency}</li>

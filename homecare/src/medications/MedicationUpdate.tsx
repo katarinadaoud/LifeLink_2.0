@@ -5,13 +5,15 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import * as MedicationService from "./MedicationService";
 import type { Medication } from "../types/medication";
+import type { Patient } from "../types/patient";
 
 const MedicationUpdatePage: React.FC = () => {
   const { name } = useParams(); // route: /medications/:name/edit
-  const { token, user } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState<Partial<Medication>>({});
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,16 +25,18 @@ const MedicationUpdatePage: React.FC = () => {
     }
   }, [user, navigate]);
 
-  // Fetch medication details by name
+  // Fetch medication details and patients by name
   useEffect(() => {
     const load = async () => {
       try {
-        // ✅ bruker riktig funksjon fra MedicationService
-        const data = await MedicationService.getMedication(
-          name ?? "",
-          token ?? ""
-        );
-        setForm(data);
+        // Load both medication data and patients list
+        const [medicationData, patientsData] = await Promise.all([
+          MedicationService.getMedication(name ?? ""),
+          MedicationService.fetchPatients()
+        ]);
+        
+        setForm(medicationData);
+        setPatients(patientsData);
       } catch (e: any) {
         setError(e.message ?? "Failed to load medication.");
       } finally {
@@ -40,7 +44,7 @@ const MedicationUpdatePage: React.FC = () => {
       }
     };
     load();
-  }, [name, token]);
+  }, [name]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +56,7 @@ const MedicationUpdatePage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.medicineName) {
+    if (!form.medicationName) {
       alert("Medication name is required.");
       return;
     }
@@ -63,9 +67,8 @@ const MedicationUpdatePage: React.FC = () => {
     try {
       // ✅ sender riktig parametre til updateMedication
       await MedicationService.updateMedication(
-        form.medicineName,
-        form as Medication,
-        token ?? ""
+        form.medicationName,
+        form as Medication
       );
       navigate("/medications");
     } catch (e: any) {
@@ -102,11 +105,29 @@ const MedicationUpdatePage: React.FC = () => {
           <Form.Label>Medication Name</Form.Label>
           <Form.Control
             type="text"
-            name="medicineName"
-            value={form.medicineName ?? ""}
+            name="medicationName"
+            value={form.medicationName ?? ""}
             onChange={handleChange}
             required
           />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Patient</Form.Label>
+          <Form.Control
+            as="select"
+            name="patientId"
+            value={form.patientId ?? ""}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a patient...</option>
+            {patients.map((patient) => (
+              <option key={patient.patientId} value={patient.patientId}>
+                {patient.fullName}
+              </option>
+            ))}
+          </Form.Control>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -114,6 +135,7 @@ const MedicationUpdatePage: React.FC = () => {
           <Form.Control
             type="text"
             name="indication"
+            value={form.indication ?? ""}
             onChange={handleChange}
           />
         </Form.Group>
@@ -124,16 +146,6 @@ const MedicationUpdatePage: React.FC = () => {
             type="text"
             name="dosage"
             value={form.dosage ?? ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Frequency</Form.Label>
-          <Form.Control
-            type="text"
-            name="frequency"
-            value={form.frequency ?? ""}
             onChange={handleChange}
           />
         </Form.Group>

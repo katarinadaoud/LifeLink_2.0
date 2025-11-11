@@ -522,3 +522,4 @@
 2025-11-11 09:54:21.120 +01:00 [INF] Executed action HomeCareApp.Controllers.AppointmentController.GetAppointments (api) in 2.9271ms
 2025-11-11 09:54:21.120 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.AppointmentController.GetAppointments (api)'
 2025-11-11 09:54:21.120 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Appointment - 200 1373 application/json; charset=utf-8 3.7822ms
+2025-11-11 13:35:43.773 +01:00 [INF] Application is shutting down...

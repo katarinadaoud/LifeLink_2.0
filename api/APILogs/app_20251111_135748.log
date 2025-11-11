@@ -1,0 +1,30 @@
+2025-11-11 13:57:49.427 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 13:57:49.481 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 13:57:49.804 +01:00 [INF] User profile is available. Using 'C:\Users\B\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-11-11 13:57:49.837 +01:00 [INF] Now listening on: http://localhost:5090
+2025-11-11 13:57:49.839 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-11-11 13:57:49.840 +01:00 [INF] Hosting environment: Development
+2025-11-11 13:57:49.842 +01:00 [INF] Content root path: C:\Users\B\Documents\ITPE3200\React-Homecare\api
+2025-11-11 13:58:05.400 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 13:58:05.400 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 13:58:05.431 +01:00 [INF] CORS policy execution successful.
+2025-11-11 13:58:05.431 +01:00 [INF] CORS policy execution successful.
+2025-11-11 13:58:05.435 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 36.4757ms
+2025-11-11 13:58:05.436 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 36.5282ms
+2025-11-11 13:58:05.439 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 13:58:05.448 +01:00 [INF] CORS policy execution successful.
+2025-11-11 13:58:05.497 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 13:58:05.505 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 13:58:05.565 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 13:58:05.624 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 114.8082ms
+2025-11-11 13:58:05.624 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 13:58:05.626 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 2 application/json; charset=utf-8 187.185ms
+2025-11-11 13:58:05.627 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 13:58:05.628 +01:00 [INF] CORS policy execution successful.
+2025-11-11 13:58:05.630 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 13:58:05.630 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 13:58:05.633 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 13:58:05.633 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 3.5689ms
+2025-11-11 13:58:05.633 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 13:58:05.634 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 2 application/json; charset=utf-8 6.2017ms
+2025-11-11 13:58:45.694 +01:00 [INF] Application is shutting down...

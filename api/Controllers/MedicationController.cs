@@ -22,45 +22,35 @@ namespace HomeCareApp.Controllers
             _db = db;
         }
 
-        // Get all medications (Employee only)
+        // Get all medications (Public access like appointments)
         [HttpGet]
-        [Authorize(Roles = "Employee")]
         public async Task<ActionResult<IEnumerable<MedicationDto>>> GetAll()
         {
             var items = await _repo.GetAllAsync();
             return Ok(items.Select(MedicationDto.FromEntity));
         }
 
-        // Get medications for the current patient
-        [HttpGet("my")]
-        [Authorize(Roles = "Patient")]
-        public async Task<ActionResult<IEnumerable<MedicationDto>>> GetMine()
+        // Get medications for a specific patient
+        [HttpGet("patient/{patientId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<MedicationDto>>> GetByPatientId(int patientId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var pid = await _db.Patients
-                .Where(p => p.UserId == userId)
-                .Select(p => (int?)p.PatientId)
-                .FirstOrDefaultAsync();
-
-            if (pid is null) return Forbid();
-
-            var items = await _repo.GetByPatientAsync(pid.Value);
+            var items = await _repo.GetByPatientAsync(patientId);
             return Ok(items.Select(MedicationDto.FromEntity));
         }
 
-        // Get a medication by name (Employee only)
-        [HttpGet("{medicineName}")]
-        [Authorize(Roles = "Employee")]
-        public async Task<ActionResult<MedicationDto>> GetByName(string medicineName)
+        // Get a medication by name
+        [HttpGet("{medicationName}")]
+        public async Task<ActionResult<MedicationDto>> GetByName(string medicationName)
         {
-            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicineName);
+            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicationName);
             if (med == null) return NotFound();
             return Ok(MedicationDto.FromEntity(med));
         }
 
-        // Create a new medication (Employee only)
+        // Create a new medication
         [HttpPost]
-        [Authorize(Roles = "Employee")]
+        [Authorize]
         public async Task<ActionResult<MedicationDto>> Create(MedicationDto dto)
         {
             var entity = dto.ToEntity();
@@ -69,12 +59,12 @@ namespace HomeCareApp.Controllers
             return CreatedAtAction(nameof(GetByName), new { medicationName = entity.medicineName }, MedicationDto.FromEntity(entity));
         }
 
-        // Update medication (Employee only)
-        [HttpPut("{medicineName}")]
-        [Authorize(Roles = "Employee")]
-        public async Task<IActionResult> Update(string medicineName, MedicationDto dto)
+        // Update medication
+        [HttpPut("{medicationName}")]
+        [Authorize]
+        public async Task<IActionResult> Update(string medicationName, MedicationDto dto)
         {
-            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicineName);
+            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicationName);
             if (med == null) return NotFound();
 
             med.Dosage = dto.Dosage;
@@ -87,12 +77,12 @@ namespace HomeCareApp.Controllers
             return NoContent();
         }
 
-        // Delete medication (Employee only)
-        [HttpDelete("{medicineName}")]
-        [Authorize(Roles = "Employee")]
-        public async Task<IActionResult> Delete(string medicineName)
+        // Delete medication
+        [HttpDelete("{medicationName}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(string medicationName)
         {
-            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicineName);
+            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicationName);
             if (med == null) return NotFound();
 
             _db.Medications.Remove(med);

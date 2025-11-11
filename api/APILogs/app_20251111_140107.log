@@ -1,0 +1,148 @@
+2025-11-11 14:01:08.254 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 14:01:08.299 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-11 14:01:08.607 +01:00 [INF] User profile is available. Using 'C:\Users\B\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-11-11 14:01:08.638 +01:00 [INF] Now listening on: http://localhost:5090
+2025-11-11 14:01:08.640 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-11-11 14:01:08.640 +01:00 [INF] Hosting environment: Development
+2025-11-11 14:01:08.642 +01:00 [INF] Content root path: C:\Users\B\Documents\ITPE3200\React-Homecare\api
+2025-11-11 14:01:15.174 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:01:15.174 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:01:15.204 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:01:15.204 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:01:15.206 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 33.4787ms
+2025-11-11 14:01:15.206 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 33.4786ms
+2025-11-11 14:01:15.208 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:01:15.212 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:01:15.260 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:01:15.268 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:01:15.323 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:01:15.384 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 112.2593ms
+2025-11-11 14:01:15.384 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:01:15.387 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 179.561ms
+2025-11-11 14:01:15.388 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:01:15.389 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:01:15.391 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:01:15.391 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:01:15.395 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:01:15.396 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 4.3133ms
+2025-11-11 14:01:15.396 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:01:15.396 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 7.1992ms
+2025-11-11 14:02:58.110 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:02:58.110 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:02:58.110 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:02:58.110 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:02:58.110 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.6307ms
+2025-11-11 14:02:58.110 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.5976ms
+2025-11-11 14:02:58.113 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:02:58.113 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:02:58.116 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:02:58.117 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:02:58.123 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:02:58.124 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 6.7701ms
+2025-11-11 14:02:58.124 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:02:58.124 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 11.0075ms
+2025-11-11 14:02:58.126 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:02:58.126 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:02:58.127 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:02:58.127 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:02:58.130 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:02:58.131 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 4.0323ms
+2025-11-11 14:02:58.131 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:02:58.131 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 5.1794ms
+2025-11-11 14:10:09.897 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:10:09.897 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:10:09.897 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:09.897 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:09.897 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.5672ms
+2025-11-11 14:10:09.897 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.5685ms
+2025-11-11 14:10:09.898 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:10:09.899 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:09.899 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:09.899 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:10:09.905 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:10:09.905 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 5.8831ms
+2025-11-11 14:10:09.906 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:09.906 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 7.3468ms
+2025-11-11 14:10:09.908 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:10:09.908 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:09.909 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:09.909 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:10:09.911 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:10:09.911 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 2.1731ms
+2025-11-11 14:10:09.911 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:09.911 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 3.6128ms
+2025-11-11 14:10:15.589 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracetamol - null null
+2025-11-11 14:10:15.589 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracetamol - null null
+2025-11-11 14:10:15.589 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:15.589 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:15.590 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracetamol - 204 null null 0.5693ms
+2025-11-11 14:10:15.590 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Paracetamol - 204 null null 0.5692ms
+2025-11-11 14:10:15.590 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Paracetamol - application/json null
+2025-11-11 14:10:15.591 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:15.594 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 14:10:15.595 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 14:10:15.595 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Paracetamol - 403 0 null 4.145ms
+2025-11-11 14:10:15.596 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Paracetamol - application/json null
+2025-11-11 14:10:15.596 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:15.597 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 14:10:15.597 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 14:10:15.597 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Paracetamol - 403 0 null 1.3468ms
+2025-11-11 14:10:17.673 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:10:17.673 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication - null null
+2025-11-11 14:10:17.673 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:17.673 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:17.673 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.3553ms
+2025-11-11 14:10:17.673 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication - 204 null null 0.4073ms
+2025-11-11 14:10:17.674 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:10:17.675 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:17.675 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:17.675 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:10:17.677 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:10:17.677 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 2.0297ms
+2025-11-11 14:10:17.677 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:17.677 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 2.9365ms
+2025-11-11 14:10:17.679 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:10:17.679 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:17.680 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:17.680 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:10:17.682 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:10:17.682 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 1.7669ms
+2025-11-11 14:10:17.682 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:17.682 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 3.0443ms
+2025-11-11 14:10:18.888 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Metformin - null null
+2025-11-11 14:10:18.888 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Metformin - null null
+2025-11-11 14:10:18.888 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:18.888 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:18.888 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Metformin - 204 null null 0.3781ms
+2025-11-11 14:10:18.888 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/medication/Metformin - 204 null null 0.3781ms
+2025-11-11 14:10:18.889 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Metformin - application/json null
+2025-11-11 14:10:18.889 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:18.890 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 14:10:18.890 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 14:10:18.890 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Metformin - 403 0 null 1.2627ms
+2025-11-11 14:10:18.891 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication/Metformin - application/json null
+2025-11-11 14:10:18.891 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:18.892 +01:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Employee)
+2025-11-11 14:10:18.892 +01:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2025-11-11 14:10:18.892 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication/Metformin - 403 0 null 0.8529ms
+2025-11-11 14:10:20.607 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:10:20.607 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:20.607 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:20.607 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:10:20.609 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:10:20.609 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 1.9222ms
+2025-11-11 14:10:20.609 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:20.610 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 2.8833ms
+2025-11-11 14:10:20.611 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/medication - application/json null
+2025-11-11 14:10:20.612 +01:00 [INF] CORS policy execution successful.
+2025-11-11 14:10:20.612 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:20.613 +01:00 [INF] Route matched with {action = "GetAll", controller = "Medication"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[HomeCareApp.DTOs.MedicationDto]]] GetAll() on controller HomeCareApp.Controllers.MedicationController (api).
+2025-11-11 14:10:20.615 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[HomeCareApp.Models.Medication, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[HomeCareApp.DTOs.MedicationDto, api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-11-11 14:10:20.615 +01:00 [INF] Executed action HomeCareApp.Controllers.MedicationController.GetAll (api) in 2.5666ms
+2025-11-11 14:10:20.615 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.MedicationController.GetAll (api)'
+2025-11-11 14:10:20.615 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/medication - 200 543 application/json; charset=utf-8 4.2824ms
+2025-11-11 14:10:29.076 +01:00 [INF] Application is shutting down...

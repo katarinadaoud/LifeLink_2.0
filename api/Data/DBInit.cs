@@ -130,5 +130,48 @@ public static class DBInit
             db.Appointments.AddRange(appointments);
             await db.SaveChangesAsync();
         }
+        
+        // Create medications if none exist
+        if (!db.Medications.Any())
+        {
+            var medications = new[]
+            {
+                new Medication
+                {
+                    medicineName = "Metformin",
+                    Name = "Metformin 500mg",
+                    PatientId = patients.First(p => p.FullName == "Tor Hansen").PatientId,
+                    Indication = "Type 2 Diabetes",
+                    Dosage = "500mg twice daily",
+                    StartDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-30)),
+                    EndDate = null,
+                    Patient = null! // Will be set by EF Core
+                },
+                new Medication
+                {
+                    medicineName = "Lisinopril",
+                    Name = "Lisinopril 10mg",
+                    PatientId = patients.First(p => p.FullName == "Kari Olsen").PatientId,
+                    Indication = "High blood pressure",
+                    Dosage = "10mg once daily",
+                    StartDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-60)),
+                    EndDate = null,
+                    Patient = null!
+                },
+                new Medication
+                {
+                    medicineName = "Paracetamol",
+                    Name = "Paracetamol 500mg",
+                    PatientId = patients.First(p => p.FullName == "Tor Hansen").PatientId,
+                    Indication = "Pain relief",
+                    Dosage = "500mg as needed, max 4 times daily",
+                    StartDate = DateOnly.FromDateTime(DateTime.Today.AddDays(-7)),
+                    EndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7)),
+                    Patient = null!
+                }
+            };
+            db.Medications.AddRange(medications);
+            await db.SaveChangesAsync();
+        }
     }
 }

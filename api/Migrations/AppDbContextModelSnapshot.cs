@@ -130,6 +130,42 @@ namespace api.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("HomeCareApp.Models.Medication", b =>
+                {
+                    b.Property<string>("medicineName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Dosage")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Indication")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("medicineName");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Medications");
+                });
+
             modelBuilder.Entity("HomeCareApp.Models.Patient", b =>
                 {
                     b.Property<int>("PatientId")
@@ -190,6 +226,17 @@ namespace api.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HomeCareApp.Models.Medication", b =>
+                {
+                    b.HasOne("HomeCareApp.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("HomeCareApp.Models.Patient", b =>
