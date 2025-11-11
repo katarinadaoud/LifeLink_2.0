@@ -26,11 +26,9 @@ dist-ssr
 # ===== BACKEND (.NET) =====
 api/bin/
 api/obj/
-api/*.db
-*.dll
-*.pdb
 *.cache
-*.exe
+*.pdb
+*.dll
 
 # ===== FRONTEND (React) =====
 homecare/node_modules/
