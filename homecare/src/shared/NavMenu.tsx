@@ -61,7 +61,28 @@ const NavMenu: React.FC = () => {
             to="/"
             className="fw-bold d-flex align-items-center lifelink-navbar-brand"
           >
-            LifeLink
+            <span className="lifelink-logo-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+                {/* Hus – litt løftet inni hjertet */}
+                <path
+                  d="M16 32 L32 16 L48 32 V48 H40 V36 H24 V48 H16 Z"
+                  className="lifelink-logo-house"
+                />
+                {/* Bredt, tydelig hjerte rundt huset – litt lavere */}
+                <path
+                  d="
+                    M32 8
+                    C22 0, 2 4, 2 20
+                    C2 36, 18 48, 32 58
+                    C46 48, 62 36, 62 20
+                    C62 4, 42 0, 32 8
+                    Z
+                  "
+                  className="lifelink-logo-heart"
+                />
+              </svg>
+            </span>
+            <span className="lifelink-logo-text">LifeLink</span>
           </Navbar.Brand>
 
           {/* Right side content for mobile - shown before hamburger */}

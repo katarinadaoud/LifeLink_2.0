@@ -401,12 +401,23 @@
   border-radius: var(--radius-lg);
 }
 
-/* Add new appointment button */
 .add-appointment-btn {
   font-size: 1.1rem;
   padding: 10px 20px;
   border-radius: var(--radius-lg);
+  background-color: #177e8b !important;
+  border-color: #177e8b !important;
+  color: #ffffff !important;
 }
+
+.add-appointment-btn:hover,
+.add-appointment-btn:focus {
+  background-color: transparent !important;
+  color: #177e8b !important;
+  border-color: #177e8b !important;
+}
+
+
 
 /* Bootstrap cards inside calendar */
 .calendar-card.card {

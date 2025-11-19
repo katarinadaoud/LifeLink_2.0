@@ -23,18 +23,44 @@
   min-height: 70px;
 }
 
-/* Brand / logo */
+/* Brand / logo – oppdatert (ingen gradient, moderne teal) */
 .lifelink-navbar-brand {
-  color: #177e8b;
-  font-size: 1.9rem;      /* slightly larger */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;          /* litt mer luft mellom ikon og tekst */
+
+  font-size: 1.9rem;      /* logo-størrelse */
   padding: 0.5rem 0;
-  font-weight: 700;       /* more "logo" weight */
-  letter-spacing: 0.04em; /* slightly more spacing between letters */
+  font-weight: 800;       /* mer “logo”-vekt */
+  letter-spacing: 0.08em; /* litt mer spacing for premium-look */
+  text-decoration: none;
+
+  /* bruker samme font som resten av appen (ingen egen font-family her) */
+  color: #177e8b;
+
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease,
+    color 0.18s ease;
 }
 
-.lifelink-navbar-brand:hover,
-.lifelink-navbar-brand:focus {
+
+/* Sikre konsistent farge, ikke svart ved klikk/besøkt */
+.lifelink-navbar-brand:link,
+.lifelink-navbar-brand:visited {
   color: #177e8b;
+  text-decoration: none;
+}
+
+/* Hover/focus/active: subtil, litt mørkere teal + shadow – ikke svart */
+.lifelink-navbar-brand:hover,
+.lifelink-navbar-brand:focus,
+.lifelink-navbar-brand:active {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.12));
+  color: #0f6f7c;  /* diskret mørkere variant av teal */
+  text-decoration: none;
 }
 
 /* Right-side containers (mobile & desktop) share height */
@@ -182,4 +208,44 @@
   background-color: #177e8b;
   color: #ffffff;
   border-color: #177e8b;
+}
+
+/* === NYTT: hus + hjerte-ikon ved siden av LifeLink === */
+
+.lifelink-logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* SVG inni ikonet – fyller nesten hele containeren */
+.lifelink-logo-icon svg {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Hus = fylt ikon */
+.lifelink-logo-icon svg .lifelink-logo-house {
+  fill: currentColor;
+}
+
+/* Hjerte = tynn, tydelig outline rundt huset */
+.lifelink-logo-icon svg .lifelink-logo-heart {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Tekstdel for LifeLink */
+.lifelink-logo-text {
+  position: relative;
+  z-index: 1;
 }
