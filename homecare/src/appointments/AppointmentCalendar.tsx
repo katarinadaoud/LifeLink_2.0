@@ -3,6 +3,7 @@ import { Card, Button, Badge, Row, Col, Modal } from 'react-bootstrap';
 import type { Appointment } from '../types/appointment';
 
 import './AppointmentCalendar.css';
+
 interface AppointmentCalendarProps {
   appointments: Appointment[]; // Array of all appointments to be displayed
   onAppointmentDeleted?: (appointmentId: number) => void; // Optional callback when an appointment is deleted
@@ -245,7 +246,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
         <Modal.Header closeButton>
           <Modal.Title className="modal-title-custom">
-            📅 Appointment Details
+            Appointment Details
           </Modal.Title>
         </Modal.Header>
         <Modal.Body className="modal-body-custom">
@@ -307,7 +308,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                 href={`/appointmentupdate/${selectedAppointment.appointmentId}`}
                 className="modal-btn"
               >
-                ✏️ Edit Appointment
+                Edit Appointment
               </Button>
               <Button 
                 variant="danger" 
@@ -318,7 +319,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                 }}
                 className="modal-btn"
               >
-                🗑️ Delete Appointment
+                Delete Appointment
               </Button>
             </>
           )}
