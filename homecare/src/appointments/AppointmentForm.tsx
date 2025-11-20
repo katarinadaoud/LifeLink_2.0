@@ -170,8 +170,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         </Form.Control>
       </Form.Group>
       {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
-      <Button variant="primary" type="submit">{isUpdate ? 'Update Appointment' : 'Create Appointment'}</Button>
-      <Button variant="secondary" onClick={onCancel} className="ms-2">Cancel</Button>
+      <Button className="btn btn-teal auth-submit" type="submit">{isUpdate ? 'Update Appointment' : 'Create Appointment'}</Button>
+      <Button className="btn btn-secondary ms-2 auth-submit" onClick={onCancel}>Cancel</Button>
     </Form>
   );
 };
