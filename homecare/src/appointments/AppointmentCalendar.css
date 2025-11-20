@@ -376,6 +376,15 @@
   color: var(--text-muted);
 }
 
+/* Make the small 'Today' badge in the legend use the app teal accent */
+.calendar-legend .badge,
+.calendar-legend .calendar-badge {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  padding: 2px 8px !important;
+}
+
 /* === MODAL & CARD OVERRIDES === */
 .modal-title-custom {
   font-size: 1.25rem;

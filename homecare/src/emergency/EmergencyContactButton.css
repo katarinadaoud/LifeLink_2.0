@@ -1,0 +1,62 @@
+/* Flytende "Contact home care"-knapp nederst til høyre */
+.lifelink-emergency-btn {
+  position: fixed;
+  /* place visually as far right as practical while keeping a small safe margin */
+  right: 0.75rem;
+  bottom: 1.5rem;
+  z-index: 1050; /* over innhold, under evt. overlays */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Make fully circular: equal width/height and 50% radius */
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+
+  background-color: #177e8b;
+  color: #ffffff;
+
+  font-size: 1.1rem;
+  font-weight: 600;
+
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.lifelink-emergency-btn:hover,
+.lifelink-emergency-btn:focus {
+  background-color: #0f6f7c;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.22);
+}
+
+.lifelink-emergency-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+  color: #ffffff;
+}
+
+/* Hide the label visually because the button is circular; aria-label remains for screen readers */
+.lifelink-emergency-label {
+  display: none !important;
+}
+
+/* Call-knapp i modal matcher LifeLink-teal */
+.lifelink-emergency-call-btn {
+  background-color: #177e8b;
+  border-color: #177e8b;
+  color: #ffffff;
+}
+
+.lifelink-emergency-call-btn:hover,
+.lifelink-emergency-call-btn:focus {
+  background-color: #0f6f7c;
+  border-color: #0f6f7c;
+}

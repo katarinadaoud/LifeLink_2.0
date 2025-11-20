@@ -18,6 +18,7 @@ import MedicationUpdatePage from './medications/MedicationUpdate'
 import SearchResultsPage from './search/SearchResultsPage'
 import NotificationListPage from './notifications/NotificationListPage'
 
+import EmergencyContactButton from './emergency/EmergencyContactButton'
 import './App.css'
 
 const App: React.FC = () => {
@@ -50,6 +51,7 @@ const App: React.FC = () => {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Container>
+        <EmergencyContactButton />
       </Router>
     </AuthProvider>
   )
