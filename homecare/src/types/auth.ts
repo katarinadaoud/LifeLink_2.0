@@ -8,6 +8,4 @@ export interface RegisterDto {
     email: string;
     password: string;
     role: 'Patient' | 'Employee';
-    // firstName: string;
-    // lastName: string;
 }

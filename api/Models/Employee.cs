@@ -21,10 +21,6 @@ namespace HomeCareApp.Models
         //navigation properties
         [ValidateNever] public required AuthUser? User { get; set; }
         [ValidateNever] public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
-        //[ValidateNever] public ICollection<AvailableDay>? AvailableDays { get; set; } = new List<AvailableDay>();
-        //[ValidateNever] public ICollection<EmergencyCall>? EmergencyCalls { get; set; } = new List<EmergencyCall>();
-
-
         
     }
 }

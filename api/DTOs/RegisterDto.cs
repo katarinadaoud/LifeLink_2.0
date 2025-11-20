@@ -17,10 +17,5 @@ namespace HomeCareApp.DTOs
         [Required]
         public string Role { get; set; } = string.Empty; // "Patient" or "Employee"
 
-        // [Required]
-        // public string FirstName { get; set; } = string.Empty;
-
-        // [Required]
-        // public string LastName { get; set; } = string.Empty;
     }
 }

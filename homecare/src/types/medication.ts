@@ -1,26 +1,26 @@
 // src/types/medication.ts
 export interface Medication {
-  medicationName: string;        // brukes som unik ID
-  dosage: string;                // camelCase som appointment
-  frequency?: string;            // optional since backend doesn't have this
-  startDate: string;             // camelCase som appointment
-  endDate?: string | null;       // camelCase som appointment
+  medicationName: string;        
+  dosage: string;                
+  frequency?: string; // optional since backend doesn't have this
+  startDate: string;            
+  endDate?: string | null;       
   instructions?: string;
-  patientName?: string;          // camelCase som appointment
-  patientId?: number;            // camelCase som appointment
-  indication?: string;           // camelCase som appointment
+  patientName?: string;          
+  patientId?: number;           
+  indication?: string;          
  
 }
 
 export type NewMedication = Medication;
-// DTO for å opprette en ny medisin (brukes av MedicationCreatePage)
+// DTO for creating a new medication
 export type NewMedicationDto = {
-  patientId: number;             // camelCase som appointment  
-  medicationName: string;        // matcher backend DTO
-  indication?: string;           // camelCase som appointment
-  dosage?: string;               // camelCase som appointment
-  startDate?: string;            // camelCase som appointment
-  endDate?: string | null;       // camelCase som appointment
+  patientId: number;             
+  medicationName: string;       
+  indication?: string;           
+  dosage?: string;               
+  startDate?: string;            
+  endDate?: string | null;       
 };
 
 

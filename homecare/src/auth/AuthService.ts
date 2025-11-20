@@ -1,7 +1,8 @@
 import type { LoginDto, RegisterDto } from '../types/auth';
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL; //Base URL from environment variables
 
+//Send login request and return JWT token
 export const login = async (credentials: LoginDto): Promise<{ token: string }> => {
     const response = await fetch(`${API_URL}/api/Auth/login`, {
         method: 'POST',
@@ -11,6 +12,7 @@ export const login = async (credentials: LoginDto): Promise<{ token: string }> =
         body: JSON.stringify(credentials),
     });
 
+    //Handle backend errors
     if (!response.ok) {
         const responseText = await response.text();
         try {
@@ -24,6 +26,7 @@ export const login = async (credentials: LoginDto): Promise<{ token: string }> =
     return response.json();
 };
 
+//Register new user
 export const register = async (userData: RegisterDto): Promise<any> => {
     const response = await fetch(`${API_URL}/api/Auth/register`, {
         method: 'POST',
@@ -33,15 +36,14 @@ export const register = async (userData: RegisterDto): Promise<any> => {
         body: JSON.stringify(userData),
     });
 
+    //Format and handle backend validation errors
     if (!response.ok) {
         const responseText = await response.text();
         try {
             const errorData = JSON.parse(responseText);
-            // The backend sends an array of errors, let's format them.
             const errorMessages = errorData.map((err: { description: string }) => err.description).join(', ');
             throw new Error(errorMessages || 'Registration failed');
         } catch (jsonError) {
-            // If response is not JSON, use raw text
             throw new Error(responseText || `Registration failed with status ${response.status}`);
         }
     }
@@ -49,6 +51,7 @@ export const register = async (userData: RegisterDto): Promise<any> => {
     return response.json();
 };
 
+//Create user profile after registration
 export const createProfile = async (): Promise<{ message: string }> => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -63,6 +66,7 @@ export const createProfile = async (): Promise<{ message: string }> => {
         },
     });
 
+    //Handle profile creation errors
     if (!response.ok) {
         const responseText = await response.text();
         try {
@@ -77,6 +81,7 @@ export const createProfile = async (): Promise<{ message: string }> => {
     return response.json();
 };
 
+//Delete user account
 export const deleteAccount = async (): Promise<{ message: string }> => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -91,6 +96,7 @@ export const deleteAccount = async (): Promise<{ message: string }> => {
         },
     });
 
+    //Handle backend errors
     if (!response.ok) {
         const responseText = await response.text();
         try {

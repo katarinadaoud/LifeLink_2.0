@@ -26,7 +26,7 @@ const ProfileGuard: React.FC<ProfileGuardProps> = ({ children }) => {
                     return;
                 }
 
-                // Try to create profile - if it fails, user might need profile setup
+                // Try to create profile, if it fails, user might need profile setup
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/Auth/create-profile`, {
                     method: 'POST',
                     headers: {

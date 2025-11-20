@@ -20,7 +20,7 @@ namespace HomeCareApp.Models
         public string Dosage { get; set; } = "";
 
         public DateOnly StartDate { get; set; }
-        public DateOnly? EndDate { get; set; }  // null = fortsatt aktiv
+        public DateOnly? EndDate { get; set; }  // null = still active
 
         [NotMapped]
         public bool IsActive =>

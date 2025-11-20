@@ -14,6 +14,7 @@ const RegisterPage: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const navigate = useNavigate();
 
+    //Update form data state on input change
     const handleChange = (e: any) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -23,10 +24,12 @@ const RegisterPage: React.FC = () => {
         setError(null);
         setSuccess(null);
         try {
+            //Attempt to register user
             await authService.register(formData);
             setSuccess('Registration successful! Please complete your profile.');
             setTimeout(() => navigate('/profile-setup'), 2000); // Redirect to profile setup
         } catch (err) {
+            //Display error message if available
             if (err instanceof Error) {
                 setError(err.message);
             } else {
