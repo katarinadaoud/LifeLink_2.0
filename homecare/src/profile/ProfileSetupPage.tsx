@@ -188,7 +188,7 @@ const ProfileSetupPage: React.FC = () => {
                                 />
                             </Form.Group>
 
-                            <Button variant="primary" type="submit" disabled={isSubmitting}>
+                            <Button className="btn btn-teal auth-submit" type="submit" disabled={isSubmitting}>
                                 {isSubmitting ? 'Creating Profile...' : 'Complete Patient Profile'}
                             </Button>
                         </Form>
@@ -237,7 +237,7 @@ const ProfileSetupPage: React.FC = () => {
                                 </Form.Select>
                             </Form.Group>
 
-                            <Button variant="primary" type="submit" disabled={isSubmitting}>
+                            <Button className="btn btn-teal auth-submit" type="submit" disabled={isSubmitting}>
                                 {isSubmitting ? 'Creating Profile...' : 'Complete Employee Profile'}
                             </Button>
                         </Form>
