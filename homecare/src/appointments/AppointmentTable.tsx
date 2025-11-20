@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import type { Appointment } from '../types/appointment';
 import { Link } from 'react-router-dom';
+import './AppointmentCalendar.css';
+
 
 interface AppointmentTableProps {
   appointments: Appointment[];
@@ -44,21 +46,29 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({ appointments, onApp
                 {userRole !== 'Patient' && <td>{appointment.patientName || `Patient ID: ${appointment.patientId}`}</td>}
                 <td>{appointment.employeeName || `Employee ID: ${appointment.employeeId}`}</td>
                 {showDescriptions && <td>{appointment.description}</td>}
-                <td className="text-center">
-                {onAppointmentDeleted && (
-                  <>
-                    <Link to={`/appointmentupdate/${appointment.appointmentId}`} className="me-2">Update</Link>
-                    <Link to="#"
-                      onClick={() => onAppointmentDeleted(appointment.appointmentId!)}
-                      className="btn btn-link text-danger"
-                    >Delete</Link>
-                  </>
-                )}              
-              </td>              
+                <td className="text-center appointment-actions">
+                  {onAppointmentDeleted && (
+                    <div className="appointment-actions-vertical">
+                      <Link
+                        to={`/appointmentupdate/${appointment.appointmentId}`}
+                        className="appointment-action appointment-action-update"
+                      >
+                        Update
+                      </Link>
+                      <Link
+                        to="#"
+                        onClick={() => onAppointmentDeleted(appointment.appointmentId!)}
+                        className="appointment-action appointment-action-delete btn btn-delete"
+                      >
+                        Delete
+                      </Link>
+                    </div>
+                  )}
+                </td>
               </tr>
-          ))}
-        </tbody>
-      </Table>
+            ))}
+          </tbody>
+        </Table>
       </div>
     </div>
   );

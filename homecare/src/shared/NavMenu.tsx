@@ -82,7 +82,10 @@ const NavMenu: React.FC = () => {
                 />
               </svg>
             </span>
-            <span className="lifelink-logo-text">LifeLink</span>
+            <span className="lifelink-logo-text">
+              <span className="lifelink-logo-text-life">Life</span>
+              <span className="lifelink-logo-text-link">Link</span>
+            </span>
           </Navbar.Brand>
 
           {/* Right side content for mobile - shown before hamburger */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Container, Row, Col, Button, Alert, Form, Modal } from 'react-bootstrap';
+import '../appointments/AppointmentCalendar.css';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -446,7 +447,7 @@ const ProfilePage: React.FC = () => {
                                             Edit Profile
                                         </Button>
                                         <Button 
-                                            variant="danger" 
+                                            className="btn appointment-grid-btn-delete"
                                             onClick={() => setShowDeleteModal(true)}
                                         >
                                             Delete Account
@@ -475,7 +476,7 @@ const ProfilePage: React.FC = () => {
                                         Cancel
                                     </Button>
                                     <Button 
-                                        variant="danger" 
+                                        className="btn appointment-grid-btn-delete"
                                         onClick={handleDeleteAccount}
                                         disabled={isDeleting}
                                     >

@@ -49,21 +49,23 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
               <td>{m.endDate ? m.endDate.slice(0, 10) : "—"}</td>
 
               {userRole === "Employee" && (
-                <td className="d-flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="primary"
-                    onClick={() => onEdit?.(m.medicationName)}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="primary"
-                    onClick={() => onDelete?.(m.medicationName)}
-                  >
-                    Delete
-                  </Button>
+                <td className="text-center">
+                  <div className="appointment-actions-vertical">
+                    <Button
+                      size="sm"
+                      className="btn btn-teal"
+                      onClick={() => onEdit?.(m.medicationName)}
+                    >
+                      Update
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="btn btn-delete"
+                      onClick={() => onDelete?.(m.medicationName)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </td>
               )}
             </tr>

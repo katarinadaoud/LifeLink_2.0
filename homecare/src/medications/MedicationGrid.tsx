@@ -38,10 +38,10 @@ const MedicationGrid: React.FC<MedicationGridProps> = ({ medications, onDelete, 
                   {userRole === 'Employee' && (
                     <>
                       {onEdit && (
-                        <Button onClick={() => onEdit(medication.medicationName)} variant="primary">Update</Button>
+                        <Button onClick={() => onEdit(medication.medicationName)} className="btn btn-teal">Update</Button>
                       )}
                       {onDelete && (
-                        <Button onClick={() => onDelete(medication.medicationName)} variant="danger">Delete</Button>
+                        <Button onClick={() => onDelete(medication.medicationName)} className="btn btn-delete">Delete</Button>
                       )}
                     </>
                   )}

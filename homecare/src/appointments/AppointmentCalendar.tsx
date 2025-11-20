@@ -103,7 +103,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
             className="calendar-btn"
           >
             ← Previous
-          </Button> 
+          </Button>
           <Button 
             variant="primary" 
             onClick={goToToday}
@@ -311,13 +311,12 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                 Edit Appointment
               </Button>
               <Button 
-                variant="danger" 
                 size="lg"
                 onClick={() => {
                   onAppointmentDeleted(selectedAppointment.appointmentId!);
                   setShowModal(false);
                 }}
-                className="modal-btn"
+                className="modal-btn btn btn-delete"
               >
                 Delete Appointment
               </Button>

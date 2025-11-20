@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Col, Row, Button } from 'react-bootstrap';
 import type { Appointment } from '../types/appointment';
+import './AppointmentCalendar.css';
 
 interface AppointmentGridProps {
   appointments: Appointment[];
@@ -32,14 +33,25 @@ const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppoi
                 <Card.Text>
                   <strong>Healthcare Provider:</strong> {appointment.employeeName || `Employee ID: ${appointment.employeeId}`}
                 </Card.Text>
+
                 <div className="mt-auto d-flex justify-content-end gap-2">
-                    {onAppointmentDeleted && (
-                      <>
-                        <Button href={`/appointmentupdate/${appointment.appointmentId}`} variant="primary">Update</Button>
-                        <Button onClick={() => onAppointmentDeleted(appointment.appointmentId!)} variant="danger">Delete</Button>
-                      </>
-                    )}
-                </div>               
+                  {onAppointmentDeleted && (
+                    <>
+                      <Button
+                        href={`/appointmentupdate/${appointment.appointmentId}`}
+                        className="btn btn-teal"
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        onClick={() => onAppointmentDeleted(appointment.appointmentId!)}
+                        className="btn btn-delete"
+                      >
+                        Delete
+                      </Button>
+                    </>
+                  )}
+                </div>
               </Card.Body>
             </Card>
           </Col>

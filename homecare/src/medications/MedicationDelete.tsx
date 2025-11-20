@@ -98,7 +98,7 @@ export default function MedicationDeletePage() {
           {err && <p className="text-danger">{err}</p>}
 
           <div className="d-flex gap-2">
-            <Button variant="danger" onClick={onConfirm} disabled={deleting}>
+            <Button className="btn btn-delete" onClick={onConfirm} disabled={deleting}>
               {deleting ? "Deleting…" : "Delete"}
             </Button>
             <Button

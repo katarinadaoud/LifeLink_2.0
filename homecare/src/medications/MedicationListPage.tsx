@@ -174,7 +174,7 @@ const MedicationListPage: React.FC = () => {
         <div className="mt-3 text-center">
           <Button 
             onClick={() => navigate("/medications/new")}
-            className="btn btn-success"
+            className="btn btn-teal"
             style={{ fontSize: '1.1rem', padding: '10px 20px' }}
           >
              Add New Medication

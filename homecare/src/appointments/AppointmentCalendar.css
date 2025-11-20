@@ -417,8 +417,6 @@
   border-color: #177e8b !important;
 }
 
-
-
 /* Bootstrap cards inside calendar */
 .calendar-card.card {
   background: var(--bg-card) !important;
@@ -493,3 +491,104 @@
     font-size: 0.6rem;
   }
 }
+
+/* === APPOINTMENT GRID – ACTION BUTTONS === */
+.appointment-grid-btn {
+  font-size: 0.9rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+/* Update = teal primary */
+.btn.appointment-grid-btn-update,
+.btn-primary.appointment-grid-btn-update {
+  background-color: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.btn.appointment-grid-btn-update:hover,
+.btn-primary.appointment-grid-btn-update:hover,
+.btn.appointment-grid-btn-update:focus,
+.btn-primary.appointment-grid-btn-update:focus {
+  background-color: #0f5f68 !important;   /* litt mørkere teal */
+  border-color: #0f5f68 !important;
+  color: #ffffff !important;
+}
+
+/* Delete = mer diskré rød, men tydelig */
+.btn.appointment-grid-btn-delete {
+  background-color: #ffffff !important;
+  border-color: #fee2e2 !important;
+  color: #b91c1c !important;
+}
+
+.btn.appointment-grid-btn-delete:hover,
+.btn.appointment-grid-btn-delete:focus {
+  background-color: #fee2e2 !important;
+  border-color: #fecaca !important;
+  color: #7f1d1d !important;
+}
+
+
+/* (Reverted grid-specific stacking/override rules) */
+
+/* List view: stack Update/Delete vertically and center them */
+.appointment-actions-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+.appointment-actions-vertical .appointment-action {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+.appointment-actions-vertical .appointment-action-delete {
+  margin-left: 0; /* ensure no extra left margin */
+}
+
+/* Ensure native <button> elements inside the vertical container stack and center */
+.appointment-actions-vertical .btn {
+  display: inline-block;
+  margin-left: 0; /* remove any left margin from utility classes */
+}
+
+/* Match grid color styling for list view stacked buttons */
+.appointment-actions-vertical .appointment-action-update,
+.appointment-actions-vertical .appointment-action-update:link,
+.appointment-actions-vertical .appointment-action-update:visited {
+  background-color: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+.appointment-actions-vertical .appointment-action-update:hover,
+.appointment-actions-vertical .appointment-action-update:focus {
+  background-color: #0f5f68 !important;
+  border-color: #0f5f68 !important;
+  color: #ffffff !important;
+}
+
+.appointment-actions-vertical .appointment-action-delete,
+.appointment-actions-vertical .appointment-action-delete:link,
+.appointment-actions-vertical .appointment-action-delete:visited {
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  color: #b91c1c !important;
+  font-weight: 600 !important;
+}
+.appointment-actions-vertical .appointment-action-delete:hover,
+.appointment-actions-vertical .appointment-action-delete:focus {
+  background-color: #fee2e2 !important;
+  border-color: #fecaca !important;
+  color: #7f1d1d !important;
+}
+
+
+
+
