@@ -43,6 +43,15 @@
   color: #ffffff;
 }
 
+.lifelink-emergency-icon svg {
+  width: 1.1em;
+  height: 1.1em;
+  display: block;
+  fill: currentColor;
+  transform: rotate(283deg);
+  transform-origin: center;
+ }
+
 /* Hide the label visually because the button is circular; aria-label remains for screen readers */
 .lifelink-emergency-label {
   display: none !important;
