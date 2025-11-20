@@ -1,4 +1,4 @@
-import type { Notification, NotificationDto, CreateNotificationDto } from '../types/notification';
+import type { NotificationDto, CreateNotificationDto } from '../types/notification';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7268';
 
