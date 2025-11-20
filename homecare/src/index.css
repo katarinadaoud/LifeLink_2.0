@@ -85,6 +85,13 @@ button:focus-visible {
 
 /* Teal primary button variant used across the app */
 .btn-teal,
+
+/* Auth form submit button sizing used by Login/Register pages */
+.auth-submit {
+  font-size: 1.2rem;
+  padding: 0.65rem 2rem;
+  margin-top: 1rem;
+}
 .btn.btn-teal {
   background-color: #177e8b;
   border-color: #177e8b;

@@ -104,14 +104,9 @@ const RegisterPage: React.FC = () => {
                     </Form.Select>
                 </Form.Group>
 
-                <Button 
-                    variant="primary" 
+                <Button
                     type="submit"
-                    style={{
-                        fontSize: '1.2rem',
-                        padding: '0.75rem 2rem',
-                        marginTop: '1rem'
-                    }}
+                    className="btn btn-teal auth-submit"
                 >
                     Register
                 </Button>
