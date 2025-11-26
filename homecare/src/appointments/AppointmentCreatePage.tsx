@@ -5,7 +5,7 @@ import type { Appointment } from '../types/appointment';
 import * as AppointmentService from './AppointmentService';
 
 const AppointmentCreatePage: React.FC = () => {
-  const navigate = useNavigate(); // Create a navigate function
+  const navigate = useNavigate(); //Create a navigate function
 
   const handleAppointmentCreated = async (appointment: Appointment) => {
     try {
