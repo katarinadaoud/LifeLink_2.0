@@ -4,7 +4,6 @@ import type { Appointment } from '../types/appointment';
 import { Link } from 'react-router-dom';
 import './AppointmentCalendar.css';
 
-
 interface AppointmentTableProps {
   appointments: Appointment[];
   onAppointmentDeleted?: (appointmentId: number) => void;

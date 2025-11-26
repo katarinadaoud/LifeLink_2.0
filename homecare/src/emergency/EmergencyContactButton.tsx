@@ -3,8 +3,8 @@ import { Button, Modal } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
 import './EmergencyContactButton.css';
 
-const EMERGENCY_PHONE_DISPLAY = '+47 12 34 56 78';  // bytt til ditt nr i demo
-const EMERGENCY_PHONE_TEL = 'tel:+4712345678';      // samme nr uten mellomrom
+const EMERGENCY_PHONE_DISPLAY = '+47 12 34 56 78';  //LifeLink number
+const EMERGENCY_PHONE_TEL = 'tel:+4712345678';     
 
 const EmergencyContactButton: React.FC = () => {
   const { user } = useAuth();
@@ -19,10 +19,6 @@ const EmergencyContactButton: React.FC = () => {
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
-  // Use a plain link on the call button (Button with `href`) so the
-  // browser/OS handles dialing natively. This is better for accessibility
-  // and for apps that intercept `tel:` links. Also provide copy/Teams
-  // options for desktop users who may prefer Teams or copying the number.
 
   const handleCopy = async () => {
     try {
@@ -34,8 +30,7 @@ const EmergencyContactButton: React.FC = () => {
     }
   };
 
-  // Generic Teams call link — Teams usually prefers an email, but some
-  // clients accept phone number in the users param. This is best-effort;
+  // Generic Teams call link 
   // if Teams cannot initiate the call it will open the Teams web/app.
   const TEAMS_CALL_URL = `https://teams.microsoft.com/l/call/0/0?users=${encodeURIComponent(
     EMERGENCY_PHONE_DISPLAY
@@ -60,7 +55,7 @@ const EmergencyContactButton: React.FC = () => {
         </span>
       </Button>
 
-      {/* Modal med bekreftelse */}
+      
       <Modal
         show={showModal}
         onHide={handleClose}
