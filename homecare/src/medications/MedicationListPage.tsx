@@ -109,10 +109,10 @@ const MedicationListPage: React.FC = () => {
   return ( 
     <div className="container-fluid">
       <div className="text-center mb-3"> {/* Centered title and subtitle */}
-        <h1 className="mb 2 page-subtitle">My Medications</h1>
+        <h1 className="mb-2 page-title">My Medications</h1>
 
         {/*short description under the title */}
-        <p className="mb-2" style={{ fontSize: '1.1rem' }}>View and manage your medications</p>
+        <p className="mb-2 text-medium">View and manage your medications</p>
       </div>
       <div className="mb-3">
         {/* Refresh Button, reloads medication list from backend */}
@@ -120,7 +120,6 @@ const MedicationListPage: React.FC = () => {
           onClick={fetchMedications} 
           className="btn btn-primary me-3 btn-medium" 
           disabled={loading}
-          style={{ fontSize: '1rem', padding: '8px 16px' }}
         >
           {loading ? 'Loading...' : 'Refresh Medications'}
         </Button>
@@ -132,7 +131,8 @@ const MedicationListPage: React.FC = () => {
             variant={viewMode === 'table' ? 'primary' : 'outline-primary'}
             onClick={() => setViewMode('table')}
             title="List view with detailed information"
-            style={{ fontSize: '1rem', padding: '8px 16px' }}
+            className='btn-medium'
+            
           >
              List View
           </Button>
@@ -142,7 +142,7 @@ const MedicationListPage: React.FC = () => {
             variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
             onClick={() => setViewMode('grid')}
             title="Card view with medication details"
-            style={{ fontSize: '1rem', padding: '8px 16px' }}
+            className="btn-medium"
           >
              Card View
           </Button>
@@ -151,16 +151,16 @@ const MedicationListPage: React.FC = () => {
       
       {/* Search field */}
       <Form.Group className="mb-3">
-        <Form.Label className="label-strong" style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+        <Form.Label className="label-strong">
           Search Medications:
         </Form.Label>
         <Form.Control
-          className="input-medium"
+          className="text-medium"
           type="text"
           placeholder="Search by medication name, indication, patient name, or dosage..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          style={{ fontSize: '1rem' }}
+          
         />
       </Form.Group>
       
@@ -192,7 +192,7 @@ const MedicationListPage: React.FC = () => {
           <Button 
             className="btn btn-teal btn-large"
             onClick={() => navigate("/medications/new")}
-            style={{ fontSize: '1.1rem', padding: '10px 20px' }}
+            
           >
              Add New Medication
           </Button>

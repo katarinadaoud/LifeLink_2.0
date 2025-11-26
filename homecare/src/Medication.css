@@ -36,6 +36,15 @@
   font-size: 1rem;
 }
 
+/* Text size */
+.text-medium {
+  font-size: 1rem;
+}
+
+.text-large {
+  font-size: 1.1rem;
+}
+
 /* Generic red error replacement (style: color: red) */
 .error-red {
   color: red;
@@ -62,3 +71,5 @@
 .error-top {
   margin-top: -5px;
 }
+
+

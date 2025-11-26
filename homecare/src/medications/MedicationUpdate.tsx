@@ -91,7 +91,7 @@ const MedicationUpdatePage: React.FC = () => {
 
   return (
     /*main container using bootsrap layout */
-    <div className="container mt-4 update container">
+    <div className="container mt-4 update-container">
       <h2 className="fw-bold text-primary mb-3">Update Medication</h2>
       <p className="text-muted mb-4"> {/*subtitle - purpose of the page */}
         Edit the medication details below and click Save Changes.
@@ -131,7 +131,6 @@ const MedicationUpdatePage: React.FC = () => {
           >
             
             <option value="">Select a patient...</option>
-            /
             
             {/*patient list automatically rendered */}
             {patients.map((patient) => (
