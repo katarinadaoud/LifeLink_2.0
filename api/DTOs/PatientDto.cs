@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using HomeCareApp.Models;
 
-
 namespace HomeCareApp.DTOs
 {
     public class PatientDto
@@ -10,7 +9,6 @@ namespace HomeCareApp.DTOs
 
         [Required]
         [RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Name must be numbers or letters and between 2 to 20 characters.")]
-
         [Display(Name = "Patient Name")]
         public string FullName { get; set; } = string.Empty;
 
@@ -31,5 +29,31 @@ namespace HomeCareApp.DTOs
 
         public AuthUser? User { get; set; }
 
+        // Create a DTO from Patient entity
+        public static PatientDto FromEntity(Patient patient) => new()
+        {
+            PatientId = patient.PatientId,
+            FullName = patient.FullName,
+            Address = patient.Address,
+            DateOfBirth = patient.DateOfBirth,
+            phonenumber = patient.phonenumber,
+            HealthRelated_info = patient.HealthRelated_info,
+            UserId = patient.UserId,
+            User = patient.User
+        };
+
+        // Convert DTO to Patient entity
+        public Patient ToEntity(string? userIdOverride = null) => new()
+        {
+            PatientId = PatientId ?? 0,
+            FullName = FullName,
+            Address = Address,
+            DateOfBirth = DateOfBirth,
+            phonenumber = phonenumber,
+            HealthRelated_info = HealthRelated_info,
+            UserId = userIdOverride ?? UserId,
+            User = User,
+            Appointments = new List<Appointment>()
+        };
     }
 }

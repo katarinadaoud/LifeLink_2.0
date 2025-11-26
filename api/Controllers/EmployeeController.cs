@@ -13,194 +13,88 @@ public class EmployeeController : ControllerBase
 {
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IPatientRepository _patientRepository;
+    private readonly ILogger<EmployeeController> _logger;
 
-    public EmployeeController(IEmployeeRepository employeeRepository, IPatientRepository patientRepository)
+    public EmployeeController(IEmployeeRepository employeeRepository, IPatientRepository patientRepository, ILogger<EmployeeController> logger)
     {
         _employeeRepository = employeeRepository;
         _patientRepository = patientRepository;
+        _logger = logger;
     }
 
-    // GET: api/employee
+    //Get all employees and returns as a list//
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees()
     {
+        //Find employee list
         var employees = await _employeeRepository.GetAll();
-        var employeeDtos = employees.Select(e => new EmployeeDto
+        if (employees == null)
         {
-            EmployeeId = e.EmployeeId,
-            FullName = e.FullName,
-            Address = e.Address,
-            Department = e.Department,
-            UserId = e.UserId,
-            User = e.User
-        });
+            _logger.LogError("[EmployeeController] Employee list not found while executing _employeeRepository.GetAll()");
+            return NotFound("Employee list not found");
+        }
+
+        //Map employee to DTOs using FromEntity
+        var employeeDtos = employees.Select(EmployeeDto.FromEntity);
+        
+        _logger.LogInformation("[EmployeeController] Retrieved {Count} employees", employees.Count());
         return Ok(employeeDtos);
     }
 
-    // GET: api/employee/{id}
-    [HttpGet("{id}")]
-    public async Task<ActionResult<EmployeeDto>> GetEmployee(int id)
-    {
-        var employee = await _employeeRepository.GetEmployeeById(id);
-        if (employee == null)
-            return NotFound();
 
-        var employeeDto = new EmployeeDto
-        {
-            EmployeeId = employee.EmployeeId,
-            FullName = employee.FullName,
-            Address = employee.Address,
-            Department = employee.Department,
-            UserId = employee.UserId,
-            User = employee.User
-        };
 
-        return Ok(employeeDto);
-    }
-
-    // GET: api/employee/user/{userId}
+    //Get employee by user id//
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<EmployeeDto>> GetEmployeeByUserId(string userId)
     {
-        Console.WriteLine($"[EmployeeController] Getting employee by UserId: {userId}");
+        _logger.LogInformation("[EmployeeController] Getting employee by UserId: {UserId}", userId);
         var employee = await _employeeRepository.GetEmployeeByUserId(userId);
         if (employee == null)
         {
-            Console.WriteLine($"[EmployeeController] Employee with UserId {userId} not found");
+            _logger.LogWarning("[EmployeeController] Employee with UserId {UserId} not found", userId);
             return NotFound($"Employee with UserId {userId} not found");
         }
 
-        var employeeDto = new EmployeeDto
-        {
-            EmployeeId = employee.EmployeeId,
-            FullName = employee.FullName,
-            Address = employee.Address,
-            Department = employee.Department,
-            UserId = employee.UserId,
-            User = employee.User
-        };
+        var employeeDto = EmployeeDto.FromEntity(employee);
 
+        _logger.LogInformation("[EmployeeController] Successfully retrieved employee {EmployeeId} for UserId: {UserId}", employee.EmployeeId, userId);
         return Ok(employeeDto);
     }
 
-    // POST: api/employee
-    [HttpPost]
-    public async Task<ActionResult<EmployeeDto>> CreateEmployee(EmployeeDto employeeDto)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
 
-        var employee = new Employee
-        {
-            FullName = employeeDto.FullName,
-            Address = employeeDto.Address,
-            Department = employeeDto.Department,
-            UserId = employeeDto.UserId,
-            User = null!,
-            Appointments = null!
-        };
-
-        await _employeeRepository.Create(employee);
-        
-        var createdEmployeeDto = new EmployeeDto
-        {
-            EmployeeId = employee.EmployeeId,
-            FullName = employee.FullName,
-            Address = employee.Address,
-            Department = employee.Department,
-            UserId = employee.UserId,
-            User = employee.User
-        };
-
-        return CreatedAtAction(nameof(GetEmployee), new { id = employee.EmployeeId }, createdEmployeeDto);
-    }
-
-    // PUT: api/employee/{id}
+    //Update employee details in My Profile//
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateEmployee(int id, EmployeeDto employeeDto)
     {
+        _logger.LogInformation("[EmployeeController] Updating employee with ID: {EmployeeId}", id);
+        
+        //id must match the id in the url and dto, making sure the correct employee is updated
         if (employeeDto.EmployeeId != id)
+        {
+            _logger.LogWarning("[EmployeeController] ID mismatch: URL ID {UrlId} vs DTO ID {DtoId}", id, employeeDto.EmployeeId);
             return BadRequest("ID mismatch");
+        }
 
         var existingEmployee = await _employeeRepository.GetEmployeeById(id);
         if (existingEmployee == null)
+        {
+            _logger.LogWarning("[EmployeeController] Employee with ID {EmployeeId} not found for update", id);
             return NotFound();
+        }
 
         if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("[EmployeeController] Invalid model state for employee update {EmployeeId}", id);
             return BadRequest(ModelState);
+        }
 
-        existingEmployee.FullName = employeeDto.FullName;
-        existingEmployee.Address = employeeDto.Address;
-        existingEmployee.Department = employeeDto.Department;
-        existingEmployee.UserId = employeeDto.UserId;
+        //Map updated fields from DTO to entity
+        var updatedEmployee = employeeDto.ToEntity();
+        updatedEmployee.EmployeeId = id; 
+        updatedEmployee.Appointments = existingEmployee.Appointments;
 
-        await _employeeRepository.Update(existingEmployee);
+        await _employeeRepository.Update(updatedEmployee);
+        _logger.LogInformation("[EmployeeController] Successfully updated employee {EmployeeId}", id);
         return NoContent();
-    }
-
-    // DELETE: api/employee/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteEmployee(int id)
-    {
-        var employee = await _employeeRepository.GetEmployeeById(id);
-        if (employee == null)
-            return NotFound();
-
-        await _employeeRepository.Delete(id);
-        return NoContent();
-    }
-
-    // GET: api/employee/dashboard
-    [HttpGet("dashboard")]
-    public async Task<ActionResult<object>> GetDashboard()
-    {
-        var patients = await _patientRepository.GetAll();
-        
-        var dashboardData = new
-        {
-            Role = "employee",
-            ActiveTab = "schedule",
-            TotalPatients = patients.Count(),
-            Message = "Employee dashboard data"
-        };
-        
-        return Ok(dashboardData);
-    }
-
-    // GET: api/employee/patients-summary
-    [HttpGet("patients-summary")]
-    public async Task<ActionResult<object>> GetPatientsSummary()
-    {
-        var patients = await _patientRepository.GetAll();
-        
-        var summary = new
-        {
-            Role = "employee",
-            ActiveTab = "patients",
-            TotalPatients = patients.Count(),
-            Patients = patients.Select(p => new {
-                p.PatientId,
-                p.FullName,
-                p.Address,
-                p.DateOfBirth
-            })
-        };
-        
-        return Ok(summary);
-    }
-
-    // GET: api/employee/visits-summary
-    [HttpGet("visits-summary")]
-    public ActionResult<object> GetVisitsSummary()
-    {
-        var visitsData = new
-        {
-            Role = "employee",
-            ActiveTab = "visits",
-            TodaysVisits = 0, // Dette kan udvides med rigtig data senere
-            Message = "Today's visits summary"
-        };
-        
-        return Ok(visitsData);
     }
 }

@@ -1,11 +1,8 @@
-using HomeCareApp.Data;
 using HomeCareApp.DTOs;
 using HomeCareApp.Models;
 using HomeCareApp.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace HomeCareApp.Controllers
 {
@@ -13,105 +10,178 @@ namespace HomeCareApp.Controllers
     [Route("api/[controller]")]
     public class MedicationController : ControllerBase
     {
-        private readonly IMedicationRepository _repo;
-        private readonly AppDbContext _db;
+        private readonly IMedicationRepository _medicationRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly ILogger<MedicationController> _logger;
 
-        public MedicationController(IMedicationRepository repo, AppDbContext db, INotificationRepository notificationRepository, ILogger<MedicationController> logger)
+        public MedicationController(IMedicationRepository medicationRepository, INotificationRepository notificationRepository, ILogger<MedicationController> logger)
         {
-            _repo = repo;
-            _db = db;
+            _medicationRepository = medicationRepository;
             _notificationRepository = notificationRepository;
             _logger = logger;
         }
 
-        // Get all medications (Public access like appointments)
+        // Get all medications, returns it as a list//
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MedicationDto>>> GetAll()
         {
-            var items = await _repo.GetAllAsync();
-            return Ok(items.Select(MedicationDto.FromEntity));
+            //find medication list
+            var medications = await _medicationRepository.GetAllAsync();
+            if (medications == null)
+            {
+                _logger.LogError("[MedicationController] Medication list not found while executing _medicationRepository.GetAllAsync()");
+                return NotFound("Medication list not found");
+            }
+
+            //Map medication to DTOs
+            var medicationDtos = medications.Select(MedicationDto.FromEntity);
+
+            _logger.LogInformation("[MedicationController] Retrieved {Count} medications", medications.Count());
+            return Ok(medicationDtos);
         }
 
-        // Get medications for a specific patient
+        // Get medications by patient id and returns list of that patients medications//
         [HttpGet("patient/{patientId}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<MedicationDto>>> GetByPatientId(int patientId)
         {
-            var items = await _repo.GetByPatientAsync(patientId);
-            return Ok(items.Select(MedicationDto.FromEntity));
+            _logger.LogInformation("[MedicationController] Getting medications for PatientId: {PatientId}", patientId);
+            
+            var medications = await _medicationRepository.GetByPatientAsync(patientId);
+            
+            _logger.LogInformation("[MedicationController] Found {Count} medications for PatientId: {PatientId}", medications.Count(), patientId);
+            return Ok(medications.Select(MedicationDto.FromEntity));
         }
 
-        // Get a medication by name
+        // Get a medication by its name//
         [HttpGet("{medicationName}")]
         public async Task<ActionResult<MedicationDto>> GetByName(string medicationName)
         {
-            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicationName);
-            if (med == null) return NotFound();
-            return Ok(MedicationDto.FromEntity(med));
+            _logger.LogInformation("[MedicationController] Getting medication by name: {MedicationName}", medicationName);
+            
+            var medications = await _medicationRepository.GetByNameAsync(medicationName);
+            if (medications == null)
+            {
+                _logger.LogWarning("[MedicationController] Medication not found: {MedicationName}", medicationName);
+                return NotFound();
+            }
+            
+            return Ok(MedicationDto.FromEntity(medications));
         }
 
-        // Create a new medication
+        // Create a new medication//
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<MedicationDto>> Create(MedicationDto dto)
         {
-            var entity = dto.ToEntity();
-            _db.Medications.Add(entity);
-            await _db.SaveChangesAsync();
-            
-            // Create notification for medication creation
-            await CreateMedicationNotification(entity, "created");
-            
-            return CreatedAtAction(nameof(GetByName), new { medicationName = entity.medicineName }, MedicationDto.FromEntity(entity));
+            if (dto == null)
+            {
+                return BadRequest("Medication data cannot be null");
+            }
+
+            try
+            {
+                var entity = dto.ToEntity();
+                var createdMedication = await _medicationRepository.AddAsync(entity);
+                
+                // Create notification for medication creation
+                await CreateMedicationNotification(createdMedication, "created");
+                
+                _logger.LogInformation("[MedicationController] Successfully created medication: {MedicationName} for PatientId: {PatientId}", entity.medicineName, entity.PatientId);
+                
+                return CreatedAtAction(nameof(GetByName), new { medicationName = entity.medicineName }, MedicationDto.FromEntity(createdMedication));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationController] Medication creation failed for {MedicationName}", dto.medicationName);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // Update medication
+        //Update medication//
         [HttpPut("{medicationName}")]
         [Authorize]
         public async Task<IActionResult> Update(string medicationName, MedicationDto dto)
         {
-            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicationName);
-            if (med == null) return NotFound();
+            if (dto == null)
+            {
+                return BadRequest("Medication data cannot be null");
+            }
 
-            med.Dosage = dto.Dosage;
-            med.StartDate = dto.StartDate;
-            med.EndDate = dto.EndDate;
-            med.PatientId = dto.PatientId;
-            med.Indication = dto.Indication;
+            try
+            {
+                //Find the existing medication
+                var existingMedication = await _medicationRepository.GetByNameAsync(medicationName);
+                if (existingMedication == null)
+                {
+                    _logger.LogWarning("[MedicationController] Medication not found for update: {MedicationName}", medicationName);
+                    return NotFound("Medication not found");
+                }
 
-            await _db.SaveChangesAsync();
-            
-            // Create notification for medication update
-            await CreateMedicationNotification(med, "updated");
-            
-            return NoContent();
+                //Update medication properties
+                existingMedication.Dosage = dto.Dosage;
+                existingMedication.StartDate = dto.StartDate;
+                existingMedication.EndDate = dto.EndDate;
+                existingMedication.PatientId = dto.PatientId;
+                existingMedication.Indication = dto.Indication;
+
+                //we don't need to call AddAsync. Changes will be saved automatically.
+                
+                
+                //Create notification for medication update
+                await CreateMedicationNotification(existingMedication, "updated");
+                
+                _logger.LogInformation("[MedicationController] Successfully updated medication: {MedicationName} for PatientId: {PatientId}", medicationName, existingMedication.PatientId);
+                
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationController] Medication update failed for {MedicationName}", medicationName);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
-        // Delete medication
+        //Delete medication//
         [HttpDelete("{medicationName}")]
         [Authorize]
         public async Task<IActionResult> Delete(string medicationName)
         {
-            var med = await _db.Medications.FirstOrDefaultAsync(m => m.medicineName == medicationName);
-            if (med == null) return NotFound();
+            try
+            {
+                //Get medication details before deletion for notifications
+                var medicationToDelete = await _medicationRepository.GetByNameAsync(medicationName);
+                if (medicationToDelete == null)
+                {
+                    _logger.LogWarning("[MedicationController] Medication not found for deletion: {MedicationName}", medicationName);
+                    return NotFound("Medication not found");
+                }
 
-            // Create notification before deletion (need medication data)
-            await CreateMedicationNotification(med, "deleted");
+                //Create notification before deletion
+                await CreateMedicationNotification(medicationToDelete, "deleted");
 
-            _db.Medications.Remove(med);
-            await _db.SaveChangesAsync();
-            return NoContent();
+                //Delete using repository
+                await _medicationRepository.DeleteAsync(medicationToDelete);
+                
+                _logger.LogInformation("[MedicationController] Successfully deleted medication: {MedicationName} for PatientId: {PatientId}", medicationName, medicationToDelete.PatientId);
+                
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationController] Medication deletion failed for {MedicationName}", medicationName);
+                return StatusCode(500, "Internal server error");
+            }
         }
 
+
+        //Create notifications, only one simple method because it is only one user affected//
         private async Task CreateMedicationNotification(Medication medication, string action)
         {
             try
             {
-                // Get patient information including UserId
-                var patient = await _db.Patients.FirstOrDefaultAsync(p => p.PatientId == medication.PatientId);
-                if (patient?.UserId == null)
+                // Check if patient information is available
+                if (medication.Patient?.UserId == null)
                 {
                     _logger.LogWarning("[MedicationController] Missing patient UserId for medication {MedicineName}", medication.medicineName);
                     return;
@@ -135,7 +205,7 @@ namespace HomeCareApp.Controllers
 
                 var notification = new Notification
                 {
-                    UserId = patient.UserId,
+                    UserId = medication.Patient.UserId,
                     Title = title,
                     Message = message,
                     Type = "medication",

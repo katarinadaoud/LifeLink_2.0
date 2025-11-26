@@ -12,160 +12,97 @@ namespace HomeCareApp.Controllers;
 public class PatientController : ControllerBase
 {
     private readonly IPatientRepository _patientRepository;
-
-    public PatientController(IPatientRepository patientRepository)
+    private readonly ILogger<PatientController> _logger;
+    
+    public PatientController(IPatientRepository patientRepository, ILogger<PatientController> logger)
     {
         _patientRepository = patientRepository;
+        _logger = logger;
     }
 
-    // GET: api/patient
+    //Get all patients and returns as a list//
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PatientDto>>> GetPatients()
     {
+        //Find patient list
         var patients = await _patientRepository.GetAll();
-        var patientDtos = patients.Select(p => new PatientDto
+        if (patients == null)
         {
-            PatientId = p.PatientId,
-            FullName = p.FullName,
-            Address = p.Address,
-            DateOfBirth = p.DateOfBirth,
-            phonenumber = p.phonenumber,
-            HealthRelated_info = p.HealthRelated_info,
-            UserId = p.UserId,
-            User = p.User
-        });
+            _logger.LogError("[PatientController] Patient list not found while executing _patientRepository.GetAll()");
+            return NotFound("Patient list not found");
+        }
+
+        //Map patients to DTOs using FromEntity
+        var patientDtos = patients.Select(PatientDto.FromEntity);
+        
+        _logger.LogInformation("[PatientController] Retrieved {Count} patients", patients.Count());
         return Ok(patientDtos);
     }
 
-    // GET: api/patient/{id}
-    [HttpGet("{id}")]
-    public async Task<ActionResult<PatientDto>> GetPatient(int id)
-    {
-        var patient = await _patientRepository.GetPatientById(id);
-        if (patient == null)
-            return NotFound();
 
-        var patientDto = new PatientDto
-        {
-            PatientId = patient.PatientId,
-            FullName = patient.FullName,
-            Address = patient.Address,
-            DateOfBirth = patient.DateOfBirth,
-            phonenumber = patient.phonenumber,
-            HealthRelated_info = patient.HealthRelated_info,
-            UserId = patient.UserId,
-            User = patient.User
-        };
 
-        return Ok(patientDto);
-    }
-
-    // GET: api/patient/user/{userId}
+    //Get patient by user id//
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<PatientDto>> GetPatientByUserId(string userId)
     {
-        Console.WriteLine($"[PatientController] Getting patient by UserId: {userId}");
+        _logger.LogInformation("[PatientController] Getting patient by UserId: {UserId}", userId);
         var patients = await _patientRepository.GetAll();
-        Console.WriteLine($"[PatientController] Total patients in database: {patients.Count()}");
+        _logger.LogInformation("[PatientController] Total patients in database: {Count}", patients.Count());
         
         foreach (var p in patients)
         {
-            Console.WriteLine($"[PatientController] Patient: {p.PatientId}, UserId: {p.UserId}");
+            _logger.LogDebug("[PatientController] Patient: {PatientId}, UserId: {UserId}", p.PatientId, p.UserId);
         }
         
         var patient = patients.FirstOrDefault(p => p.UserId == userId);
         
         if (patient == null)
         {
-            Console.WriteLine($"[PatientController] Patient with UserId {userId} not found");
+            _logger.LogWarning("[PatientController] Patient with UserId {UserId} not found", userId);
             return NotFound($"Patient with UserId {userId} not found");
         }
 
-        var patientDto = new PatientDto
-        {
-            PatientId = patient.PatientId,
-            FullName = patient.FullName,
-            Address = patient.Address,
-            DateOfBirth = patient.DateOfBirth,
-            phonenumber = patient.phonenumber,
-            HealthRelated_info = patient.HealthRelated_info,
-            UserId = patient.UserId,
-            User = patient.User
-        };
+        var patientDto = PatientDto.FromEntity(patient);
 
+        _logger.LogInformation("[PatientController] Successfully retrieved patient {PatientId} for UserId: {UserId}", patient.PatientId, userId);
         return Ok(patientDto);
     }
 
-    // POST: api/patient
-    [HttpPost]
-    public async Task<ActionResult<PatientDto>> CreatePatient(PatientDto patientDto)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        var patient = new Patient
-        {
-            FullName = patientDto.FullName,
-            Address = patientDto.Address,
-            DateOfBirth = patientDto.DateOfBirth,
-            phonenumber = patientDto.phonenumber,
-            HealthRelated_info = patientDto.HealthRelated_info,
-            UserId = patientDto.UserId,
-            User = null!,
-            Appointments = null!
-        };
-
-        await _patientRepository.Create(patient);
-        
-        var createdPatientDto = new PatientDto
-        {
-            PatientId = patient.PatientId,
-            FullName = patient.FullName,
-            Address = patient.Address,
-            DateOfBirth = patient.DateOfBirth,
-            phonenumber = patient.phonenumber,
-            HealthRelated_info = patient.HealthRelated_info,
-            UserId = patient.UserId,
-            User = patient.User
-        };
-
-        return CreatedAtAction(nameof(GetPatient), new { id = patient.PatientId }, createdPatientDto);
-    }
-
-    // PUT: api/patient/{id}
+    //Update patient details in My Profile//
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePatient(int id, PatientDto patientDto)
     {
+        _logger.LogInformation("[PatientController] Updating patient with ID: {PatientId}", id);
+        
+        //id must match the url and dto, making sure the correct patient is updated
         if (patientDto.PatientId != id)
+        {
+            _logger.LogWarning("[PatientController] ID mismatch: URL ID {UrlId} vs DTO ID {DtoId}", id, patientDto.PatientId);
             return BadRequest("ID mismatch");
+        }
 
         var existingPatient = await _patientRepository.GetPatientById(id);
         if (existingPatient == null)
+        {
+            _logger.LogWarning("[PatientController] Patient with ID {PatientId} not found for update", id);
             return NotFound();
+        }
 
         if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("[PatientController] Invalid model state for patient update {PatientId}", id);
             return BadRequest(ModelState);
+        }
 
-        existingPatient.FullName = patientDto.FullName;
-        existingPatient.Address = patientDto.Address;
-        existingPatient.DateOfBirth = patientDto.DateOfBirth;
-        existingPatient.phonenumber = patientDto.phonenumber;
-        existingPatient.HealthRelated_info = patientDto.HealthRelated_info;
-        existingPatient.UserId = patientDto.UserId;
+        // Map updated fields from DTO to entity
+        var updatedPatient = patientDto.ToEntity();
+        updatedPatient.PatientId = id;
+        updatedPatient.Appointments = existingPatient.Appointments;
 
-        await _patientRepository.Update(existingPatient);
+        await _patientRepository.Update(updatedPatient);
+        _logger.LogInformation("[PatientController] Successfully updated patient {PatientId}", id);
         return NoContent();
     }
 
-    // DELETE: api/patient/{id}
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePatient(int id)
-    {
-        var patient = await _patientRepository.GetPatientById(id);
-        if (patient == null)
-            return NotFound();
 
-        await _patientRepository.Delete(id);
-        return NoContent();
-    }
 }

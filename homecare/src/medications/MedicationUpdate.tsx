@@ -89,7 +89,7 @@ const MedicationUpdatePage: React.FC = () => {
 
   return (
     <div className="container mt-4" style={{ maxWidth: "600px" }}>
-      <h2 className="fw-bold text-primary mb-3">Update Medication</h2>
+      <h2>Update Medication</h2>
       <p className="text-muted mb-4">
         Edit the medication details below and click Save Changes.
       </p>
@@ -177,7 +177,7 @@ const MedicationUpdatePage: React.FC = () => {
           >
             Cancel
           </Button>
-          <Button variant="primary" type="submit" disabled={saving}>
+          <Button className="btn btn-teal auth-submit" type="submit" disabled={saving}>
             {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>

@@ -13,12 +13,12 @@ namespace HomeCareApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase // ControllerBase is sufficient for API controllers
+    public class AuthController : ControllerBase
     {
-        private readonly UserManager<AuthUser> _userManager;
-        private readonly SignInManager<AuthUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
+        private readonly UserManager<AuthUser> _userManager; //for handling users
+        private readonly SignInManager<AuthUser> _signInManager; //for handling log ins
+        private readonly RoleManager<IdentityRole> _roleManager; //for handling roles
+        private readonly IConfiguration _configuration; //for accessing app settings
         private readonly ILogger<AuthController> _logger;
         private readonly IPatientRepository _patientRepository;
         private readonly IEmployeeRepository _employeeRepository;
@@ -34,6 +34,8 @@ namespace HomeCareApp.Controllers
             _employeeRepository = employeeRepository;
         }
 
+
+        // Creates a user with role Patient or Employee//
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
@@ -53,13 +55,13 @@ namespace HomeCareApp.Controllers
             
             if (result.Succeeded)
             {
-                // Ensure roles exist
+                //Ensure roles exist
                 if (!await _roleManager.RoleExistsAsync("Patient"))
                     await _roleManager.CreateAsync(new IdentityRole("Patient"));
                 if (!await _roleManager.RoleExistsAsync("Employee"))
                     await _roleManager.CreateAsync(new IdentityRole("Employee"));
 
-                // Add user to role
+                //Add user to role
                 await _userManager.AddToRoleAsync(user, registerDto.Role);
 
                 _logger.LogInformation("[AuthAPIController] user registered for {@username} with role {@role}", registerDto.Username, registerDto.Role);
@@ -71,11 +73,14 @@ namespace HomeCareApp.Controllers
             return BadRequest(errors);
         }
 
+        //Method for user login//
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
+            //Check if the user exists
             var user = await _userManager.FindByNameAsync(loginDto.Username);
 
+            // Validate the password
             if (user != null && await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
                 _logger.LogInformation("[AuthAPIController] user authorised for {@username}", loginDto.Username);
@@ -87,33 +92,37 @@ namespace HomeCareApp.Controllers
             return Unauthorized();
         }
 
+        //Method for user logout//
         [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            // For token-based authentication, logout is typically handled on the client-side by clearing the token. This endpoint can be used for things like token invalidation if implemented.
-            await _signInManager.SignOutAsync(); // This is more for cookie-based auth, but doesn't hurt.
+            //Logout is usually handled on the client side by removing the token
+            await _signInManager.SignOutAsync();
             _logger.LogInformation("[AuthAPIController] user logged out");
             return Ok(new { Message = "Logout successful" });
         }
 
+        //Completes patient profile after registration//
         [Authorize]
         [HttpPost("complete-patient-profile")]
-        public async Task<IActionResult> CompletePatientProfile([FromBody] PatientProfileDto profileDto)
+        public async Task<IActionResult> CompletePatientProfile([FromBody] PatientDto profileDto)
         {
+            //Get current user
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
                 return NotFound("User not found");
             }
 
+            //Check if user is patient
             var roles = await _userManager.GetRolesAsync(user);
             if (!roles.Contains("Patient"))
             {
                 return BadRequest("User is not a patient");
             }
 
-            // Check if patient record already exists
+            // Check if patient already exists
             var patients = await _patientRepository.GetAll();
             var existingPatient = patients.FirstOrDefault(p => p.UserId == user.Id);
             
@@ -122,17 +131,9 @@ namespace HomeCareApp.Controllers
                 return BadRequest("Patient profile already exists");
             }
 
-            var patient = new Patient
-            {
-                FullName = profileDto.FullName,
-                Address = profileDto.Address,
-                DateOfBirth = profileDto.DateOfBirth,
-                phonenumber = profileDto.PhoneNumber,
-                HealthRelated_info = profileDto.HealthRelatedInfo,
-                UserId = user.Id,
-                User = user,
-                Appointments = new List<Appointment>()
-            };
+            //Map patient using DTO ToEntity
+            var patient = profileDto.ToEntity(user.Id);
+            patient.User = user; //Set navigation property
 
             await _patientRepository.Create(patient);
             _logger.LogInformation("[AuthAPIController] Patient profile created for {Username}", user.UserName);
@@ -140,9 +141,10 @@ namespace HomeCareApp.Controllers
             return Ok(new { Message = "Patient profile created successfully" });
         }
 
+        //Completes employee profile after registration//
         [Authorize]
         [HttpPost("complete-employee-profile")]
-        public async Task<IActionResult> CompleteEmployeeProfile([FromBody] EmployeeProfileDto profileDto)
+        public async Task<IActionResult> CompleteEmployeeProfile([FromBody] EmployeeDto profileDto)
         {
             var user = await GetCurrentUserAsync();
             if (user == null)
@@ -156,7 +158,6 @@ namespace HomeCareApp.Controllers
                 return BadRequest("User is not an employee");
             }
 
-            // Check if employee record already exists
             var employees = await _employeeRepository.GetAll();
             var existingEmployee = employees.FirstOrDefault(e => e.UserId == user.Id);
             
@@ -165,15 +166,9 @@ namespace HomeCareApp.Controllers
                 return BadRequest("Employee profile already exists");
             }
 
-            var employee = new Employee
-            {
-                FullName = profileDto.FullName,
-                Address = profileDto.Address,
-                Department = profileDto.Department,
-                UserId = user.Id,
-                User = user,
-                Appointments = new List<Appointment>()
-            };
+            
+            var employee = profileDto.ToEntity(user.Id);
+            employee.User = user; 
 
             await _employeeRepository.Create(employee);
             _logger.LogInformation("[AuthAPIController] Employee profile created for {Username}", user.UserName);
@@ -181,9 +176,10 @@ namespace HomeCareApp.Controllers
             return Ok(new { Message = "Employee profile created successfully" });
         }
 
+        //Help method to get current user from JWT claims using multiple fallback strategies//
         private async Task<AuthUser?> GetCurrentUserAsync()
         {
-            // Get all NameIdentifier claims (there might be multiple)
+            //Get all possible user identifiers from claims
             var allNameIdentifierClaims = User.FindAll(ClaimTypes.NameIdentifier).Select(c => c.Value).ToList();
             var userIdFromNameId = User.FindFirst("nameid")?.Value;
             var userIdFromSub = User.FindFirst("sub")?.Value;
@@ -194,7 +190,7 @@ namespace HomeCareApp.Controllers
             
             AuthUser? user = null;
             
-            // Try to find user by each possible ID (prioritize GUID format)
+            //Try to find user by each possible ID 
             var possibleIds = new List<string?> { userIdFromSub, userIdFromNameId, userIdFromUserid }
                 .Concat(allNameIdentifierClaims)
                 .Where(id => !string.IsNullOrEmpty(id))
@@ -205,7 +201,7 @@ namespace HomeCareApp.Controllers
             {
                 if (string.IsNullOrEmpty(id)) continue;
                 
-                // Check if it looks like a GUID (prioritize these)
+                //Check if it looks like a GUID (Globally Unique Identifier)
                 if (Guid.TryParse(id, out _))
                 {
                     user = await _userManager.FindByIdAsync(id);
@@ -213,13 +209,13 @@ namespace HomeCareApp.Controllers
                 }
             }
             
-            // If still not found, try by username
+            //If still not found, try by username
             if (user == null && !string.IsNullOrEmpty(username))
             {
                 user = await _userManager.FindByNameAsync(username);
             }
             
-            // Try non-GUID IDs as last resort
+            //Try non-GUID IDs as last resort
             if (user == null)
             {
                 foreach (var id in possibleIds)
@@ -234,11 +230,12 @@ namespace HomeCareApp.Controllers
             return user;
         }
 
+        //Deletes account of current user//
         [Authorize]
         [HttpDelete("delete-account")]
         public async Task<IActionResult> DeleteAccount()
         {
-            // Get all NameIdentifier claims (there might be multiple)
+        
             var allNameIdentifierClaims = User.FindAll(ClaimTypes.NameIdentifier).Select(c => c.Value).ToList();
             var userIdFromNameId = User.FindFirst("nameid")?.Value;
             var userIdFromSub = User.FindFirst("sub")?.Value;
@@ -247,7 +244,7 @@ namespace HomeCareApp.Controllers
                           User.FindFirst("username")?.Value ??
                           User.Identity?.Name;
             
-            // Log all available claims for debugging
+            //Log all available claims for debugging
             var allClaims = User.Claims.Select(c => $"{c.Type}={c.Value}").ToArray();
             _logger.LogInformation("[AuthAPIController] All Claims: {Claims}", string.Join(", ", allClaims));
             _logger.LogInformation("[AuthAPIController] All NameIdentifier claims: {NameIdentifiers}, nameid: {NameId}, sub: {Sub}, userid: {UserId}, username: {Username}", 
@@ -256,7 +253,7 @@ namespace HomeCareApp.Controllers
             AuthUser? user = null;
             string? actualUserId = null;
             
-            // Try to find user by each possible ID (prioritize GUID format)
+        
             var possibleIds = new List<string?> { userIdFromSub, userIdFromNameId, userIdFromUserid }
                 .Concat(allNameIdentifierClaims)
                 .Where(id => !string.IsNullOrEmpty(id))
@@ -267,7 +264,6 @@ namespace HomeCareApp.Controllers
             {
                 if (string.IsNullOrEmpty(id)) continue;
                 
-                // Check if it looks like a GUID (prioritize these)
                 if (Guid.TryParse(id, out _))
                 {
                     user = await _userManager.FindByIdAsync(id);
@@ -280,7 +276,6 @@ namespace HomeCareApp.Controllers
                 }
             }
             
-            // If still not found, try by username
             if (user == null && !string.IsNullOrEmpty(username))
             {
                 user = await _userManager.FindByNameAsync(username);
@@ -291,7 +286,6 @@ namespace HomeCareApp.Controllers
                 }
             }
             
-            // Try non-GUID IDs as last resort
             if (user == null)
             {
                 foreach (var id in possibleIds)
@@ -315,10 +309,10 @@ namespace HomeCareApp.Controllers
                 return NotFound("User not found");
             }
 
-            // Get user roles to determine what to delete
+            //get user roles to determine what to delete
             var roles = await _userManager.GetRolesAsync(user);
             
-            // Delete associated Patient or Employee records first (if they exist)
+            //delete associated Patient or Employee records first
             foreach (var role in roles)
             {
                 try
@@ -329,12 +323,12 @@ namespace HomeCareApp.Controllers
                         var patient = patients.FirstOrDefault(p => p.UserId == actualUserId);
                         if (patient != null)
                         {
-                            Console.WriteLine($"[AuthController] Deleting patient record for UserId: {actualUserId}");
+                            _logger.LogInformation("[AuthController] Deleting patient record for UserId: {UserId}", actualUserId);
                             await _patientRepository.Delete(patient.PatientId);
                         }
                         else
                         {
-                            Console.WriteLine($"[AuthController] No patient record found for UserId: {actualUserId}");
+                            _logger.LogWarning("[AuthController] No patient record found for UserId: {UserId}", actualUserId);
                         }
                     }
                     else if (role == "Employee")
@@ -343,19 +337,19 @@ namespace HomeCareApp.Controllers
                         var employee = employees.FirstOrDefault(e => e.UserId == actualUserId);
                         if (employee != null)
                         {
-                            Console.WriteLine($"[AuthController] Deleting employee record for UserId: {actualUserId}");
+                            _logger.LogInformation("[AuthController] Deleting employee record for UserId: {UserId}", actualUserId);
                             await _employeeRepository.Delete(employee.EmployeeId);
                         }
                         else
                         {
-                            Console.WriteLine($"[AuthController] No employee record found for UserId: {actualUserId}");
+                            _logger.LogWarning("[AuthController] No employee record found for UserId: {UserId}", actualUserId);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[AuthController] Error deleting {role} record: {ex.Message}");
-                    // Continue with user deletion even if Patient/Employee deletion fails
+                    _logger.LogError("[AuthController] Error deleting {Role} record: {ErrorMessage}", role, ex.Message);
+                    //continue with user deletion even if Patient/Employee deletion fails
                 }
             }
 
@@ -371,46 +365,48 @@ namespace HomeCareApp.Controllers
             return BadRequest(errors);
         }
 
+
+        //Generates JWT token for authenticated user//
         private async Task<string> GenerateJwtToken(AuthUser user)
         {
-            var jwtKey = _configuration["Jwt:Key"]; // The secret key used for the signature
-            if (string.IsNullOrEmpty(jwtKey)) // Ensure the key is not null or empty
+            var jwtKey = _configuration["Jwt:Key"]; //the secret key used for the signature
+            if (string.IsNullOrEmpty(jwtKey)) //ensure the key is not null or empty
             {   
                 _logger.LogError("[AuthAPIController] JWT key is missing from configuration.");
                 throw new InvalidOperationException("JWT key is missing from configuration.");
             }
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)); // Reading the key from the configuration
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256); // Using HMAC SHA256 algorithm for signing the token
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)); //reading the key from the configuration
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256); //using HMAC SHA256 algorithm for signing the token
 
-            // Get user roles
+            // get user roles
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id), // Subject of the token - use USER ID not username
-                new Claim(JwtRegisteredClaimNames.Email, user.Email!), // User's email
-                new Claim(ClaimTypes.NameIdentifier, user.Id), // Unique identifier for the user - use USER ID
-                new Claim(ClaimTypes.Name, user.UserName!), // Username
-                new Claim("username", user.UserName!), // Explicit username claim
-                new Claim("userid", user.Id), // Explicit user ID claim
-                new Claim("nameid", user.Id), // Alternative user ID claim
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // Unique identifier for the token
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()) // Issued at timestamp
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id), //subject of the token - user id not username
+                new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+                new Claim(ClaimTypes.NameIdentifier, user.Id), //unique identifier for the user
+                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim("username", user.UserName!), //explicit username claim
+                new Claim("userid", user.Id), //explicit user id claim
+                new Claim("nameid", user.Id), //alternative user id claim
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //unique identifier for the token
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()) //Issued at timestamp
             };
 
             // Add role claims
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
-                claims.Add(new Claim("role", role)); // Add explicit role claim for JWT
+                claims.Add(new Claim("role", role)); //add explicit role claim for JWT
             }
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(120), // Token expiration time set to 120 minutes
-                signingCredentials: credentials); // Signing the token with the specified credentials
+                expires: DateTime.Now.AddMinutes(120), //token expiration time set to 120 minutes
+                signingCredentials: credentials); //signing the token with the specified credentials
 
             _logger.LogInformation("[AuthAPIController] JWT token created for {@username} with roles {@roles}", user.UserName, string.Join(", ", roles));
             _logger.LogInformation("[AuthAPIController] JWT token claims: {Claims}", string.Join(", ", claims.Select(c => $"{c.Type}={c.Value}")));

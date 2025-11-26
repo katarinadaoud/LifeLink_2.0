@@ -324,21 +324,23 @@ const ProfilePage: React.FC = () => {
                                         </Row>
 
                                         <Row>
-                                            <Col md={6}>
-                                                <Form.Group className="mb-3">
-                                                    <Form.Label><strong>Department:</strong></Form.Label>
-                                                    {isEditing ? (
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="department"
-                                                            value={formData.department}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    ) : (
-                                                        <p className="mt-1">{userInfo.department}</p>
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
+                                            {user?.role === 'Employee' && (
+                                                <Col md={6}>
+                                                    <Form.Group className="mb-3">
+                                                        <Form.Label><strong>Department:</strong></Form.Label>
+                                                        {isEditing ? (
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="department"
+                                                                value={formData.department}
+                                                                onChange={handleInputChange}
+                                                            />
+                                                        ) : (
+                                                            <p className="mt-1">{userInfo.department}</p>
+                                                        )}
+                                                    </Form.Group>
+                                                </Col>
+                                            )}
                                             {user?.role === 'Patient' && userInfo.patientId && (
                                                 <Col md={6}>
                                                     <div className="mb-3">
