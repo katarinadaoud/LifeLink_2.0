@@ -1,0 +1,2 @@
+2025-11-27 11:41:19.472 +01:00 [INF] Applying migration '20251104093324_InitialAuthMigration'.
+2025-11-27 11:41:19.519 +01:00 [INF] Applying migration '20251127103744_RemoveTestData'.

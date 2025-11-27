@@ -1,0 +1,4 @@
+2025-11-27 11:41:05.812 +01:00 [INF] Applying migration '20251104093338_InitialAppMigration'.
+2025-11-27 11:41:05.867 +01:00 [INF] Applying migration '20251111125603_AddMedicationTable'.
+2025-11-27 11:41:05.881 +01:00 [INF] Applying migration '20251111155442_AddNotificationTable'.
+2025-11-27 11:41:05.894 +01:00 [INF] Applying migration '20251127103728_RemoveTestData'.

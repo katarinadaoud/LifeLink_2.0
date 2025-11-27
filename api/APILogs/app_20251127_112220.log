@@ -1,0 +1,18 @@
+2025-11-27 11:22:20.800 +01:00 [INF] Starting database initialization...
+2025-11-27 11:22:20.886 +01:00 [INF] Applying database migrations...
+2025-11-27 11:22:21.730 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-27 11:22:21.815 +01:00 [INF] No migrations were applied. The database is already up to date.
+2025-11-27 11:22:21.815 +01:00 [INF] Database migrations completed successfully
+2025-11-27 11:22:22.060 +01:00 [INF] Creating role: Admin
+2025-11-27 11:22:22.199 +01:00 [INF] Successfully created role: Admin
+2025-11-27 11:22:22.199 +01:00 [INF] Database initialization completed successfully
+2025-11-27 11:22:22.201 +01:00 [INF] Seeding development data...
+2025-11-27 11:22:22.218 +01:00 [INF] User profile is available. Using 'C:\Users\B\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-11-27 11:22:22.287 +01:00 [INF] Creating development admin user...
+2025-11-27 11:22:22.479 +01:00 [INF] Development admin user created successfully
+2025-11-27 11:22:22.479 +01:00 [INF] Development data seeding completed
+2025-11-27 11:22:22.622 +01:00 [INF] Now listening on: http://localhost:5090
+2025-11-27 11:22:22.622 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-11-27 11:22:22.623 +01:00 [INF] Hosting environment: Development
+2025-11-27 11:22:22.623 +01:00 [INF] Content root path: C:\Users\B\Documents\ITPE3200\React-Homecare\api
+2025-11-27 11:22:36.507 +01:00 [INF] Application is shutting down...

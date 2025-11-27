@@ -150,17 +150,45 @@ const ProfileSetupPage: React.FC = () => {
 
         try {
             const token = localStorage.getItem('token');
+            
+            // Map frontend fields to server DTO field names
+            const serverData = {
+                fullName: patientData.fullName,
+                address: patientData.address,
+                dateOfBirth: patientData.dateOfBirth,
+                phonenumber: patientData.phoneNumber, // frontend: phoneNumber -> server: phonenumber
+                HealthRelated_info: patientData.healthRelatedInfo // frontend: healthRelatedInfo -> server: HealthRelated_info
+            };
+            
             const response = await fetch(`http://localhost:5090/api/Auth/complete-patient-profile`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(patientData)
+                body: JSON.stringify(serverData)
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
+                
+                // Try to parse as JSON validation error
+                try {
+                    const errorData = JSON.parse(errorText);
+                    if (errorData.errors) {
+                        const errorMessages = Object.entries(errorData.errors)
+                            .map(([_, messages]: [string, any]) => 
+                                Array.isArray(messages) ? messages.join(', ') : messages
+                            )
+                            .join('. ');
+                        throw new Error(errorMessages);
+                    } else if (errorData.title) {
+                        throw new Error(errorData.title);
+                    }
+                } catch (parseError) {
+                    // If JSON parsing fails, use raw error text
+                }
+                
                 throw new Error(errorText || 'Failed to create profile');
             }
 
