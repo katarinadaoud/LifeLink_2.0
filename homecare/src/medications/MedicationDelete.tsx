@@ -4,35 +4,37 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import type { Medication } from "../types/medication";
 import { getMedication, deleteMedication } from "./MedicationService";
+import "./Medication.css";
+
 
 export default function MedicationDeletePage() {
   const { name } = useParams(); // route: /medications/:name/delete
-  const { user } = useAuth();
+  const { user } = useAuth();  // get current logged in user
   const navigate = useNavigate();
 
-  const [med, setMed] = useState<Medication | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState<string | null>(null);
-  const [deleting, setDeleting] = useState(false);
+  const [med, setMed] = useState<Medication | null>(null); // medication to be deleted
+  const [loading, setLoading] = useState(true); // loading state 
+  const [err, setErr] = useState<string | null>(null); // error message state
+  const [deleting, setDeleting] = useState(false); // deleting state
 
-  // --- Restrict access ---
+  //  Restrict access to employees only
   if (!user || user.role !== "Employee") {
     return <p className="text-danger text-center mt-5">Not authorized.</p>;
   }
 
-  // --- Load medication ---
-  useEffect(() => {
-    const load = async () => {
-      if (!name) {
+  // Load medication 
+  useEffect(() => {  // every time name changes or on mount
+    const load = async () => { // async function to load medication details
+      if (!name) { 
         setErr("Missing medication name.");
         setLoading(false);
         return;
       }
-      try {
+      try { // fetch medication by name
         const data = await getMedication(name);
         setMed(data);
       } catch (e: any) {
-        setErr(e.message ?? "Failed to load medication.");
+        setErr(e.message ?? "Failed to load medication."); // set error message if fetch fails
       } finally {
         setLoading(false);
       }
@@ -42,11 +44,11 @@ export default function MedicationDeletePage() {
 
   // Confirm delete 
   async function onConfirm() {
-    if (!med) return;
+    if (!med) return; // if no medication, do nothing
     setDeleting(true);
     setErr(null);
 
-    try {
+    try { // call delete API
       await deleteMedication(med.medicationName);
       navigate("/medications");
     } catch (e: any) {
@@ -71,18 +73,23 @@ export default function MedicationDeletePage() {
       </p>
     );
 
-  // Main view 
+  // Main container for delete and confirmation
   return (
     <div className="container mt-4">
+      {/* Card with red border to indicate delete action */}
       <Card className="shadow-sm border-danger">
         <Card.Body>
+          {/* Title and confirmation message, in red */}
           <Card.Title className="text-danger fw-bold">
             Delete Medication
           </Card.Title>
+
+          {/* Confirmation message */}
           <p className="mb-3">
             Are you sure you want to delete this medication?
           </p>
 
+          {/* details of medication being deleted */}
           <ul className="list-unstyled mb-4">
             <li><strong>Name:</strong> {med.medicationName}</li>
             <li><strong>Patient:</strong> {med.patientName ?? med.patientId ?? "—"}</li>
@@ -95,12 +102,18 @@ export default function MedicationDeletePage() {
             </li>
           </ul>
 
+          {/* Display error message if deleting fail */}
           {err && <p className="text-danger">{err}</p>}
 
+          {/* Confirm and Cancel buttons */}
           <div className="d-flex gap-2">
+
+            {/* Confirm delete button, disabled while deleting */}
             <Button className="btn btn-delete" onClick={onConfirm} disabled={deleting}>
-              {deleting ? "Deleting…" : "Delete"}
+              {deleting ? "Deleting…" : "Delete"} 
             </Button>
+
+            {/* Cancel button, navigates back to medications list */}
             <Button
               variant="outline-secondary"
               onClick={() => navigate("/medications")}

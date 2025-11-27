@@ -193,7 +193,7 @@ const AppointmentListPage: React.FC = () => {
         <div className="mt-3 text-center">
           <Button
             href="/appointmentcreate"
-            className="btn btn-primary add-appointment-btn"  // endret her
+            className="btn btn-primary add-appointment-btn"  
           >
             Add New Appointment
           </Button>

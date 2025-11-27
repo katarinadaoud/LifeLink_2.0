@@ -4,6 +4,7 @@ import type { Appointment } from '../types/appointment';
 
 import './AppointmentCalendar.css';
 
+// Props for the calendar: list of appointments, optional delete handler and user role
 interface AppointmentCalendarProps {
   appointments: Appointment[]; // Array of all appointments to be displayed
   onAppointmentDeleted?: (appointmentId: number) => void; // Optional callback when an appointment is deleted
@@ -15,21 +16,25 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
   onAppointmentDeleted, 
   userRole 
 }) => {
+  // Keeps track of which month/year is currently shown in the calendar
   const [currentDate, setCurrentDate] = useState(new Date()); // Holds whichever month is currently visible in the calendar view.
+  // Stores the appointment that was clicked so we can show its details in the modal
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null); // Tracks which appointment the user has clicked — used to populate the details modal.
+  // Controls whether the appointment details modal is open or closed
   const [showModal, setShowModal] = useState(false); // Boolean flag controlling whether the appointment details modal is visible.
 
-  // Helper function to get the first day of the month
+  // Helper function to get the first day of the current month
   const getFirstDayOfMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), 1);
   };
 
-  // Helper function to get the last day of the month
+  // Helper function to get the last day of the current month
   const getLastDayOfMonth = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   };
 
-  // Helper function to get all days to display in calendar (including prev/next month days)
+  // Helper function to compute all the days that should be displayed in the grid,
+  // including trailing days from the previous and next month so weeks are complete
   const getCalendarDays = () => {
     const firstDay = getFirstDayOfMonth(currentDate);
     const lastDay = getLastDayOfMonth(currentDate);
@@ -49,7 +54,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
     return days;
   };
 
-  // Helper function to get appointments for a specific date
+  // Helper function to return all appointments that fall on a specific calendar day
   const getAppointmentsForDate = (date: Date) => {
     const dateStr = date.toDateString();
     return appointments.filter(appointment => {
@@ -58,7 +63,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
     });
   };
 
-  // Navigation functions
+  // Navigation functions to move between months
   const goToPreviousMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };
@@ -78,10 +83,12 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
   ];
   const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
+  // Checks if a given date belongs to the currently selected month
   const isCurrentMonth = (date: Date) => {
     return date.getMonth() === currentDate.getMonth();
   };
 
+  // Checks if a given date is "today"
   const isToday = (date: Date) => {
     const today = new Date();
     return date.toDateString() === today.toDateString();
@@ -89,7 +96,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
 
   return (
     <div className="calendar-container">
-      {/* Calendar Header - More Compact */}
+      {/* Calendar header showing current month/year and navigation buttons */}
       <div className="calendar-header">
           <div>
           <h3 className="calendar-title mb-0 fw-bold">
@@ -121,7 +128,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
         </div>
       </div>
 
-      {/* Day Headers - More Compact */}
+      {/* Row with weekday names as headers for the calendar columns */}
       <div className="calendar-grid">
         <Row className="mb-2">
           {dayNames.map(day => (
@@ -132,7 +139,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
         </Row>
       </div>
 
-      {/* Calendar Grid - More Compact Layout */}
+      {/* Main calendar grid where each cell represents a day and shows its appointments */}
       <div className="calendar-grid">
         {Array.from({ length: Math.ceil(calendarDays.length / 7) }).map((_, weekIndex) => (
           <Row 
@@ -147,8 +154,8 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                       'calendar-card h-100 ' +
                       (!isCurrentMonth(date) ? 'calendar-outside-month ' : '') +
                       (isToday(date) ? 'calendar-today ' : '')
-  }
->
+                    }
+                  >
 
                     <Card.Header className="calendar-card-header py-1 px-2 d-flex justify-content-between align-items-center">
                       <strong 
@@ -167,6 +174,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                       )}
                     </Card.Header>
                     <Card.Body className="calendar-body p-1">
+                      {/* For each day, show up to two appointment "chips" with time and subject */}
                       {dayAppointments.slice(0, 2).map(appointment => (
                         <div key={appointment.appointmentId} className="mb-1">
                           <div 
@@ -189,6 +197,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                           </div>
                         </div>
                       ))}
+                      {/* If there are more than two appointments, show a "+X more" link that opens a summary */}
                       {dayAppointments.length > 2 && (
                         <div 
                           className="appointment-more text-center fw-bold"
@@ -218,7 +227,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
         ))}
       </div>
 
-      {/* Legend and Stats - More Compact */}
+      {/* Legend and monthly statistics for appointments in the currently visible month */}
       <div className="calendar-legend">
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           <div>
@@ -242,7 +251,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
         </div>
       </div>
 
-      {/* Appointment Details Modal */}
+      {/* Modal that shows detailed information about the selected appointment */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" centered>
         <Modal.Header closeButton>
           <Modal.Title className="modal-title-custom">
@@ -300,6 +309,7 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
           )}
         </Modal.Body>
         <Modal.Footer>
+          {/* If a delete handler is provided, show edit/delete actions for the selected appointment */}
           {onAppointmentDeleted && selectedAppointment && (
             <>
               <Button 

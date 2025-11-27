@@ -1,8 +1,10 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
 import type { Medication } from "../types/medication";
+import "./Medication.css";
 
 
+// Props for MedicationTable component
 export interface MedicationTableProps {
   rows: Medication[];
   userRole?: string;
@@ -15,12 +17,15 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
   userRole,
   onEdit,
   onDelete,
+
 }) => {
   return (
+    //Container using Bootstrap to center the table
+
     <div className="d-flex flex-column align-items-center">
-      <div style={{ width: '100%', overflowX: 'auto' }}>
+      <div className="table-scroll"> {/* Scrollable conton smaller screens */}
         <Table striped bordered hover className="text-center">
-          <thead style={{ backgroundColor: '#177e8b', color: 'white' }}>
+          <thead className="table-header"> {/*table headers */}
             <tr>
               <th>Patient</th>
           <th>Name</th>
@@ -28,18 +33,22 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
           <th>Dosage</th>
           <th>Start Date</th>
           <th>End Date</th>
+
+          {/*shows action columns for employees only*/}
           {userRole === "Employee" && <th>Actions</th>}
         </tr>
       </thead>
       <tbody>
         {rows.length === 0 ? (
           <tr>
+            {/* if no rowrs, show message*/}
             <td colSpan={userRole === "Employee" ? 7 : 6} className="text-center text-muted">
               No medications found.
             </td>
           </tr>
         ) : (
-          rows.map((m) => (
+          // Map through medication rows and display data
+          rows.map((m) => ( 
             <tr key={m.medicationName}>
               <td>{m.patientName ?? m.patientId ?? "—"}</td>
               <td>{m.medicationName}</td>
@@ -48,6 +57,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
               <td>{m.startDate ? m.startDate.slice(0, 10) : "—"}</td>
               <td>{m.endDate ? m.endDate.slice(0, 10) : "—"}</td>
 
+                {/*update + delete buttons shown for employees only*/}
               {userRole === "Employee" && (
                 <td className="text-center">
                   <div className="appointment-actions-vertical">

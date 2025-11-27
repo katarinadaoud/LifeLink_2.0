@@ -1,4 +1,5 @@
 /* === CALENDAR LAYOUT – PROFESSIONAL HEALTHCARE UI (HN teal theme) === */
+/* Global design tokens: colors, radii, shadows and transitions used across the calendar views */
 :root {
   --bg-page: #f3f6fb;
   --bg-card: #ffffff;
@@ -22,6 +23,7 @@
   --transition-fast: 0.18s ease;
 }
 
+/* Use border-box so padding/borders are included in element width/height calculations */
 *,
 *::before,
 *::after {
@@ -29,6 +31,7 @@
 }
 
 /* === PAGE HERO (My Appointments) === */
+/* Title section above the views: “My appointments” heading and intro text */
 .container-fluid > .text-center.mb-3 {
   max-width: 1100px;
   margin: 1.2rem auto 0.6rem auto;
@@ -52,7 +55,8 @@
   margin: 0;
 }
 
-/* === TOP TOOLBAR (Refresh + view) === */
+/* === TOP TOOLBAR (Refresh + view toggle) === */
+/* Container for “Refresh” button and List/Card/Calendar toggle */
 .container-fluid > .mb-3 {
   max-width: 1100px;
   margin: 0.6rem auto 1.1rem auto;
@@ -62,14 +66,14 @@
   flex-wrap: wrap;
 }
 
-/* Refresh-knapp */
+/* Refresh button: neutral card-like button with teal text */
 .container-fluid > .mb-3 > .btn {
   background: #fff !important;
   color: var(--primary) !important;
   border: 1px solid var(--border-soft) !important;
   padding: 9px 20px !important;
   font-size: 0.96rem !important;
-  border-radius: var(--radius-md) !important;   /* MER FIRKANTET */
+  border-radius: var(--radius-md) !important;   /* Slightly squared corners for a toolbar look */
   box-shadow: var(--shadow-soft);
 }
 
@@ -78,36 +82,39 @@
   color: #fff !important;
 }
 
-/* View toggle container */
+/* Container for the view mode buttons (List / Card / Calendar) */
 .container-fluid > .mb-3 .btn-group {
   display: inline-flex;
 }
 
-/* View toggle buttons */
+/* Shared styling for view toggle buttons */
 .container-fluid > .mb-3 .btn-group .btn {
   padding: 9px 20px !important;
   font-size: 0.96rem !important;
-  border-radius: var(--radius-md) !important;   /* MER FIRKANTET */
+  border-radius: var(--radius-md) !important;   /* Same radius as refresh button for consistency */
   box-shadow: none;
 }
 
-/* Mellomrom mellom List / Card / Calendar */
+/* Spacing between List / Card / Calendar buttons */
 .container-fluid > .mb-3 .btn-group .btn + .btn {
   margin-left: 0.5rem !important;
 }
 
+/* Default (inactive) view toggle style */
 .container-fluid > .mb-3 .btn-group .btn:not(.btn-primary) {
   background: #fff !important;
   color: var(--primary) !important;
   border-color: var(--border-soft) !important;
 }
 
+/* Active view toggle (currently selected view) */
 .container-fluid > .mb-3 .btn-group .btn.btn-primary {
   background: var(--primary) !important;
   border-color: var(--primary) !important;
   color: #fff !important;
 }
 
+/* Hover style for inactive view toggles */
 .container-fluid > .mb-3 .btn-group .btn:hover:not(.btn-primary) {
   background: var(--primary-soft) !important;
   color: var(--primary) !important;
@@ -115,6 +122,7 @@
   box-shadow: var(--shadow-soft);
 }
 
+/* Hover style for the active view toggle */
 .container-fluid > .mb-3 .btn-group .btn.btn-primary:hover {
   background: var(--primary) !important;
   border-color: var(--primary) !important;
@@ -124,6 +132,7 @@
 }
 
 /* === SEARCH AREA === */
+/* Label and input for searching appointments above the table/grid */
 .appointment-search-label {
   font-size: 1rem;
   font-weight: 600;
@@ -135,6 +144,7 @@
 }
 
 /* === CALENDAR WRAPPER === */
+/* Overall container that constrains the calendar to a readable width */
 .calendar-container {
   max-width: 1100px;
   margin: 0 auto 1.2rem auto;
@@ -143,6 +153,7 @@
 }
 
 /* === MONTH HEADER === */
+/* Top bar of the calendar: month title and navigation buttons */
 .calendar-header {
   max-width: 1100px;
   margin: 0 auto 0.3rem auto;
@@ -185,6 +196,7 @@
 }
 
 /* === WEEKDAY ROW === */
+/* First calendar-grid: only used for the row of weekday labels */
 .calendar-grid:first-of-type {
   max-width: 1100px;
   margin: 0.05rem auto 0 auto;
@@ -209,6 +221,7 @@
 }
 
 /* === MAIN CALENDAR GRID === */
+/* Second calendar-grid: wrapper for the month view with weeks and days */
 .calendar-grid:last-of-type {
   max-width: 1100px;
   margin: 0.2rem auto 0 auto;
@@ -230,6 +243,7 @@
 }
 
 /* === DAY CARD === */
+/* Each calendar cell representing one day */
 .calendar-card {
   background: var(--bg-card);
   border-radius: var(--radius-md);
@@ -248,13 +262,14 @@
   border-color: rgba(13, 148, 136, 0.22);
 }
 
-/* Highlight days with appointments */
+/* Highlight days that contain at least one appointment */
 .calendar-card:has(.appointment-item) {
   border-color: rgba(23, 126, 139, 0.32);
   background: #f7fcfc;
 }
 
 /* === DAY CARD HEADER === */
+/* Top section inside a day card: date number and appointment count badge */
 .calendar-card-header {
   padding: 4px 7px 2px 7px !important;
   display: flex;
@@ -279,6 +294,7 @@
 }
 
 /* === APPOINTMENTS LIST === */
+/* Container inside each day card where appointment “chips” are rendered */
 .calendar-body {
   flex: 1;
   padding: 2px 7px 4px 7px !important;
@@ -289,7 +305,7 @@
   justify-content: flex-start;
 }
 
-/* Appointment item */
+/* Appointment item: small pill with subject and time */
 .appointment-item {
   padding: 4px 7px !important;
   font-size: 0.72rem;
@@ -338,6 +354,7 @@
 }
 
 /* === TODAY & OUTSIDE DAYS === */
+/* Styles for the cell representing the current day */
 .calendar-today {
   border-color: rgba(13, 148, 136, 0.95);
   box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.18);
@@ -348,6 +365,7 @@
   font-weight: 700;
 }
 
+/* Days from previous/next month rendered in the current month grid */
 .calendar-outside-month {
   background: #f9fafb;
   color: #9ca3af;
@@ -359,6 +377,7 @@
 }
 
 /* === LEGEND === */
+/* Panel under the calendar explaining colors and showing monthly counts */
 .calendar-legend {
   max-width: 1100px;
   margin: 0.5rem auto 0 auto;
@@ -376,7 +395,7 @@
   color: var(--text-muted);
 }
 
-/* Make the small 'Today' badge in the legend use the app teal accent */
+/* Make the “Today” badge and related badges use the teal accent color */
 .calendar-legend .badge,
 .calendar-legend .calendar-badge {
   background-color: var(--accent) !important;
@@ -386,6 +405,7 @@
 }
 
 /* === MODAL & CARD OVERRIDES === */
+/* Fine-tuning of typography and buttons inside the appointment details modal */
 .modal-title-custom {
   font-size: 1.25rem;
   font-weight: 700;
@@ -410,6 +430,7 @@
   border-radius: var(--radius-lg);
 }
 
+/* “Add appointment” primary button used near the calendar */
 .add-appointment-btn {
   font-size: 1.1rem;
   padding: 10px 20px;
@@ -426,7 +447,7 @@
   border-color: #177e8b !important;
 }
 
-/* Bootstrap cards inside calendar */
+/* Bootstrap card overrides inside the calendar so they match the custom design */
 .calendar-card.card {
   background: var(--bg-card) !important;
   border-radius: var(--radius-md) !important;
@@ -444,6 +465,7 @@
 }
 
 /* === RESPONSIVE TUNING === */
+/* Adjust calendar layout and text sizes for tablets/smaller laptops */
 @media (max-width: 992px) {
   .calendar-header,
   .calendar-grid:first-of-type,
@@ -463,6 +485,7 @@
   }
 }
 
+/* Further reductions and font tweaks for mobile phones */
 @media (max-width: 576px) {
   .container-fluid > .text-center.mb-3 h1 {
     font-size: 1.5rem !important;
@@ -502,6 +525,7 @@
 }
 
 /* === APPOINTMENT GRID – ACTION BUTTONS === */
+/* Shared styling for Update/Delete buttons in the grid view */
 .appointment-grid-btn {
   font-size: 0.9rem;
   padding: 0.35rem 0.9rem;
@@ -509,7 +533,7 @@
   font-weight: 500;
 }
 
-/* Update = teal primary */
+/* Update = teal primary button, reusing the accent color */
 .btn.appointment-grid-btn-update,
 .btn-primary.appointment-grid-btn-update {
   background-color: var(--accent) !important;
@@ -521,12 +545,12 @@
 .btn-primary.appointment-grid-btn-update:hover,
 .btn.appointment-grid-btn-update:focus,
 .btn-primary.appointment-grid-btn-update:focus {
-  background-color: #0f5f68 !important;   /* litt mørkere teal */
+  background-color: #0f5f68 !important;   /* Slightly darker teal on hover/focus */
   border-color: #0f5f68 !important;
   color: #ffffff !important;
 }
 
-/* Delete = mer diskré rød, men tydelig */
+/* Delete = softer red styling, but still clearly destructive */
 .btn.appointment-grid-btn-delete {
   background-color: #ffffff !important;
   border-color: #fee2e2 !important;
@@ -543,7 +567,7 @@
 
 /* (Reverted grid-specific stacking/override rules) */
 
-/* List view: stack Update/Delete vertically and center them */
+/* List view: stack Update/Delete vertically and center them under the appointment */
 .appointment-actions-vertical {
   display: flex;
   flex-direction: column;
@@ -558,16 +582,16 @@
   text-decoration: none;
 }
 .appointment-actions-vertical .appointment-action-delete {
-  margin-left: 0; /* ensure no extra left margin */
+  margin-left: 0; /* Ensure no extra left margin from layout utility classes */
 }
 
-/* Ensure native <button> elements inside the vertical container stack and center */
+/* Ensure native <button> elements inside the vertical container also stack and center */
 .appointment-actions-vertical .btn {
   display: inline-block;
-  margin-left: 0; /* remove any left margin from utility classes */
+  margin-left: 0; /* Remove any left margin from utility classes */
 }
 
-/* Match grid color styling for list view stacked buttons */
+/* Match grid color styling for list view stacked “Update” button */
 .appointment-actions-vertical .appointment-action-update,
 .appointment-actions-vertical .appointment-action-update:link,
 .appointment-actions-vertical .appointment-action-update:visited {
@@ -583,6 +607,7 @@
   color: #ffffff !important;
 }
 
+/* Match grid color styling for list view stacked “Delete” button */
 .appointment-actions-vertical .appointment-action-delete,
 .appointment-actions-vertical .appointment-action-delete:link,
 .appointment-actions-vertical .appointment-action-delete:visited {
@@ -597,7 +622,3 @@
   border-color: #fecaca !important;
   color: #7f1d1d !important;
 }
-
-
-
-

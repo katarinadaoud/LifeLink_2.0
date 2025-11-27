@@ -14,71 +14,71 @@ namespace HomeCareApp.Repositories.Implementations
             _db = db;
         }
 
-        public async Task<IEnumerable<Notification>> GetAllAsync()
+        public async Task<IEnumerable<Notification>> GetAllAsync() //get all notifications
         {
-            return await _db.Notifications
-                .Include(n => n.User)
-                .OrderByDescending(n => n.CreatedAt)
+            return await _db.Notifications // go to notifications table
+                .Include(n => n.User) // include related user data
+                .OrderByDescending(n => n.CreatedAt) // order by created date descending
+                .ToListAsync(); // return list of notifications
+        }
+
+        public async Task<IEnumerable<Notification>> GetByUserIdAsync(string userId) // get notifications for a specific user
+        {
+            return await _db.Notifications // go to notifications table
+                .Where(n => n.UserId == userId) // filter by user id, only notifications for that user
+                .OrderByDescending(n => n.CreatedAt) // order by created date descending
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Notification>> GetByUserIdAsync(string userId)
+        public async Task<IEnumerable<Notification>> GetUnreadByUserIdAsync(string userId) // gets all unread notifications for a specific user
         {
-            return await _db.Notifications
-                .Where(n => n.UserId == userId)
-                .OrderByDescending(n => n.CreatedAt)
+            return await _db.Notifications // go to notifications table
+                .Where(n => n.UserId == userId && !n.IsRead) // gets notifications where user id matches and is not read
+                .OrderByDescending(n => n.CreatedAt) // order by created date descending
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Notification>> GetUnreadByUserIdAsync(string userId)
+        public async Task<Notification?> GetByIdAsync(int notificationId) //get a single notification by its id
         {
-            return await _db.Notifications
-                .Where(n => n.UserId == userId && !n.IsRead)
-                .OrderByDescending(n => n.CreatedAt)
-                .ToListAsync();
+            return await _db.Notifications // go to notifications table
+                .Include(n => n.User) // include related user data for the notification
+                .FirstOrDefaultAsync(n => n.NotificationId == notificationId); //finds notification by id or returns null if not found
         }
 
-        public async Task<Notification?> GetByIdAsync(int notificationId)
+        public async Task<bool> CreateAsync(Notification notification) // create a new notification
         {
-            return await _db.Notifications
-                .Include(n => n.User)
-                .FirstOrDefaultAsync(n => n.NotificationId == notificationId);
-        }
-
-        public async Task<bool> CreateAsync(Notification notification)
-        {
-            try
+            try // try to add notification 
             {
-                _db.Notifications.Add(notification);
-                await _db.SaveChangesAsync();
-                return true;
+                _db.Notifications.Add(notification); // add notification to notifications table
+                await _db.SaveChangesAsync(); // save new notification to database
+                return true; // return true if successful
             }
-            catch
+            catch // if saving fails, return false
             {
                 return false;
             }
         }
 
-        public async Task<bool> MarkAsReadAsync(int notificationId)
+        public async Task<bool> MarkAsReadAsync(int notificationId) // mark a single notification as read
         {
-            try
+            try // try to mark as read
             {
-                var notification = await _db.Notifications.FindAsync(notificationId);
-                if (notification != null)
+                var notification = await _db.Notifications.FindAsync(notificationId); // find notification by id
+                if (notification != null) // if a notification is found, mark as read and save changes
                 {
                     notification.IsRead = true;
                     await _db.SaveChangesAsync();
                     return true;
                 }
-                return false;
+                return false; // return false if notification not found
             }
-            catch
+            catch // database fails or other error, return false
             {
                 return false;
             }
         }
 
-        public async Task<bool> MarkAllAsReadAsync(string userId)
+        public async Task<bool> MarkAllAsReadAsync(string userId) // mark all notifications for a user as read
         {
             try
             {
@@ -86,7 +86,7 @@ namespace HomeCareApp.Repositories.Implementations
                     .Where(n => n.UserId == userId && !n.IsRead)
                     .ToListAsync();
 
-                foreach (var notification in notifications)
+                foreach (var notification in notifications) // mark each notification as read
                 {
                     notification.IsRead = true;
                 }
@@ -94,7 +94,7 @@ namespace HomeCareApp.Repositories.Implementations
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch // if fails, return false
             {
                 return false;
             }
@@ -104,25 +104,25 @@ namespace HomeCareApp.Repositories.Implementations
         {
             try
             {
-                var notification = await _db.Notifications.FindAsync(notificationId);
-                if (notification != null)
+                var notification = await _db.Notifications.FindAsync(notificationId); // find notification by id
+                if (notification != null) // if found, remove from database
                 {
-                    _db.Notifications.Remove(notification);
-                    await _db.SaveChangesAsync();
-                    return true;
+                    _db.Notifications.Remove(notification); // remove notification from notifications table
+                    await _db.SaveChangesAsync(); // save changes to database
+                    return true; // return true if successful
                 }
-                return false;
+                return false; // return false if notification not found
             }
-            catch
+            catch // if database fails or other error, return false
             {
                 return false;
             }
         }
 
-        public async Task<int> GetUnreadCountAsync(string userId)
+        public async Task<int> GetUnreadCountAsync(string userId) // get count of unread notifications for a user
         {
             return await _db.Notifications
-                .Where(n => n.UserId == userId && !n.IsRead)
+                .Where(n => n.UserId == userId && !n.IsRead) // filter by user id and unread notifications
                 .CountAsync();
         }
     }

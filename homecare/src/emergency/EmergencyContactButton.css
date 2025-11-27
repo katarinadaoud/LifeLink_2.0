@@ -1,15 +1,13 @@
-/* Flytende "Contact home care"-knapp nederst til høyre */
+
 .lifelink-emergency-btn {
   position: fixed;
-  /* place visually as far right as practical while keeping a small safe margin */
   right: 0.75rem;
   bottom: 1.5rem;
-  z-index: 1050; /* over innhold, under evt. overlays */
+  z-index: 1050; 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  /* Make fully circular: equal width/height and 50% radius */
   width: 64px;
   height: 64px;
   padding: 0;
@@ -57,7 +55,7 @@
   display: none !important;
 }
 
-/* Call-knapp i modal matcher LifeLink-teal */
+/* Call-button LifeLink-teal */
 .lifelink-emergency-call-btn {
   background-color: #177e8b;
   border-color: #177e8b;

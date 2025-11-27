@@ -1,5 +1,6 @@
-// src/medications/MedicationService.ts
 import type { Medication } from "../types/medication";
+
+
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -26,7 +27,7 @@ const handleResponse = async (response: Response) => {
   }
 };
 
-// EMPLOYEE: hent alle medisiner
+// employee: get all medications
 export async function getAllMedications(): Promise<Medication[]> {
   const response = await fetch(`${API_URL}/api/medication`, {
     method: "GET",
@@ -35,7 +36,7 @@ export async function getAllMedications(): Promise<Medication[]> {
   return handleResponse(response);
 }
 
-// Get medications by patient ID
+// Get medications by patientID
 export async function getMedicationsByPatientId(patientId: number): Promise<Medication[]> {
   const response = await fetch(`${API_URL}/api/medication/patient/${patientId}`, {
     headers: getAuthHeaders(),
@@ -43,7 +44,7 @@ export async function getMedicationsByPatientId(patientId: number): Promise<Medi
   return handleResponse(response);
 }
 
-// PATIENT: hent egne medisiner (deprecated - use getMedicationsByPatientId instead)
+// Patient: get my medications. d
 export async function getMyMedications(): Promise<Medication[]> {
   const response = await fetch(`${API_URL}/api/medication/my`, {
     method: "GET",
@@ -52,7 +53,7 @@ export async function getMyMedications(): Promise<Medication[]> {
   return handleResponse(response);
 }
 
-// Hent én medisin (f.eks. etter navn)
+// get medication by name 
 export async function getMedication(medicationName: string): Promise<Medication> {
   const response = await fetch(`${API_URL}/api/medication/${medicationName}`, {
     method: "GET",
@@ -61,7 +62,7 @@ export async function getMedication(medicationName: string): Promise<Medication>
   return handleResponse(response);
 }
 
-// Opprett ny medisin
+// create new medication
 export async function createMedication(data: Partial<Medication>): Promise<Medication> {
   const response = await fetch(`${API_URL}/api/medication`, {
     method: "POST",
@@ -71,7 +72,7 @@ export async function createMedication(data: Partial<Medication>): Promise<Medic
   return handleResponse(response);
 }
 
-// Oppdater eksisterende medisin
+// update existing medication
 export async function updateMedication(
   medicationName: string,
   data: Partial<Medication>
@@ -84,7 +85,7 @@ export async function updateMedication(
   return handleResponse(response);
 }
 
-// Slett medisin
+// delete medication by name
 export async function deleteMedication(medicationName: string): Promise<void> {
   const response = await fetch(`${API_URL}/api/medication/${medicationName}`, {
     method: "DELETE",
