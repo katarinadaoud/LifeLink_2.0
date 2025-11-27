@@ -22,24 +22,20 @@ namespace HomeCareApp.Models
         public DateTime DateOfBirth { get; set; }
 
         //Validation for phone number
-        [RegularExpression(@"^\+47\d{8}$", ErrorMessage = "phonenumber must start with +47 and have 8 numbers.")]
+        [RegularExpression(@"^\+47\d{8}$", ErrorMessage = "Phonenumber must start with +47 and have 8 numbers.")]
         [DataType(DataType.PhoneNumber)]
         public string phonenumber { get; set; } = string.Empty;
         
         public string HealthRelated_info { get; set; } = string.Empty;
 
         public string UserId { get; set; } = string.Empty; //FK to User
-        //public int? EmergencyContactId { get; set; } //FK to Emergency contact
 
         //navigation properties
         [ValidateNever]
         public required AuthUser? User { get; set; }
-        //[ValidateNever]
-        //public required EmergencyContact? EmergencyContact { get; set; }
+
         [ValidateNever]
         public required ICollection<Appointment> Appointments { get; set; }
-        //[ValidateNever]
-       // public required ICollection<EmergencyCall> EmergencyCalls { get; set; }
 
     }
 }

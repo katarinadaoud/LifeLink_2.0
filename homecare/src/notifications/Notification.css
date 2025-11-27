@@ -1,0 +1,76 @@
+/*notification style*/
+
+.notification-title {
+  color: #177e8b;
+}
+
+.notification-filter-button-active {
+  background-color: #177e8b;
+  border-color: #177e8b;
+  color: white;
+}
+
+.notification-filter-button-inactive {
+  background-color: transparent;
+  border-color: #177e8b;
+  color: #177e8b;
+}
+
+.notification-mark-all-button {
+  font-size: 0.9rem;
+}
+
+.notification-loading-spinner {
+  color: #177e8b;
+}
+
+.notification-card {
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.notification-card-unread {
+  background-color: #f8f9ff;
+}
+
+.notification-card-read {
+  background-color: white;
+}
+
+.notification-item-title {
+  color: #177e8b;
+  margin-bottom: 0.25rem;
+}
+
+.notification-item-title-bold {
+  font-weight: bold;
+}
+
+.notification-item-title-normal {
+  font-weight: normal;
+}
+
+.notification-new-badge {
+  font-size: 0.7rem;
+}
+
+.notification-message-bold {
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.notification-message-normal {
+  font-weight: normal;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.notification-type-badge {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.notification-action-button {
+  font-size: 0.8rem;
+}

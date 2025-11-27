@@ -4,8 +4,11 @@ import { useAuth } from '../auth/AuthContext';
 import { NotificationService } from './NotificationService';
 import type { NotificationDto } from '../types/notification';
 import { useNavigate } from 'react-router-dom';
+import './Notification.css';
 
 const NotificationListPage: React.FC = () => {
+
+  //Component state management, handles variables that change over time
   const [notifications, setNotifications] = useState<NotificationDto[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,6 +21,7 @@ const NotificationListPage: React.FC = () => {
       navigate('/login');
       return;
     }
+    //loads notifications if user is logged in
     loadNotifications();
   }, [user, filter, navigate]);
 
@@ -30,7 +34,7 @@ const NotificationListPage: React.FC = () => {
         ? await NotificationService.getUnreadNotifications()
         : await NotificationService.getMyNotifications();
       
-      setNotifications(data);
+      setNotifications(data); //update notification
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load notifications');
       console.error('Error loading notifications:', err);
@@ -42,7 +46,7 @@ const NotificationListPage: React.FC = () => {
   const handleMarkAsRead = async (notificationId: number) => {
     try {
       await NotificationService.markAsRead(notificationId);
-      // Update the notification in the list
+      //update the notification as read
       setNotifications(prev => 
         prev.map(n => 
           n.notificationId === notificationId 
@@ -58,7 +62,7 @@ const NotificationListPage: React.FC = () => {
   const handleMarkAllAsRead = async () => {
     try {
       await NotificationService.markAllAsRead();
-      // Update all notifications to read
+      //update all notifications as read
       setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
     } catch (err) {
       console.error('Error marking all notifications as read:', err);
@@ -68,7 +72,7 @@ const NotificationListPage: React.FC = () => {
   const handleDeleteNotification = async (notificationId: number) => {
     try {
       await NotificationService.deleteNotification(notificationId);
-      // Remove notification from list
+      //remove notification from list
       setNotifications(prev => prev.filter(n => n.notificationId !== notificationId));
     } catch (err) {
       console.error('Error deleting notification:', err);
@@ -76,19 +80,19 @@ const NotificationListPage: React.FC = () => {
   };
 
   const handleNotificationClick = (notification: NotificationDto) => {
-    // Mark as read when clicked
+    //mark as read when clicked
     if (!notification.isRead) {
       handleMarkAsRead(notification.notificationId!);
     }
 
-    // Navigate to related item if applicable
+    //navigate to related item if applicable
     if (notification.type === 'appointment' && notification.relatedId) {
       navigate('/appointments');
     } else if (notification.type === 'medication' && notification.relatedId) {
       navigate('/medications');
     }
   };
-
+  //data formatting for dates and time
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -108,6 +112,7 @@ const NotificationListPage: React.FC = () => {
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 
+  //user have to be logged in to see notifications
   if (!user) {
     return (
       <Container className="mt-5">
@@ -118,12 +123,14 @@ const NotificationListPage: React.FC = () => {
     );
   }
 
+
+  //notification section on page//
   return (
     <Container className="mt-4">
       <Row>
         <Col>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2 style={{ color: '#177e8b' }}>
+            <h2 className="notification-title">
               Notifications 
               {unreadCount > 0 && (
                 <Badge bg="danger" className="ms-2">
@@ -136,22 +143,14 @@ const NotificationListPage: React.FC = () => {
                 <Button 
                   variant={filter === 'all' ? 'primary' : 'outline-primary'}
                   onClick={() => setFilter('all')}
-                  style={{ 
-                    backgroundColor: filter === 'all' ? '#177e8b' : 'transparent',
-                    borderColor: '#177e8b',
-                    color: filter === 'all' ? 'white' : '#177e8b'
-                  }}
+                  className={filter === 'all' ? 'notification-filter-button-active' : 'notification-filter-button-inactive'}
                 >
                   All
                 </Button>
                 <Button 
                   variant={filter === 'unread' ? 'primary' : 'outline-primary'}
                   onClick={() => setFilter('unread')}
-                  style={{ 
-                    backgroundColor: filter === 'unread' ? '#177e8b' : 'transparent',
-                    borderColor: '#177e8b',
-                    color: filter === 'unread' ? 'white' : '#177e8b'
-                  }}
+                  className={filter === 'unread' ? 'notification-filter-button-active' : 'notification-filter-button-inactive'}
                 >
                   Unread
                 </Button>
@@ -160,7 +159,7 @@ const NotificationListPage: React.FC = () => {
                 <Button 
                   variant="outline-secondary" 
                   onClick={handleMarkAllAsRead}
-                  style={{ fontSize: '0.9rem' }}
+                  className="notification-mark-all-button"
                 >
                   Mark All as Read
                 </Button>
@@ -176,7 +175,7 @@ const NotificationListPage: React.FC = () => {
 
           {loading ? (
             <div className="text-center py-5">
-              <Spinner animation="border" role="status" style={{ color: '#177e8b' }}>
+              <Spinner animation="border" role="status" className="notification-loading-spinner">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
             </div>
@@ -197,24 +196,17 @@ const NotificationListPage: React.FC = () => {
               {notifications.map((notification) => (
                 <Card 
                   key={notification.notificationId} 
-                  className={`mb-3 ${!notification.isRead ? 'border-primary' : ''}`}
-                  style={{ 
-                    cursor: 'pointer',
-                    backgroundColor: !notification.isRead ? '#f8f9ff' : 'white'
-                  }}
+                  className={`notification-card ${!notification.isRead ? 'border-primary notification-card-unread' : 'notification-card-read'}`}
                   onClick={() => handleNotificationClick(notification)}
                 >
                   <Card.Body>
                     <Row>
                       <Col xs={10}>
                         <div className="d-flex justify-content-between align-items-start mb-2">
-                          <h6 className="mb-1" style={{ 
-                            fontWeight: !notification.isRead ? 'bold' : 'normal',
-                            color: '#177e8b'
-                          }}>
+                          <h6 className={`notification-item-title ${!notification.isRead ? 'notification-item-title-bold' : 'notification-item-title-normal'}`}>
                             {notification.title}
                             {!notification.isRead && (
-                              <Badge bg="primary" className="ms-2" style={{ fontSize: '0.7rem' }}>
+                              <Badge bg="primary" className="ms-2 notification-new-badge">
                                 New
                               </Badge>
                             )}
@@ -223,17 +215,13 @@ const NotificationListPage: React.FC = () => {
                             {formatDate(notification.createdAt)}
                           </small>
                         </div>
-                        <p className="mb-0" style={{ 
-                          fontWeight: !notification.isRead ? '500' : 'normal',
-                          fontSize: '1.1rem'
-                        }}>
+                        <p className={!notification.isRead ? 'notification-message-bold' : 'notification-message-normal'}>
                           {notification.message}
                         </p>
                         {notification.type && (
                           <Badge 
                             bg="secondary" 
-                            className="mt-2"
-                            style={{ fontSize: '0.8rem' }}
+                            className="notification-type-badge"
                           >
                             {notification.type}
                           </Badge>
@@ -249,7 +237,7 @@ const NotificationListPage: React.FC = () => {
                                 e.stopPropagation();
                                 handleMarkAsRead(notification.notificationId!);
                               }}
-                              style={{ fontSize: '0.8rem' }}
+                              className="notification-action-button"
                             >
                               Read
                             </Button>
@@ -261,7 +249,7 @@ const NotificationListPage: React.FC = () => {
                               e.stopPropagation();
                               handleDeleteNotification(notification.notificationId!);
                             }}
-                            style={{ fontSize: '0.8rem' }}
+                            className="notification-action-button"
                           >
                             Delete
                           </Button>

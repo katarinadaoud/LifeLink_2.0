@@ -1,0 +1,53 @@
+/*styles for homepage*/
+
+.homepage-container {
+  padding-top: 2.5rem;
+  padding-bottom: 2.75rem;
+}
+
+.homepage-title {
+  color: #111827;
+  font-size: 2.25rem;
+  letter-spacing: 0.04em;
+}
+
+.homepage-description {
+  max-width: 60ch;
+  margin: 0 auto 1.75rem auto;
+  color: #374151;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  padding: 0 1rem;
+}
+
+.homepage-main-section {
+  padding-top: 1.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.homepage-section-title {
+  color: #111827;
+  font-size: 1.7rem;
+}
+
+.homepage-action-button {
+  background-color: #177e8b;
+  border-color: #177e8b;
+  border-radius: 12px;
+  height: 130px;
+  max-width: 340px;
+  min-width: 260px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.homepage-action-button:hover {
+  background-color: transparent !important;
+  color: #177e8b !important;
+}
+
+.homepage-button-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+}

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using HomeCareApp.DTOs;
-using HomeCareApp.Models;
 using HomeCareApp.Repositories.Interfaces;
 using System.Security.Claims;
 
@@ -21,7 +20,7 @@ namespace HomeCareApp.Controllers
             _logger = logger;
         }
 
-        // Get all notifications for current user
+        //Get all notifications for current user//
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NotificationDto>>> GetMyNotifications()
         {
@@ -32,22 +31,12 @@ namespace HomeCareApp.Controllers
             }
 
             var notifications = await _notificationRepo.GetByUserIdAsync(currentUserId);
-            var notificationDtos = notifications.Select(n => new NotificationDto
-            {
-                NotificationId = n.NotificationId,
-                UserId = n.UserId,
-                Title = n.Title,
-                Message = n.Message,
-                Type = n.Type,
-                RelatedId = n.RelatedId,
-                IsRead = n.IsRead,
-                CreatedAt = n.CreatedAt
-            });
+            var notificationDtos = notifications.Select(NotificationDto.FromEntity);
 
             return Ok(notificationDtos);
         }
 
-        // Get unread notifications count for current user
+        //Get unread notifications count for current user//
         [HttpGet("unread-count")]
         public async Task<ActionResult<int>> GetUnreadCount()
         {
@@ -61,7 +50,7 @@ namespace HomeCareApp.Controllers
             return Ok(count);
         }
 
-        // Get only unread notifications for current user
+        //Get only unread notifications for current user//
         [HttpGet("unread")]
         public async Task<ActionResult<IEnumerable<NotificationDto>>> GetUnreadNotifications()
         {
@@ -72,22 +61,12 @@ namespace HomeCareApp.Controllers
             }
 
             var notifications = await _notificationRepo.GetUnreadByUserIdAsync(currentUserId);
-            var notificationDtos = notifications.Select(n => new NotificationDto
-            {
-                NotificationId = n.NotificationId,
-                UserId = n.UserId,
-                Title = n.Title,
-                Message = n.Message,
-                Type = n.Type,
-                RelatedId = n.RelatedId,
-                IsRead = n.IsRead,
-                CreatedAt = n.CreatedAt
-            });
+            var notificationDtos = notifications.Select(NotificationDto.FromEntity);
 
             return Ok(notificationDtos);
         }
 
-        // Mark notification as read
+        //Mark notification as read//
         [HttpPut("{id}/mark-read")]
         public async Task<ActionResult> MarkAsRead(int id)
         {
@@ -97,7 +76,7 @@ namespace HomeCareApp.Controllers
                 return Unauthorized("User not found");
             }
 
-            // Verify notification belongs to current user
+            //Verify notification belongs to current user
             var notification = await _notificationRepo.GetByIdAsync(id);
             if (notification == null)
             {
@@ -118,7 +97,7 @@ namespace HomeCareApp.Controllers
             return NoContent();
         }
 
-        // Mark all notifications as read for current user
+        //Mark all notifications as read for current user//
         [HttpPut("mark-all-read")]
         public async Task<ActionResult> MarkAllAsRead()
         {
@@ -137,7 +116,7 @@ namespace HomeCareApp.Controllers
             return NoContent();
         }
 
-        // Delete notification (only your own)
+        //Delete notification by id//
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteNotification(int id)
         {
@@ -147,7 +126,6 @@ namespace HomeCareApp.Controllers
                 return Unauthorized("User not found");
             }
 
-            // Verify notification belongs to current user
             var notification = await _notificationRepo.GetByIdAsync(id);
             if (notification == null)
             {
@@ -166,42 +144,6 @@ namespace HomeCareApp.Controllers
             }
 
             return NoContent();
-        }
-
-        // Create notification (for testing or admin purposes)
-        [HttpPost]
-        public async Task<ActionResult<NotificationDto>> CreateNotification(NotificationDto notificationDto)
-        {
-            var notification = new Notification
-            {
-                UserId = notificationDto.UserId,
-                Title = notificationDto.Title,
-                Message = notificationDto.Message,
-                Type = notificationDto.Type,
-                RelatedId = notificationDto.RelatedId,
-                IsRead = false,
-                CreatedAt = DateTime.Now
-            };
-
-            var success = await _notificationRepo.CreateAsync(notification);
-            if (!success)
-            {
-                return BadRequest("Failed to create notification");
-            }
-
-            var responseDto = new NotificationDto
-            {
-                NotificationId = notification.NotificationId,
-                UserId = notification.UserId,
-                Title = notification.Title,
-                Message = notification.Message,
-                Type = notification.Type,
-                RelatedId = notification.RelatedId,
-                IsRead = notification.IsRead,
-                CreatedAt = notification.CreatedAt
-            };
-
-            return CreatedAtAction(nameof(GetMyNotifications), new { id = notification.NotificationId }, responseDto);
         }
     }
 }

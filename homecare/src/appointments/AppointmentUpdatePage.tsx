@@ -4,7 +4,6 @@ import AppointmentForm from './AppointmentForm';
 import type { Appointment } from '../types/appointment';
 import * as AppointmentService from './AppointmentService';
 
-
 const AppointmentUpdatePage: React.FC = () => {
   const { appointmentId } = useParams<{ appointmentId: string }>(); // Get appointmentId from the URL
   const navigate = useNavigate(); // Create a navigate function

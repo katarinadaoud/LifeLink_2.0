@@ -5,8 +5,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './HomePage.css';
 
 const HomePage: React.FC = () => {
+
+  //navigation properties
   const navigate = useNavigate();
 
   const handleAppointmentsClick = () => {
@@ -22,55 +25,22 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div
-      className="text-center bg-white"
-      style={{
-        paddingTop: '2.5rem',   // var py-5 ≈ 3rem
-        paddingBottom: '2.75rem'
-      }}
-    >
-      <h1
-        className="fw-bold mb-3"
-        style={{
-          color: '#111827',
-          fontSize: '2.25rem',   // litt ned fra 2.5rem
-          letterSpacing: '0.04em'
-        }}
-      >
+    <div className="text-center bg-white homepage-container">
+      <h1 className="fw-bold mb-3 homepage-title">
         Welcome to LifeLink
       </h1>
 
-      <p
-        style={{
-          maxWidth: '60ch',      // heller tegnbredde enn px
-          margin: '0 auto 1.75rem auto',
-          color: '#374151',
-          fontSize: '1.1rem',    // litt ned fra 1.3rem
-          lineHeight: '1.7',
-          padding: '0 1rem'
-        }}
-      >
+      <p className="homepage-description">
         At LifeLink, you can easily book appointments for the support you need — whether it’s
         assistance with daily living, medication reminders, shopping, or household chores.
         We’re here to make life at home easier, safer, and more comfortable.
       </p>
 
-      {/* Hovedfunksjoner seksjon */}
-      <Container
-        className="px-4"
-        style={{
-          paddingTop: '1.5rem',   // var py-5
-          paddingBottom: '2.5rem'
-        }}
-      >
+      
+      {/*main features section */}
+      <Container className="px-4 homepage-main-section">
         <div className="text-center mb-4">
-          <h2
-            className="fw-semibold mb-3"
-            style={{
-              color: '#111827',
-              fontSize: '1.7rem'   // tydelig mindre enn H1
-            }}
-          >
+          <h2 className="fw-semibold mb-3 homepage-section-title">
             What do you want to do?
           </h2>
         </div>
@@ -81,27 +51,9 @@ const HomePage: React.FC = () => {
               variant="primary"
               size="lg"
               onClick={handleAppointmentsClick}
-              className="d-flex justify-content-center align-items-center w-100"
-              style={{
-                backgroundColor: '#177e8b',
-                borderColor: '#177e8b',
-                borderRadius: '12px',
-                height: '130px',        // litt lavere
-                maxWidth: '340px',
-                minWidth: '260px',
-                padding: '1.5rem',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#177e8b';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = '#177e8b';
-                e.currentTarget.style.color = 'white';
-              }}
+              className="d-flex justify-content-center align-items-center w-100 homepage-action-button"
             >
-              <span style={{ fontSize: '1.3rem', fontWeight: 600, textAlign: 'center' }}>
+              <span className="homepage-button-text">
                 Book Appointment
               </span>
             </Button>
@@ -112,27 +64,9 @@ const HomePage: React.FC = () => {
               variant="primary"
               size="lg"
               onClick={handleMedicationsClick}
-              className="d-flex justify-content-center align-items-center w-100"
-              style={{
-                backgroundColor: '#177e8b',
-                borderColor: '#177e8b',
-                borderRadius: '12px',
-                height: '130px',
-                maxWidth: '340px',
-                minWidth: '260px',
-                padding: '1.5rem',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#177e8b';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = '#177e8b';
-                e.currentTarget.style.color = 'white';
-              }}
+              className="d-flex justify-content-center align-items-center w-100 homepage-action-button"
             >
-              <span style={{ fontSize: '1.3rem', fontWeight: 600, textAlign: 'center' }}>
+              <span className="homepage-button-text">
                 Manage Medications
               </span>
             </Button>
@@ -143,27 +77,9 @@ const HomePage: React.FC = () => {
               variant="primary"
               size="lg"
               onClick={handleInboxClick}
-              className="d-flex justify-content-center align-items-center w-100"
-              style={{
-                backgroundColor: '#177e8b',
-                borderColor: '#177e8b',
-                borderRadius: '12px',
-                height: '130px',
-                maxWidth: '340px',
-                minWidth: '260px',
-                padding: '1.5rem',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#177e8b';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = '#177e8b';
-                e.currentTarget.style.color = 'white';
-              }}
+              className="d-flex justify-content-center align-items-center w-100 homepage-action-button"
             >
-              <span style={{ fontSize: '1.3rem', fontWeight: 600, textAlign: 'center' }}>
+              <span className="homepage-button-text">
                 Messages
               </span>
             </Button>

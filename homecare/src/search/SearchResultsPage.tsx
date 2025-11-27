@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Spinner, Alert } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
+import './SearchResult.css';
 
 interface SearchResult {
   type: 'appointment' | 'medication' | 'profile';
@@ -36,7 +37,7 @@ const SearchResultsPage: React.FC = () => {
     const searchResults: SearchResult[] = [];
     const query = searchQuery.toLowerCase();
 
-    // Simple category-based search
+    //simple category-based search
     if (query.includes('appointment') || query.includes('avtale') || query.includes('booking')) {
       searchResults.push({
         type: 'appointment',
@@ -71,6 +72,7 @@ const SearchResultsPage: React.FC = () => {
     setLoading(false);
   };
 
+  //navigation when clicking on result
   const handleResultClick = (result: SearchResult) => {
     switch (result.type) {
       case 'appointment':
@@ -87,6 +89,7 @@ const SearchResultsPage: React.FC = () => {
     }
   };
 
+  //you have to be logged in to search
   if (!user) {
     return (
       <Container className="mt-5">
@@ -97,20 +100,22 @@ const SearchResultsPage: React.FC = () => {
     );
   }
 
+
+  //the view for search results
   return (
     <Container className="mt-4">
       <Row>
         <Col>
-          <h2 style={{ color: '#177e8b', marginBottom: '2rem' }}>
+          <h2 className="search-results-title">
             Search Results for "{query}"
           </h2>
           
           {loading && (
-            <div className="text-center py-5">
-              <Spinner animation="border" role="status" style={{ color: '#177e8b' }}>
+            <div className="search-loading-container">
+              <Spinner animation="border" role="status" className="search-loading-spinner">
                 <span className="visually-hidden">Loading...</span>
               </Spinner>
-              <p className="mt-3">Searching...</p>
+              <p className="search-loading-text">Searching...</p>
             </div>
           )}
           
@@ -122,7 +127,7 @@ const SearchResultsPage: React.FC = () => {
           
           {!loading && !error && (
             <>
-              <p className="mb-4 text-muted">
+              <p className="search-results-count">
                 Found {results.length} result{results.length !== 1 ? 's' : ''}
               </p>
               
@@ -139,37 +144,22 @@ const SearchResultsPage: React.FC = () => {
                   {results.map((result, index) => (
                     <Col md={6} lg={4} key={`${result.type}-${result.id}-${index}`} className="mb-3">
                       <Card 
-                        style={{ cursor: 'pointer', height: '100%' }}
+                        className="search-result-card"
                         onClick={() => handleResultClick(result)}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
-                        }}
                       >
-                        <Card.Header 
-                          style={{ 
-                            backgroundColor: '#177e8b', 
-                            color: 'white',
-                            fontSize: '0.9rem',
-                            textTransform: 'uppercase'
-                          }}
-                        >
+                        <Card.Header className="search-result-card-header">
                           {result.type}
                         </Card.Header>
                         <Card.Body>
-                          <Card.Title style={{ fontSize: '1.1rem', color: '#177e8b' }}>
+                          <Card.Title className="search-result-card-title">
                             {result.title}
                           </Card.Title>
-                          <Card.Text style={{ fontSize: '0.95rem' }}>
+                          <Card.Text className="search-result-card-text">
                             {result.description}
                           </Card.Text>
                           {result.date && (
                             <Card.Text>
-                              <small className="text-muted">Date: {result.date}</small>
+                              <small className="search-result-date">Date: {result.date}</small>
                             </Card.Text>
                           )}
                         </Card.Body>

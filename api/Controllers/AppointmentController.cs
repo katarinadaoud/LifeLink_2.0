@@ -1,4 +1,3 @@
-using HomeCareApp.Data;
 using HomeCareApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,30 +22,26 @@ public class AppointmentController : ControllerBase
         _logger = logger;
     }
 
+    //Get all appointments and returns a list of appointments//
     [HttpGet]
-    public async Task<IActionResult> GetAppointments()
+    public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAppointments()
     {
+        //Find appointment list
         var appointments = await _appointmentRepository.GetAll();
         if (appointments == null)
         {
             _logger.LogError("[AppointmentController] Appointment list not found while executing _appointmentRepository.GetAll()");
             return NotFound("Appointment list not found");
         }
-        var appointmentDtos = appointments.Select(appointment => new AppointmentDto
-        {
-            AppointmentId = appointment.AppointmentId,
-            Subject = appointment.Subject,
-            Description = appointment.Description,
-            Date = appointment.Date,
-            PatientId = appointment.PatientId ?? 0,
-            EmployeeId = appointment.EmployeeId ?? 0,
-            PatientName = appointment.Patient?.FullName ?? "Unknown Patient",
-            EmployeeName = appointment.Employee?.FullName ?? "Unknown Employee"
-        });
+
+        //Map the appointments to DTO
+        var appointmentDtos = appointments.Select(AppointmentDto.FromEntity);
+        
+        _logger.LogInformation("[AppointmentController] Retrieved {Count} appointments", appointments.Count());
         return Ok(appointmentDtos);
     }
 
-    // GET: api/appointment/patient/{patientId}
+    //Get appointments by patient id and returns a list of appointments for that patient//
     [HttpGet("patient/{patientId}")]
     [Authorize]
     public async Task<IActionResult> GetAppointmentsByPatientId(int patientId)
@@ -54,20 +49,30 @@ public class AppointmentController : ControllerBase
         var appointments = await _appointmentRepository.GetAll();
         var patientAppointments = appointments.Where(a => a.PatientId == patientId);
         
-        var appointmentDtos = patientAppointments.Select(appointment => new AppointmentDto
-        {
-            AppointmentId = appointment.AppointmentId,
-            Subject = appointment.Subject,
-            Description = appointment.Description,
-            Date = appointment.Date,
-            PatientId = appointment.PatientId ?? 0,
-            EmployeeId = appointment.EmployeeId ?? 0,
-            PatientName = appointment.Patient?.FullName ?? "Unknown Patient",
-            EmployeeName = appointment.Employee?.FullName ?? "Unknown Employee"
-        });
+        var appointmentDtos = patientAppointments.Select(AppointmentDto.FromEntity);
+        
+        _logger.LogInformation("[AppointmentController] Found {Count} appointments for PatientId: {PatientId}", patientAppointments.Count(), patientId);
         
         return Ok(appointmentDtos);
     }
+
+    //Get single appointment by id//
+    [HttpGet("{id}")]
+    public async Task<ActionResult<AppointmentDto>> GetAppointmentById(int id)
+    {
+        var appointment = await _appointmentRepository.GetAppointmentById(id);
+        if (appointment == null)
+        {
+            _logger.LogWarning("[AppointmentController] Appointment with ID {AppointmentId} not found", id);
+            return NotFound($"Appointment with ID {id} not found");
+        }
+
+        var appointmentDto = AppointmentDto.FromEntity(appointment);
+        _logger.LogInformation("[AppointmentController] Retrieved appointment with ID {AppointmentId}", id);
+        return Ok(appointmentDto);
+    }
+    
+    //Create a new appointment//
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] AppointmentDto appointmentDto)
@@ -76,16 +81,7 @@ public class AppointmentController : ControllerBase
         {
             return BadRequest("Appointment cannot be null");
         }
-        var newAppointment = new Appointment
-        {
-            Subject = appointmentDto.Subject,
-            Description = appointmentDto.Description,
-            Date = appointmentDto.Date,
-            PatientId = appointmentDto.PatientId,
-            EmployeeId = appointmentDto.EmployeeId,
-            Patient = null!, // Will be set by EF Core
-            Employee = null! // Will be set by EF Core
-        };
+        var newAppointment = appointmentDto.ToEntity();
         bool returnOk = await _appointmentRepository.Create(newAppointment);
         if (returnOk)
         {
@@ -99,30 +95,9 @@ public class AppointmentController : ControllerBase
         return StatusCode(500, "Internal server error");
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAppointment(int id)
-    {
-        var appointment = await _appointmentRepository.GetAppointmentById(id);
-        if (appointment == null)
-        {
-            _logger.LogError("[AppointmentController] Appointment not found for the AppointmentId {AppointmentId:0000}", id);
-            return NotFound("Appointment not found for the AppointmentId");
-        }
 
-        var appointmentDto = new AppointmentDto
-        {
-            AppointmentId = appointment.AppointmentId,
-            Subject = appointment.Subject,
-            Description = appointment.Description,
-            Date = appointment.Date,
-            PatientId = appointment.PatientId ?? 0,
-            EmployeeId = appointment.EmployeeId ?? 0,
-            PatientName = appointment.Patient?.FullName ?? "Unknown Patient",
-            EmployeeName = appointment.Employee?.FullName ?? "Unknown Employee"
-        };
 
-        return Ok(appointmentDto);
-    }
+    //Update an existing appointment by id//
     [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] AppointmentDto appointmentDto)
@@ -137,29 +112,30 @@ public class AppointmentController : ControllerBase
         {
             return NotFound("Appointment not found");
         }
-        // Update the appointment properties
-        existingAppointment.Subject = appointmentDto.Subject;
-        existingAppointment.Description = appointmentDto.Description;
-        existingAppointment.Date = appointmentDto.Date;
-        existingAppointment.PatientId = appointmentDto.PatientId;
-        existingAppointment.EmployeeId = appointmentDto.EmployeeId;
-        // Save the changes
-        bool updateSuccessful = await _appointmentRepository.Update(existingAppointment);
+        //Use ToEntity method for consistent mapping
+        var updatedAppointment = appointmentDto.ToEntity();
+        updatedAppointment.AppointmentId = id;
+        updatedAppointment.Patient = existingAppointment.Patient;
+        updatedAppointment.Employee = existingAppointment.Employee;
+     
+        bool updateSuccessful = await _appointmentRepository.Update(updatedAppointment);
         if (updateSuccessful)
         {
             // Create notifications for appointment update
-            await CreateAppointmentUpdateNotifications(existingAppointment);
-            return Ok(existingAppointment); // Return the updated appointment
+            await CreateAppointmentUpdateNotifications(updatedAppointment);
+            return Ok(updatedAppointment);
         }
 
         _logger.LogWarning("[AppointmentController] Appointment update failed {@appointment}", existingAppointment);
         return StatusCode(500, "Internal server error");
     }
+
+    //Delete an appointment by id//
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        // Get appointment details before deletion for notifications
+        //Get appointment details before deletion for notifications
         var appointmentToDelete = await _appointmentRepository.GetAppointmentById(id);
         if (appointmentToDelete == null)
         {
@@ -173,17 +149,18 @@ public class AppointmentController : ControllerBase
             return BadRequest("Appointment deletion failed");
         }
 
-        // Create notifications for appointment deletion
+        //Create notifications for appointment deletion
         await CreateAppointmentDeleteNotifications(appointmentToDelete);
         
         return NoContent();
     }
 
+    //Creating notifications, we use several methods here because the notifications affect different users//
     private async Task CreateAppointmentNotifications(Appointment appointment)
     {
         try
         {
-            // Get patient and employee information first
+            //Get patient and employee information first
             var fullAppointment = await _appointmentRepository.GetAppointmentById(appointment.AppointmentId);
             if (fullAppointment?.Patient?.UserId == null || fullAppointment?.Employee?.UserId == null)
             {
@@ -191,7 +168,7 @@ public class AppointmentController : ControllerBase
                 return;
             }
 
-            // Create notification for patient
+            //Create notification for patient
             var patientNotification = new Notification
             {
                 UserId = fullAppointment.Patient.UserId,
@@ -203,7 +180,7 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            // Create notification for employee  
+            //Create notification for employee  
             var employeeNotification = new Notification
             {
                 UserId = fullAppointment.Employee!.UserId,
@@ -215,7 +192,7 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            // Save both notifications
+            //Save both notifications
             await _notificationRepository.CreateAsync(patientNotification);
             await _notificationRepository.CreateAsync(employeeNotification);
 
@@ -227,6 +204,7 @@ public class AppointmentController : ControllerBase
         }
     }
 
+    //Creating update notifications//
     private async Task CreateAppointmentUpdateNotifications(Appointment appointment)
     {
         try
@@ -237,7 +215,7 @@ public class AppointmentController : ControllerBase
                 return;
             }
 
-            // Create notification for patient
+
             var patientNotification = new Notification
             {
                 UserId = appointment.Patient.UserId,
@@ -249,7 +227,7 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            // Create notification for employee  
+    
             var employeeNotification = new Notification
             {
                 UserId = appointment.Employee!.UserId,
@@ -261,7 +239,6 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            // Save both notifications
             await _notificationRepository.CreateAsync(patientNotification);
             await _notificationRepository.CreateAsync(employeeNotification);
 
@@ -273,6 +250,7 @@ public class AppointmentController : ControllerBase
         }
     }
 
+    //Creating delete notifications//
     private async Task CreateAppointmentDeleteNotifications(Appointment appointment)
     {
         try
@@ -283,7 +261,7 @@ public class AppointmentController : ControllerBase
                 return;
             }
 
-            // Create notification for patient
+    
             var patientNotification = new Notification
             {
                 UserId = appointment.Patient.UserId,
@@ -295,7 +273,6 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            // Create notification for employee  
             var employeeNotification = new Notification
             {
                 UserId = appointment.Employee!.UserId,
@@ -307,7 +284,7 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            // Save both notifications
+
             await _notificationRepository.CreateAsync(patientNotification);
             await _notificationRepository.CreateAsync(employeeNotification);
 

@@ -14,9 +14,9 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         setError(null);
         try {
+            // Attempt to log in and get user details
             const user = await login({ username, password });
-            
-            // Check if user has completed their profile
+            //Determine which profile to check based on role
             const token = localStorage.getItem('token');
             let endpoint = '';
             
@@ -28,6 +28,7 @@ const LoginPage: React.FC = () => {
             
             if (endpoint) {
                 try {
+                    //Check if user already has a profile
                     const profileResponse = await fetch(`http://localhost:5090${endpoint}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -53,7 +54,7 @@ const LoginPage: React.FC = () => {
                     }
                 } catch (profileErr) {
                     console.error('Error checking profile:', profileErr);
-                    // If we can't check profile, redirect to setup to be safe
+                    // If profile check fails, redirect to profile setup
                     navigate('/profile-setup');
                     return;
                 }
@@ -63,6 +64,7 @@ const LoginPage: React.FC = () => {
             navigate('/');
             
         } catch (err) {
+            //Invalid login credentials or login error
             setError('Invalid username or password.');
             console.error(err);
         }

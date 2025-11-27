@@ -1,4 +1,4 @@
-/* Reset for navbar to start at top */
+/*styling for the whole app*/
 html, body {
   margin: 0;
   padding: 0;
@@ -7,7 +7,6 @@ html, body {
 #root {
   margin: 0;
   padding: 0;
-  /* text-align: center; */
 }
 
 .logo {

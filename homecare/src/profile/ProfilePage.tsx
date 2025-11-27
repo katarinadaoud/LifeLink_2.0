@@ -3,8 +3,10 @@ import { Card, Container, Row, Col, Button, Alert, Form, Modal } from 'react-boo
 import '../appointments/AppointmentCalendar.css';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './ProfilePage.css';
 
-const ProfilePage: React.FC = () => {
+const ProfilePage: React.FC = () => { 
+    //component state management, handles variables that change over time
     const { user, deleteAccount } = useAuth();
     const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
@@ -14,8 +16,9 @@ const ProfilePage: React.FC = () => {
     const [success, setSuccess] = useState<string | null>(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
 
-    // Form state for editing
+    //form for editing
     const [formData, setFormData] = useState({
         fullName: '',
         address: '',
@@ -26,13 +29,65 @@ const ProfilePage: React.FC = () => {
         dateOfBirth: ''
     });
 
+    //client-side validation functions
+    const validatePhoneNumber = (phone: string): string | null => {
+        if (phone && !/^\d{8}$/.test(phone.replace(/\s/g, ''))) {
+            return 'Phone number must be 8 digits';
+        }
+        return null;
+    };
+
+    const validateFullName = (name: string): string | null => {
+        if (name.trim().length < 2) {
+            return 'Full name must be at least 2 characters long';
+        }
+        if (name && !/^[a-zA-ZæøåÆØÅ\s]+$/.test(name)) {
+            return 'Full name can only contain letters and spaces';
+        }
+        return null;
+    };
+
+    const validateDateOfBirth = (date: string): string | null => {
+        if (date) {
+            const birthDate = new Date(date);
+            const today = new Date();
+            const age = today.getFullYear() - birthDate.getFullYear();
+            if (age < 0 || age > 120) {
+                return 'Please enter a valid date of birth';
+            }
+        }
+        return null;
+    };
+
+    const validateRequired = (value: string, fieldName: string): string | null => {
+        if (!value.trim()) return `${fieldName} is required`;
+        return null;
+    };
+
+    const validateField = (name: string, value: string): string | null => {
+        switch (name) {
+            case 'fullName':
+                return validateFullName(value);
+            case 'phonenumber':
+                return validatePhoneNumber(value);
+            case 'dateOfBirth':
+                return validateDateOfBirth(value);
+            case 'address':
+                return validateRequired(value, 'Address');
+            case 'department':
+                return validateRequired(value, 'Department');
+            default:
+                return null;
+        }
+    };
+
     useEffect(() => {
         fetchUserProfile();
     }, [user]);
 
+    //find user profile
     const fetchUserProfile = async () => {
         if (!user) {
-            console.log('No user found');
             return;
         }
         
@@ -40,27 +95,17 @@ const ProfilePage: React.FC = () => {
             setLoading(true);
             let endpoint = '';
             
-            console.log('User object:', user);
-            console.log('User role:', user.role);
-            console.log('User sub:', user.sub);
-            console.log('All user properties:', Object.keys(user));
-            
-            // Try multiple ways to get user ID - check what's actually available
+            //try multiple ways to get user id
             const userId = user.sub || user.nameid;
             
-            console.log('Resolved userId:', userId);
-            
-            // Determine which endpoint to use based on user role
+            //determine which endpoint to use based on user role
             if (user.role === 'Patient') {
                 endpoint = `/api/patient/user/${userId}`;
             } else if (user.role === 'Employee') {
                 endpoint = `/api/employee/user/${userId}`;
             }
             
-            console.log('Endpoint:', endpoint);
-            
             const token = localStorage.getItem('token');
-            console.log('Token exists:', !!token);
             
             const response = await fetch(`http://localhost:5090${endpoint}`, {
                 headers: {
@@ -68,9 +113,6 @@ const ProfilePage: React.FC = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            
-            console.log('Response status:', response.status);
-            console.log('Response ok:', response.ok);
             
             if (response.ok) {
                 const data = await response.json();
@@ -85,8 +127,7 @@ const ProfilePage: React.FC = () => {
                     dateOfBirth: data.dateOfBirth ? data.dateOfBirth.split('T')[0] : ''
                 });
             } else if (response.status === 404) {
-                // Profile not found - try to create it
-                console.log('Profile not found, attempting to create profile...');
+                //profile not found, try to create it
                 try {
                     const createResponse = await fetch(`http://localhost:5090/api/Auth/create-profile`, {
                         method: 'POST',
@@ -97,27 +138,22 @@ const ProfilePage: React.FC = () => {
                     });
                     
                     if (createResponse.ok) {
-                        console.log('Profile created successfully, refetching...');
-                        // Retry fetching the profile
+                        //retry fetching the profile
                         await fetchUserProfile();
                         return;
                     } else {
                         const createErrorText = await createResponse.text();
-                        console.log('Failed to create profile:', createResponse.status, createErrorText);
                         setError(`Failed to create profile: ${createResponse.status} - ${createErrorText}`);
                     }
                 } catch (createErr) {
-                    console.error('Error creating profile:', createErr);
                     setError('Error creating profile');
                 }
             } else {
                 const errorText = await response.text();
-                console.log('Error response:', response.status, errorText);
                 setError(`Failed to load profile information: ${response.status} - ${errorText}`);
             }
         } catch (err) {
             setError('Error loading profile');
-            console.error('Error fetching profile:', err);
         } finally {
             setLoading(false);
         }
@@ -129,12 +165,39 @@ const ProfilePage: React.FC = () => {
             ...prev,
             [name]: value
         }));
+
+        //real-time validation
+        const validationError = validateField(name, value);
+        setValidationErrors(prev => ({
+            ...prev,
+            [name]: validationError || ''
+        }));
     };
 
     const handleSave = async () => {
         try {
             setError(null);
             setSuccess(null);
+            
+            //validate all fields before saving
+            const errors: {[key: string]: string} = {};
+            
+            const fullNameError = validateFullName(formData.fullName);
+            if (fullNameError) errors.fullName = fullNameError;
+            
+            const phoneError = validatePhoneNumber(formData.phonenumber);
+            if (phoneError) errors.phonenumber = phoneError;
+            
+            const dateError = validateDateOfBirth(formData.dateOfBirth);
+            if (dateError) errors.dateOfBirth = dateError;
+            
+            if (Object.keys(errors).length > 0) {
+                setValidationErrors(errors);
+                setError('Please fix the validation errors before saving');
+                return;
+            }
+            
+            setValidationErrors({});
             
             let endpoint = '';
             if (user?.role === 'Patient') {
@@ -164,19 +227,18 @@ const ProfilePage: React.FC = () => {
             if (response.ok) {
                 setSuccess('Profile updated successfully!');
                 setIsEditing(false);
-                await fetchUserProfile(); // Refresh data
+                await fetchUserProfile();
             } else {
                 setError('Failed to update profile');
             }
         } catch (err) {
             setError('Error updating profile');
-            console.error('Error updating profile:', err);
         }
     };
 
     const handleCancel = () => {
         setIsEditing(false);
-        // Reset form data to original values
+        //reset form data to original values
         setFormData({
             fullName: userInfo?.fullName || '',
             address: userInfo?.address || '',
@@ -193,7 +255,7 @@ const ProfilePage: React.FC = () => {
             setIsDeleting(true);
             setError(null);
             
-            // First delete the patient/employee record if it exists
+            //first delete the patient/employee record if it exists
             if (userInfo) {
                 let endpoint = '';
                 if (user?.role === 'Patient' && userInfo.patientId) {
@@ -213,18 +275,17 @@ const ProfilePage: React.FC = () => {
                     });
                     
                     if (!response.ok) {
-                        console.warn('Failed to delete patient/employee record, proceeding with account deletion');
+                        //continue with account deletion even if patient/employee deletion fails
                     }
                 }
             }
             
-            // Then delete the user account
+            //then delete the user account
             await deleteAccount();
             
-            // Navigate to home page
+            //navigate to home page
             navigate('/');
         } catch (err) {
-            console.error('Error deleting account:', err);
             setError(err instanceof Error ? err.message : 'Failed to delete account');
         } finally {
             setIsDeleting(false);
@@ -242,12 +303,13 @@ const ProfilePage: React.FC = () => {
         );
     }
 
+    //the profile page view
     return (
         <Container className="mt-4">
             <Row className="justify-content-center">
                 <Col md={8}>
                     <Card>
-                        <Card.Header style={{ backgroundColor: '#177e8b', color: 'white' }}>
+                        <Card.Header className="profile-card-header">
                             <h3 className="mb-0">My Profile</h3>
                         </Card.Header>
                         <Card.Body>
@@ -295,12 +357,18 @@ const ProfilePage: React.FC = () => {
                                                 <Form.Group className="mb-3">
                                                     <Form.Label><strong>Full Name:</strong></Form.Label>
                                                     {isEditing ? (
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="fullName"
-                                                            value={formData.fullName}
-                                                            onChange={handleInputChange}
-                                                        />
+                                                        <>
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="fullName"
+                                                                value={formData.fullName}
+                                                                onChange={handleInputChange}
+                                                                isInvalid={!!validationErrors.fullName}
+                                                            />
+                                                            <Form.Control.Feedback type="invalid">
+                                                                {validationErrors.fullName}
+                                                            </Form.Control.Feedback>
+                                                        </>
                                                     ) : (
                                                         <p className="mt-1">{userInfo.fullName}</p>
                                                     )}
@@ -310,12 +378,18 @@ const ProfilePage: React.FC = () => {
                                                 <Form.Group className="mb-3">
                                                     <Form.Label><strong>Address:</strong></Form.Label>
                                                     {isEditing ? (
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="address"
-                                                            value={formData.address}
-                                                            onChange={handleInputChange}
-                                                        />
+                                                        <>
+                                                            <Form.Control
+                                                                type="text"
+                                                                name="address"
+                                                                value={formData.address}
+                                                                onChange={handleInputChange}
+                                                                isInvalid={!!validationErrors.address}
+                                                            />
+                                                            <Form.Control.Feedback type="invalid">
+                                                                {validationErrors.address}
+                                                            </Form.Control.Feedback>
+                                                        </>
                                                     ) : (
                                                         <p className="mt-1">{userInfo.address}</p>
                                                     )}
@@ -324,21 +398,29 @@ const ProfilePage: React.FC = () => {
                                         </Row>
 
                                         <Row>
-                                            <Col md={6}>
-                                                <Form.Group className="mb-3">
-                                                    <Form.Label><strong>Department:</strong></Form.Label>
-                                                    {isEditing ? (
-                                                        <Form.Control
-                                                            type="text"
-                                                            name="department"
-                                                            value={formData.department}
-                                                            onChange={handleInputChange}
-                                                        />
-                                                    ) : (
-                                                        <p className="mt-1">{userInfo.department}</p>
-                                                    )}
-                                                </Form.Group>
-                                            </Col>
+                                            {user?.role === 'Employee' && (
+                                                <Col md={6}>
+                                                    <Form.Group className="mb-3">
+                                                        <Form.Label><strong>Department:</strong></Form.Label>
+                                                        {isEditing ? (
+                                                            <>
+                                                                <Form.Control
+                                                                    type="text"
+                                                                    name="department"
+                                                                    value={formData.department}
+                                                                    onChange={handleInputChange}
+                                                                    isInvalid={!!validationErrors.department}
+                                                                />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    {validationErrors.department}
+                                                                </Form.Control.Feedback>
+                                                            </>
+                                                        ) : (
+                                                            <p className="mt-1">{userInfo.department}</p>
+                                                        )}
+                                                    </Form.Group>
+                                                </Col>
+                                            )}
                                             {user?.role === 'Patient' && userInfo.patientId && (
                                                 <Col md={6}>
                                                     <div className="mb-3">
@@ -364,13 +446,19 @@ const ProfilePage: React.FC = () => {
                                                         <Form.Group className="mb-3">
                                                             <Form.Label><strong>Phone Number:</strong></Form.Label>
                                                             {isEditing ? (
-                                                                <Form.Control
-                                                                    type="text"
-                                                                    name="phonenumber"
-                                                                    value={formData.phonenumber}
-                                                                    onChange={handleInputChange}
-                                                                    placeholder="+47xxxxxxxx"
-                                                                />
+                                                                <>
+                                                                    <Form.Control
+                                                                        type="text"
+                                                                        name="phonenumber"
+                                                                        value={formData.phonenumber}
+                                                                        onChange={handleInputChange}
+                                                                        placeholder="12345678"
+                                                                        isInvalid={!!validationErrors.phonenumber}
+                                                                    />
+                                                                    <Form.Control.Feedback type="invalid">
+                                                                        {validationErrors.phonenumber}
+                                                                    </Form.Control.Feedback>
+                                                                </>
                                                             ) : (
                                                                 <p className="mt-1">{userInfo.phonenumber}</p>
                                                             )}
@@ -380,12 +468,18 @@ const ProfilePage: React.FC = () => {
                                                         <Form.Group className="mb-3">
                                                             <Form.Label><strong>Date of Birth:</strong></Form.Label>
                                                             {isEditing ? (
-                                                                <Form.Control
-                                                                    type="date"
-                                                                    name="dateOfBirth"
-                                                                    value={formData.dateOfBirth}
-                                                                    onChange={handleInputChange}
-                                                                />
+                                                                <>
+                                                                    <Form.Control
+                                                                        type="date"
+                                                                        name="dateOfBirth"
+                                                                        value={formData.dateOfBirth}
+                                                                        onChange={handleInputChange}
+                                                                        isInvalid={!!validationErrors.dateOfBirth}
+                                                                    />
+                                                                    <Form.Control.Feedback type="invalid">
+                                                                        {validationErrors.dateOfBirth}
+                                                                    </Form.Control.Feedback>
+                                                                </>
                                                             ) : (
                                                                 <p className="mt-1">{userInfo.dateOfBirth ? new Date(userInfo.dateOfBirth).toLocaleDateString() : ''}</p>
                                                             )}
@@ -436,13 +530,8 @@ const ProfilePage: React.FC = () => {
                                 ) : (
                                     <div>
                                         <Button 
-                                            style={{ 
-                                                backgroundColor: '#177e8b', 
-                                                borderColor: '#177e8b',
-                                                color: 'white'
-                                            }}
+                                            className="me-2 profile-edit-btn"
                                             onClick={() => setIsEditing(true)}
-                                            className="me-2"
                                         >
                                             Edit Profile
                                         </Button>
@@ -456,7 +545,7 @@ const ProfilePage: React.FC = () => {
                                 )}
                             </div>
 
-                            {/* Delete Account Confirmation Modal */}
+                            {/*delete account confirmation*/}
                             <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Delete Account</Modal.Title>

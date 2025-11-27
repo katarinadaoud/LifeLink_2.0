@@ -9,11 +9,12 @@ import { useAuth } from '../auth/AuthContext';
 
 // import API_URL from '../apiConfig';
 
+// Reusable form component for both creating and updating appointments
 interface AppointmentFormProps {
-  onAppointmentChanged: (newAppointment: Appointment) => void;
-  appointmentId?: number;
-  isUpdate?: boolean;
-  initialData?: Appointment;  
+  onAppointmentChanged: (newAppointment: Appointment) => void; // Callback to parent when form is submitted
+  appointmentId?: number;                                      // Optional ID (used when updating)
+  isUpdate?: boolean;                                          // Flag to distinguish create vs update
+  initialData?: Appointment;                                   // Optional initial values when editing
 }
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
@@ -21,6 +22,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   appointmentId, 
   isUpdate = false,
   initialData}) =>  {
+
+  // Local form fields, prefilled from initialData when updating
   const [subject, setSubject] = useState<string>(initialData?.subject || '');
   const [description, setDescription] = useState<string>(initialData?.description || '');
   const [date, setDate] = useState<string>(
@@ -28,69 +31,83 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   );
   const [patientId, setPatientId] = useState<number>(initialData?.patientId || 0);
   const [employeeId, setEmployeeId] = useState<number>(initialData?.employeeId || 0);
+
+  // Lists used for select dropdowns
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [patients, setPatients] = useState<Patient[]>([]);
+
+  // When the logged-in user is a patient, we store their patient record here
   const [currentPatient, setCurrentPatient] = useState<Patient | null>(null);
+
+  // Simple loading flag while we fetch employees/patients
   const [loading, setLoading] = useState<boolean>(true);
   // const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user } = useAuth(); // Get current authenticated user and role
 
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
         
-        // Always fetch employees
+        // Always fetch employees for the dropdown
         const employeesData = await fetchEmployees();
         setEmployees(employeesData);
 
-        // If user is a Patient, only fetch their own data
+        // If the logged-in user is a patient, we only load their own patient record
         if (user?.role === 'Patient') {
-          const userId = user.sub || user.nameid;
+          const userId = user.sub || user.nameid; // Support different claim names
           const patientData = await fetchPatientByUserId(userId);
           setCurrentPatient(patientData);
           setPatientId(patientData.patientId || 0);
         } else {
-          // If user is Employee, fetch all patients
+          // For employees/admins we load all patients so they can choose from the list
           const patientsData = await fetchPatients();
           setPatients(patientsData);
         }
       } catch (error) {
+        // In a real app we might show a user-facing error here
         console.error('Error fetching data:', error);
       } finally {
         setLoading(false);
       }
     };
 
+    // Only attempt to load data once we know who the user is
     if (user) {
       loadData();
     }
   }, [user]);
 
+  // Simple "go back" handler for the Cancel button
   const onCancel = () => {
     navigate(-1); // This will navigate back one step in the history
   };
 
+  // Handle submit for both create and update
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const appointment: Appointment = { 
       appointmentId, 
       subject, 
       description, 
-      date: new Date(date),
+      date: new Date(date),     // Convert string from <input type="datetime-local" /> to Date
       patientId,
       employeeId
     };
+    // Let the parent component decide whether this becomes a POST or PUT
     onAppointmentChanged(appointment); // Call the passed function with the appointment data
   };
 
+  // While we are still loading employees/patients, show a simple loading message
   if (loading) {
     return <div>Loading form data...</div>;
   }
 
   return (
     <Form onSubmit={handleSubmit}>
+      {/* Subject field with basic pattern validation */}
       <Form.Group controlId="formAppointmentSubject">
         <Form.Label>Subject</Form.Label>
         <Form.Control
@@ -104,6 +121,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         />       
       </Form.Group>
 
+      {/* Date/time input for the appointment */}
       <Form.Group controlId="formAppointmentDate">
         <Form.Label>Date</Form.Label>
         <Form.Control
@@ -114,6 +132,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         />
       </Form.Group>
 
+      {/* Optional free-text description of the appointment */}
       <Form.Group controlId="formAppointmentDescription">
         <Form.Label>Description</Form.Label>
         <Form.Control
@@ -125,9 +144,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         />
       </Form.Group>
 
+      {/* Patient selection behaves differently for patients vs employees */}
       <Form.Group controlId="formAppointmentPatientId">
         <Form.Label>Patient</Form.Label>
         {user?.role === 'Patient' && currentPatient ? (
+          // If the logged-in user is a patient, we show their name as read-only
           <Form.Control
             type="text"
             value={currentPatient.fullName}
@@ -135,6 +156,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             style={{ backgroundColor: '#f8f9fa' }}
           />
         ) : (
+          // For employees/admins we show a dropdown with all patients
           <Form.Control
             as="select"
             value={patientId}
@@ -152,6 +174,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         )}
       </Form.Group>
 
+      {/* Employee (healthcare provider) dropdown */}
       <Form.Group controlId="formAppointmentEmployeeId">
         <Form.Label>Employee</Form.Label>
         <Form.Control
@@ -169,11 +192,18 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           ))}
         </Form.Control>
       </Form.Group>
+
       {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
-      <Button className="btn btn-teal auth-submit" type="submit">{isUpdate ? 'Update Appointment' : 'Create Appointment'}</Button>
-      <Button className="btn btn-secondary ms-2 auth-submit" onClick={onCancel}>Cancel</Button>
+
+      {/* Submit and cancel buttons – text changes depending on create vs update */}
+      <Button className="btn btn-teal auth-submit" type="submit">
+        {isUpdate ? 'Update Appointment' : 'Create Appointment'}
+      </Button>
+      <Button className="btn btn-secondary ms-2 auth-submit" onClick={onCancel}>
+        Cancel
+      </Button>
     </Form>
   );
 };
 
-export default AppointmentForm;
+export default AppointmentForm;  

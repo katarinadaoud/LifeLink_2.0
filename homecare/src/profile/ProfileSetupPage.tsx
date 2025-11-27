@@ -18,6 +18,7 @@ interface EmployeeProfileData {
 }
 
 const ProfileSetupPage: React.FC = () => {
+    //components and hooks
     const { user } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
@@ -38,6 +39,37 @@ const ProfileSetupPage: React.FC = () => {
         department: ''
     });
 
+    const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+
+    //client-side validation functions
+    const validateFullName = (name: string): string | null => {
+        if (name.trim().length < 2) return 'Full name must be at least 2 characters long';
+        if (name && !/^[a-zA-ZæøåÆØÅ\s]+$/.test(name)) return 'Full name can only contain letters and spaces';
+        return null;
+    };
+
+    const validatePhoneNumber = (phone: string): string | null => {
+        if (phone && !/^\d{8}$/.test(phone.replace(/\s/g, ''))) {
+            return 'Phone number must be 8 digits';
+        }
+        return null;
+    };
+
+    const validateDateOfBirth = (date: string): string | null => {
+        if (date) {
+            const birthDate = new Date(date);
+            const today = new Date();
+            const age = today.getFullYear() - birthDate.getFullYear();
+            if (age < 0 || age > 120) return 'Please enter a valid date of birth';
+        }
+        return null;
+    };
+
+    const validateRequired = (value: string, fieldName: string): string | null => {
+        if (!value.trim()) return `${fieldName} is required`;
+        return null;
+    };
+
     useEffect(() => {
         if (!user) {
             navigate('/login');
@@ -45,18 +77,75 @@ const ProfileSetupPage: React.FC = () => {
         }
     }, [user, navigate]);
 
+    //handle input changes with validation
     const handlePatientChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setPatientData({ ...patientData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setPatientData({ ...patientData, [name]: value });
+        
+        //real-time validation
+        let error = '';
+        switch (name) {
+            case 'fullName':
+                error = validateFullName(value) || '';
+                break;
+            case 'phoneNumber':
+                error = validatePhoneNumber(value) || '';
+                break;
+            case 'dateOfBirth':
+                error = validateDateOfBirth(value) || '';
+                break;
+            case 'address':
+                error = validateRequired(value, 'Address') || '';
+                break;
+        }
+        
+        setValidationErrors(prev => ({ ...prev, [name]: error }));
     };
 
     const handleEmployeeChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setEmployeeData({ ...employeeData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setEmployeeData({ ...employeeData, [name]: value });
+        
+        //real-time validation
+        let error = '';
+        switch (name) {
+            case 'fullName':
+                error = validateFullName(value) || '';
+                break;
+            case 'address':
+                error = validateRequired(value, 'Address') || '';
+                break;
+            case 'department':
+                error = validateRequired(value, 'Department') || '';
+                break;
+        }
+        
+        setValidationErrors(prev => ({ ...prev, [name]: error }));
     };
 
+    //submit the patient profile
     const submitPatientProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
+
+        //validate all fields before submission
+        const errors = {
+            fullName: validateFullName(patientData.fullName) || '',
+            address: validateRequired(patientData.address, 'Address') || '',
+            dateOfBirth: validateDateOfBirth(patientData.dateOfBirth) || '',
+            phoneNumber: validatePhoneNumber(patientData.phoneNumber) || ''
+        };
+
+        setValidationErrors(errors);
+        
+        //check if there are any validation errors
+        const hasErrors = Object.values(errors).some(error => error !== '');
+        if (hasErrors) {
+            setError('Please fix the validation errors before submitting');
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -84,10 +173,28 @@ const ProfileSetupPage: React.FC = () => {
         }
     };
 
+    //submit the employee profile
     const submitEmployeeProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
+
+        //validate all fields before submission
+        const errors = {
+            fullName: validateFullName(employeeData.fullName) || '',
+            address: validateRequired(employeeData.address, 'Address') || '',
+            department: validateRequired(employeeData.department, 'Department') || ''
+        };
+
+        setValidationErrors(errors);
+        
+        //check if there are any validation errors
+        const hasErrors = Object.values(errors).some(error => error !== '');
+        if (hasErrors) {
+            setError('Please fix the validation errors before submitting');
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
@@ -119,6 +226,7 @@ const ProfileSetupPage: React.FC = () => {
         return <div>Loading...</div>;
     }
 
+    //the view for profile setup
     return (
         <Container className="mt-5">
             <Card>
@@ -139,8 +247,12 @@ const ProfileSetupPage: React.FC = () => {
                                     name="fullName"
                                     value={patientData.fullName}
                                     onChange={handlePatientChange}
+                                    isInvalid={!!validationErrors.fullName}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.fullName}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -150,8 +262,12 @@ const ProfileSetupPage: React.FC = () => {
                                     name="address"
                                     value={patientData.address}
                                     onChange={handlePatientChange}
+                                    isInvalid={!!validationErrors.address}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.address}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -161,8 +277,12 @@ const ProfileSetupPage: React.FC = () => {
                                     name="dateOfBirth"
                                     value={patientData.dateOfBirth}
                                     onChange={handlePatientChange}
+                                    isInvalid={!!validationErrors.dateOfBirth}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.dateOfBirth}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -172,8 +292,13 @@ const ProfileSetupPage: React.FC = () => {
                                     name="phoneNumber"
                                     value={patientData.phoneNumber}
                                     onChange={handlePatientChange}
+                                    isInvalid={!!validationErrors.phoneNumber}
+                                    placeholder="12345678"
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.phoneNumber}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -203,8 +328,12 @@ const ProfileSetupPage: React.FC = () => {
                                     name="fullName"
                                     value={employeeData.fullName}
                                     onChange={handleEmployeeChange}
+                                    isInvalid={!!validationErrors.fullName}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.fullName}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -214,8 +343,12 @@ const ProfileSetupPage: React.FC = () => {
                                     name="address"
                                     value={employeeData.address}
                                     onChange={handleEmployeeChange}
+                                    isInvalid={!!validationErrors.address}
                                     required
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.address}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Form.Group className="mb-3">
@@ -224,6 +357,7 @@ const ProfileSetupPage: React.FC = () => {
                                     name="department"
                                     value={employeeData.department}
                                     onChange={handleEmployeeChange}
+                                    isInvalid={!!validationErrors.department}
                                     required
                                 >
                                     <option value="">Select Department</option>
@@ -235,6 +369,9 @@ const ProfileSetupPage: React.FC = () => {
                                     <option value="Management">Management</option>
                                     <option value="Other">Other</option>
                                 </Form.Select>
+                                <Form.Control.Feedback type="invalid">
+                                    {validationErrors.department}
+                                </Form.Control.Feedback>
                             </Form.Group>
 
                             <Button className="btn btn-teal auth-submit" type="submit" disabled={isSubmitting}>

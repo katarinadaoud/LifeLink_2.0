@@ -12,6 +12,7 @@ namespace HomeCareApp.DTOs
         public DateOnly StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
 
+        //create a DTO from the Medication entity
         public static MedicationDto FromEntity(Medication m) => new()
         {
             medicationName = m.medicineName,
@@ -23,6 +24,7 @@ namespace HomeCareApp.DTOs
             EndDate = m.EndDate
         };
 
+        //convert the DTO back to a Medication entity
         public Medication ToEntity() => new()
         {
             medicineName = medicationName,

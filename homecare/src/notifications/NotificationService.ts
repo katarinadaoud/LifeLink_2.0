@@ -1,9 +1,9 @@
-import type { Notification, NotificationDto, CreateNotificationDto } from '../types/notification';
+import type { NotificationDto } from '../types/notification';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7268';
 
 export const NotificationService = {
-    // Get all notifications for current user
+    //get all notifications for current user
     async getMyNotifications(): Promise<NotificationDto[]> {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -25,7 +25,7 @@ export const NotificationService = {
         return await response.json();
     },
 
-    // Get unread notifications count
+    //get unread notifications count on bell icon
     async getUnreadCount(): Promise<number> {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -47,7 +47,7 @@ export const NotificationService = {
         return await response.json();
     },
 
-    // Get only unread notifications
+    //get only unread notifications on bell icon
     async getUnreadNotifications(): Promise<NotificationDto[]> {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -69,7 +69,7 @@ export const NotificationService = {
         return await response.json();
     },
 
-    // Mark notification as read
+    //mark notification as read
     async markAsRead(notificationId: number): Promise<void> {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -89,7 +89,7 @@ export const NotificationService = {
         }
     },
 
-    // Mark all notifications as read
+    //mark all notifications as read
     async markAllAsRead(): Promise<void> {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -109,7 +109,7 @@ export const NotificationService = {
         }
     },
 
-    // Delete notification
+    //delete notification
     async deleteNotification(notificationId: number): Promise<void> {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -127,28 +127,5 @@ export const NotificationService = {
         if (!response.ok) {
             throw new Error(`Failed to delete notification: ${response.statusText}`);
         }
-    },
-
-    // Create notification (for testing)
-    async createNotification(notification: CreateNotificationDto): Promise<NotificationDto> {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No authentication token found');
-        }
-
-        const response = await fetch(`${API_BASE_URL}/api/Notification`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(notification),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to create notification: ${response.statusText}`);
-        }
-
-        return await response.json();
     }
 };

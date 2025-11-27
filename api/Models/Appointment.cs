@@ -22,7 +22,6 @@ namespace HomeCareApp.Models
         //navigation keys
         public required Patient? Patient { get; set; }
         public required Employee? Employee { get; set; }
-        //public required ICollection<AppointmentTask>? AppointmentTasks { get; set; }
 
     }
 
