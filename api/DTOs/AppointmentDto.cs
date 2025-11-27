@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using HomeCareApp.Models;
 
-
 namespace HomeCareApp.DTOs
 {
     public class AppointmentDto
@@ -10,7 +9,6 @@ namespace HomeCareApp.DTOs
 
         [Required]
         [RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Subject must be numbers or letters and between 2 to 20 characters.")]
-
         [Display(Name = "Appointment subject")]
         public string Subject { get; set; } = string.Empty;
 

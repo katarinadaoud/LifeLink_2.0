@@ -18,7 +18,7 @@ namespace HomeCareApp.DTOs
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        [RegularExpression(@"^(\+47)?[\s]?[0-9]{8}$", ErrorMessage = "Phone number must be 8 digits, optionally with +47 prefix.")]
+        [RegularExpression(@"^[0-9]{8}$", ErrorMessage = "Phone number must be 8 digits.")]
         [DataType(DataType.PhoneNumber)]
         public string phonenumber { get; set; } = string.Empty;
 

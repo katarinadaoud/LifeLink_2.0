@@ -2,64 +2,123 @@ using HomeCareApp.Data;
 using HomeCareApp.Models;
 using HomeCareApp.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HomeCareApp.Repositories.Implementations
 {
     public class MedicationRepository : IMedicationRepository
     {
         private readonly AppDbContext _db;
+        private readonly ILogger<MedicationRepository> _logger;
 
-        public MedicationRepository(AppDbContext db)
+        public MedicationRepository(AppDbContext db, ILogger<MedicationRepository> logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         //Get all medications 
         public async Task<List<Medication>> GetAllAsync()
         {
-            var query = _db.Medications.Include(m => m.Patient).AsQueryable(); // include related patient data
-
-            return await query.OrderByDescending(m => m.StartDate).ToListAsync(); // return list of medications ordered by start date descending
+            try
+            {
+                _logger.LogInformation("[MedicationRepository] GetAllAsync() - Retrieving all medications");
+                var query = _db.Medications.Include(m => m.Patient).AsQueryable();
+                var medications = await query.OrderByDescending(m => m.StartDate).ToListAsync();
+                _logger.LogInformation("[MedicationRepository] GetAllAsync() - Successfully retrieved {Count} medications", medications.Count);
+                return medications;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationRepository] GetAllAsync() failed: {Message}", ex.Message);
+                throw;
+            }
         }
 
         
         // Get medications by patient id
         public async Task<List<Medication>> GetByPatientAsync(int patientId) // get medications for a specific patient which are active 
         {
-            var query = _db.Medications // go to medications table
-                .Include(m => m.Patient) // include related patient data
-                .Where(m => m.PatientId == patientId); // filter by patient id
+            try
+            {
+                _logger.LogInformation("[MedicationRepository] GetByPatientAsync({PatientId}) - Retrieving medications for patient", patientId);
+                var query = _db.Medications
+                    .Include(m => m.Patient)
+                    .Where(m => m.PatientId == patientId);
 
-           
-                var today = DateOnly.FromDateTime(DateTime.Today); // get today's date and convert to DateOnly, not time
-                query = query.Where(m => m.EndDate == null || m.EndDate >= today); /*if end date is null or in the future, 
-                                                                                    medication is active. if end date is in the past, medication is inactive*/
-            
+                var today = DateOnly.FromDateTime(DateTime.Today);
+                query = query.Where(m => m.EndDate == null || m.EndDate >= today);
 
-            return await query.OrderByDescending(m => m.StartDate).ToListAsync(); // return list of medications ordered by start date descending
+                var medications = await query.OrderByDescending(m => m.StartDate).ToListAsync();
+                _logger.LogInformation("[MedicationRepository] GetByPatientAsync({PatientId}) - Successfully retrieved {Count} active medications", patientId, medications.Count);
+                return medications;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationRepository] GetByPatientAsync({PatientId}) failed: {Message}", patientId, ex.Message);
+                throw;
+            }
         }
 
         // Get a single medication by its name
         public async Task<Medication?> GetByNameAsync(string medicineName) // get medication by medicine name
         {
-            return await _db.Medications // go to medications table
-                .Include(m => m.Patient) // include related patient data
-                .FirstOrDefaultAsync(m => m.medicineName == medicineName); // return medication or null if not found
+            try
+            {
+                _logger.LogInformation("[MedicationRepository] GetByNameAsync({MedicineName}) - Retrieving medication", medicineName);
+                var medication = await _db.Medications
+                    .Include(m => m.Patient)
+                    .FirstOrDefaultAsync(m => m.MedicineName == medicineName);
+                if (medication != null)
+                {
+                    _logger.LogInformation("[MedicationRepository] GetByNameAsync({MedicineName}) - Medication found for patient: {PatientName}", medicineName, medication.Patient?.FullName ?? "Unknown");
+                }
+                else
+                {
+                    _logger.LogWarning("[MedicationRepository] GetByNameAsync({MedicineName}) - Medication not found", medicineName);
+                }
+                return medication;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationRepository] GetByNameAsync({MedicineName}) failed: {Message}", medicineName, ex.Message);
+                throw;
+            }
         }
 
         // Add a new medication
         public async Task<Medication> AddAsync(Medication med) // add new medication to database
         {
-            _db.Medications.Add(med); // add medication to medications table
-            await _db.SaveChangesAsync(); // save changes to database
-            return med;
+            try
+            {
+                _logger.LogInformation("[MedicationRepository] AddAsync() - Adding medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
+                _db.Medications.Add(med);
+                await _db.SaveChangesAsync();
+                _logger.LogInformation("[MedicationRepository] AddAsync() - Successfully added medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
+                return med;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationRepository] AddAsync() failed for medication: {MedicineName} - {Message}", med.MedicineName, ex.Message);
+                throw;
+            }
         }
 
         // Delete a medication
         public async Task DeleteAsync(Medication med) // delete medication from database
         {
-            _db.Medications.Remove(med); // remove medication from medications table
-            await _db.SaveChangesAsync(); // save changes to database
+            try
+            {
+                _logger.LogInformation("[MedicationRepository] DeleteAsync() - Deleting medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
+                _db.Medications.Remove(med);
+                await _db.SaveChangesAsync();
+                _logger.LogInformation("[MedicationRepository] DeleteAsync() - Successfully deleted medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[MedicationRepository] DeleteAsync() failed for medication: {MedicineName} - {Message}", med.MedicineName, ex.Message);
+                throw;
+            }
         }
     }
 }

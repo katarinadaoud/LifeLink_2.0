@@ -87,13 +87,13 @@ namespace HomeCareApp.Controllers
                 // Create notification for medication creation
                 await CreateMedicationNotification(createdMedication, "created");
                 
-                _logger.LogInformation("[MedicationController] Successfully created medication: {MedicationName} for PatientId: {PatientId}", entity.medicineName, entity.PatientId);
+                _logger.LogInformation("[MedicationController] Successfully created medication: {MedicationName} for PatientId: {PatientId}", entity.MedicineName, entity.PatientId);
                 
-                return CreatedAtAction(nameof(GetByName), new { medicationName = entity.medicineName }, MedicationDto.FromEntity(createdMedication));
+                return CreatedAtAction(nameof(GetByName), new { medicationName = entity.MedicineName }, MedicationDto.FromEntity(createdMedication));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[MedicationController] Medication creation failed for {MedicationName}", dto.medicationName);
+                _logger.LogError(ex, "[MedicationController] Medication creation failed for {MedicationName}", dto.MedicineName);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -183,7 +183,7 @@ namespace HomeCareApp.Controllers
                 // Check if patient information is available
                 if (medication.Patient?.UserId == null)
                 {
-                    _logger.LogWarning("[MedicationController] Missing patient UserId for medication {MedicineName}", medication.medicineName);
+                    _logger.LogWarning("[MedicationController] Missing patient UserId for medication {MedicineName}", medication.MedicineName);
                     return;
                 }
 
@@ -195,12 +195,12 @@ namespace HomeCareApp.Controllers
                     _ => "Medication Changed"
                 };
 
-                string message = action switch
+                var message = action switch
                 {
-                    "created" => $"A new medication '{medication.medicineName}' has been added to your treatment plan. Dosage: {medication.Dosage}.",
-                    "updated" => $"Your medication '{medication.medicineName}' has been updated. New dosage: {medication.Dosage}.",
-                    "deleted" => $"The medication '{medication.medicineName}' has been removed from your treatment plan.",
-                    _ => $"Your medication '{medication.medicineName}' has been changed."
+                    "created" => $"A new medication '{medication.MedicineName}' has been added to your treatment plan. Dosage: {medication.Dosage}.",
+                    "updated" => $"Your medication '{medication.MedicineName}' has been updated. New dosage: {medication.Dosage}.",
+                    "deleted" => $"The medication '{medication.MedicineName}' has been removed from your treatment plan.",
+                    _ => $"Your medication '{medication.MedicineName}' has been changed."
                 };
 
                 var notification = new Notification
@@ -215,11 +215,11 @@ namespace HomeCareApp.Controllers
                 };
 
                 await _notificationRepository.CreateAsync(notification);
-                _logger.LogInformation("[MedicationController] Created {Action} notification for medication {MedicineName}", action, medication.medicineName);
+                _logger.LogInformation("[MedicationController] Created {Action} notification for medication {MedicineName}", action, medication.MedicineName);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[MedicationController] Failed to create {Action} notification for medication {MedicineName}", action, medication.medicineName);
+                _logger.LogError(ex, "[MedicationController] Failed to create {Action} notification for medication {MedicineName}", action, medication.MedicineName);
             }
         }
     }

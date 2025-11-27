@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace HomeCareApp.Models
 {
@@ -27,6 +28,7 @@ namespace HomeCareApp.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Navigation property
-        public virtual AuthUser? User { get; set; }
+        [ValidateNever]
+        public AuthUser? User { get; set; }
     }
 }

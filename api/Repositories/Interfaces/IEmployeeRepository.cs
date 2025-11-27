@@ -18,7 +18,6 @@ namespace HomeCareApp.Repositories.Interfaces
         Task<Employee> Create(Employee employee);
         Task<Employee> Update(Employee employee);
         
-        // deletes employee by id
         Task Delete(int id);
     }
 }

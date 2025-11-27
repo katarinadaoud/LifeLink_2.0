@@ -123,7 +123,7 @@ const ProfilePage: React.FC = () => {
                     department: data.department || '',
                     email: user.email || '',
                     phonenumber: data.phonenumber || '',
-                    healthRelated_info: data.healthRelated_info || '',
+                    healthRelated_info: data.HealthRelated_info || '', // Match backend casing
                     dateOfBirth: data.dateOfBirth ? data.dateOfBirth.split('T')[0] : ''
                 });
             } else if (response.status === 404) {
@@ -219,7 +219,7 @@ const ProfilePage: React.FC = () => {
                     address: formData.address,
                     department: formData.department,
                     phonenumber: formData.phonenumber,
-                    healthRelated_info: formData.healthRelated_info,
+                    HealthRelated_info: formData.healthRelated_info,
                     dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : userInfo.dateOfBirth
                 })
             });
@@ -245,7 +245,7 @@ const ProfilePage: React.FC = () => {
             department: userInfo?.department || '',
             email: user?.email || '',
             phonenumber: userInfo?.phonenumber || '',
-            healthRelated_info: userInfo?.healthRelated_info || '',
+            healthRelated_info: userInfo?.HealthRelated_info || '',
             dateOfBirth: userInfo?.dateOfBirth ? userInfo.dateOfBirth.split('T')[0] : ''
         });
     };
@@ -499,7 +499,7 @@ const ProfilePage: React.FC = () => {
                                                                     onChange={handleInputChange}
                                                                 />
                                                             ) : (
-                                                                <p className="mt-1">{userInfo.healthRelated_info}</p>
+                                                                <p className="mt-1">{userInfo.HealthRelated_info}</p>
                                                             )}
                                                         </Form.Group>
                                                     </Col>
