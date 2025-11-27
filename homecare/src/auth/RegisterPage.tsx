@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import * as authService from './AuthService';
+import './Auth.css';
 
 const RegisterPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -40,66 +41,54 @@ const RegisterPage: React.FC = () => {
     };
 
     return (
-        <Container className="mt-5">
-            <h2 style={{ fontSize: '2rem', marginBottom: '2rem', color: '#177e8b' }}>Register</h2>
+        <Container className="auth-container">
+            <h2 className="auth-title">Register</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                    <Form.Label style={{ fontSize: '1.1rem', fontWeight: '500' }}>Username</Form.Label>
+                    <Form.Label className="auth-label">Username</Form.Label>
                     <Form.Control 
                         type="text" 
                         name="username" 
                         value={formData.username} 
                         onChange={handleChange} 
-                        style={{ 
-                            fontSize: '1.1rem', 
-                            padding: '0.75rem' 
-                        }}
+                        className="auth-input"
                         required 
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label style={{ fontSize: '1.1rem', fontWeight: '500' }}>Email</Form.Label>
+                    <Form.Label className="auth-label">Email</Form.Label>
                     <Form.Control 
                         type="email" 
                         name="email" 
                         value={formData.email} 
                         onChange={handleChange} 
-                        style={{ 
-                            fontSize: '1.1rem', 
-                            padding: '0.75rem' 
-                        }}
+                        className="auth-input"
                         required 
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label style={{ fontSize: '1.1rem', fontWeight: '500' }}>Password</Form.Label>
+                    <Form.Label className="auth-label">Password</Form.Label>
                     <Form.Control 
                         type="password" 
                         name="password" 
                         value={formData.password} 
                         onChange={handleChange} 
-                        style={{ 
-                            fontSize: '1.1rem', 
-                            padding: '0.75rem' 
-                        }}
+                        className="auth-input"
                         required 
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                    <Form.Label style={{ fontSize: '1.1rem', fontWeight: '500' }}>I am a:</Form.Label>
+                    <Form.Label className="auth-label">I am a:</Form.Label>
                     <Form.Select 
                         name="role" 
                         value={formData.role} 
                         onChange={handleChange} 
-                        style={{ 
-                            fontSize: '1.1rem', 
-                            padding: '0.75rem' 
-                        }}
+                        className="auth-input"
                         required
                     >
                         <option value="Patient">Patient</option>
@@ -109,7 +98,7 @@ const RegisterPage: React.FC = () => {
 
                 <Button
                     type="submit"
-                    className="btn btn-teal auth-submit"
+                    className="auth-submit"
                 >
                     Register
                 </Button>

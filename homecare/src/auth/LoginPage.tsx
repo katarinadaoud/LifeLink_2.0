@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
+import './Auth.css';
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -71,40 +72,34 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <Container className="mt-5">
-            <h2 style={{ fontSize: '2rem', marginBottom: '2rem', color: '#177e8b' }}>Login</h2>
+        <Container className="auth-container">
+            <h2 className="auth-title">Login</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicUsername">
-                    <Form.Label style={{ fontSize: '1.1rem', fontWeight: '500' }}>Username</Form.Label>
+                    <Form.Label className="auth-label">Username</Form.Label>
                     <Form.Control
                         type="text"
                         placeholder="Enter username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        style={{ 
-                            fontSize: '1.1rem', 
-                            padding: '0.75rem' 
-                        }}
+                        className="auth-input"
                         required/>
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label style={{ fontSize: '1.1rem', fontWeight: '500' }}>Password</Form.Label>
+                    <Form.Label className="auth-label">Password</Form.Label>
                     <Form.Control
                         type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        style={{ 
-                            fontSize: '1.1rem', 
-                            padding: '0.75rem' 
-                        }}
+                        className="auth-input"
                         required/>
                 </Form.Group>
                 <Button
                     type="submit"
-                    className="btn btn-teal auth-submit"
+                    className="auth-submit"
                 >
                     Login
                 </Button>
