@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Form, Row, Col } from 'react-bootstrap';
+import "../Medication.css";
+
 
 type Scope = 'patient' | 'employee';
 
@@ -13,19 +15,22 @@ export type MedicationFormValues = {
   endDate: string;
 };
 
+//Medication form component for creating or editing medication records
 export default function MedicationForm({
   scope = 'employee',
   initial,
   onSubmit,
   onCancel,
-  submitText,
-}: {
-  scope?: Scope;
+  submitText, 
+}: { 
+  scope?: Scope; 
   initial?: Partial<MedicationFormValues>;
   onSubmit: (payload: Omit<MedicationFormValues, 'endDate'> & { endDate: string | null }) => Promise<void> | void;
   onCancel?: () => void;
   submitText?: string;
 }) {
+
+  // Initialize form values based on initial prop or empty defaults
   const init: MedicationFormValues = useMemo(() => ({
     patientId: initial?.patientId ?? '',
     medicationName: initial?.medicationName ?? '',
@@ -35,14 +40,17 @@ export default function MedicationForm({
     endDate: (initial?.endDate ?? '').slice(0, 10),
   }), [initial]);
 
+  // Form state management, contains current values, errors, and submission state
   const [values, setValues] = useState<MedicationFormValues>(init);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
+  // setter for all form fields
   function set<K extends keyof MedicationFormValues>(key: K, v: MedicationFormValues[K]) {
     setValues(prev => ({ ...prev, [key]: v }));
   }
 
+  // validate form values and return errors
   function validate(v: MedicationFormValues) {
     const e: Record<string, string> = {};
     if (scope === 'employee' && (v.patientId === '' || v.patientId === undefined)) e.patientId = 'Påkrevd';
@@ -53,24 +61,27 @@ export default function MedicationForm({
     return e;
   }
 
+  // handle form submission, stops default, and calls onSubmit prop
   async function handleSubmit(evt: React.FormEvent) {
     evt.preventDefault();
     const e = validate(values);
     setErrors(e);
     if (Object.keys(e).length) return;
 
+    // prepare payload for submission, sends to backend
     const payload = {
       ...(values.medicationId ? { medicationId: values.medicationId } : {}),
-      ...(scope === 'employee'
+      ...(scope === 'employee' // if employee, include patientId
         ? { patientId: typeof values.patientId === 'string' ? Number(values.patientId) : values.patientId }
         : {}),
       medicationName: values.medicationName.trim(),
       indication: values.indication.trim(),
       dosage: values.dosage.trim(),
       startDate: values.startDate,
-      endDate: values.endDate || null, // backend: DateOnly? -> null = aktiv
+      endDate: values.endDate || null, // backend: DateOnly? -> null if empty = active
     };
 
+    // submit the form
     try {
       setSubmitting(true);
       await onSubmit(payload);
@@ -80,7 +91,11 @@ export default function MedicationForm({
   }
 
   return (
+    //main form for creating/updating medication
+
     <Form onSubmit={handleSubmit} noValidate>
+
+      {/* Patient ID field only for employees */}
       {scope === 'employee' && (
         <Form.Group className="mb-3" controlId="patientId">
           <Form.Label>Patient ID</Form.Label>
@@ -93,10 +108,12 @@ export default function MedicationForm({
             placeholder="Skriv pasient-ID"
             required
           />
+          {/* Validation error message */}
           <Form.Control.Feedback type="invalid">{errors.patientId}</Form.Control.Feedback>
         </Form.Group>
       )}
 
+      {/* Medication Name and Dosage fields side by side */}
       <Row>
         <Col md={6}>
           <Form.Group className="mb-3" controlId="medicationName">
@@ -127,6 +144,7 @@ export default function MedicationForm({
         </Col>
       </Row>
 
+      {/* Indication field - optional*/}
       <Form.Group className="mb-3" controlId="indication">
         <Form.Label>Indication (valgfritt)</Form.Label>
         <Form.Control
@@ -136,6 +154,7 @@ export default function MedicationForm({
         />
       </Form.Group>
 
+      {/* Start and End Date fields side by side */}
       <Row>
         <Col md={6}>
           <Form.Group className="mb-3" controlId="startDate">
@@ -163,7 +182,7 @@ export default function MedicationForm({
           </Form.Group>
         </Col>
       </Row>
-
+      {/* Submit and Cancel buttons */}
       <div className="d-flex gap-2">
         <Button type="submit" disabled={submitting}>
           {submitting ? 'Lagrer…' : (submitText ?? 'Save')}

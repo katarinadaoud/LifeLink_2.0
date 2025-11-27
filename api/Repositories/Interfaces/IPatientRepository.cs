@@ -2,7 +2,7 @@ using HomeCareApp.Models;
 
 namespace HomeCareApp.Repositories.Interfaces;
 
-// basic crud for patient entities
+//basic crud for patient entities
 public interface IPatientRepository
 {
     Task<IEnumerable<Patient>> GetAll();

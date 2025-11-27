@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj": {}
+    "C:\\Users\\nahid\\OneDrive\\Dokumenter\\GitHub\\React-Homecare\\api\\api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj": {
+    "C:\\Users\\nahid\\OneDrive\\Dokumenter\\GitHub\\React-Homecare\\api\\api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj",
+        "projectUniqueName": "C:\\Users\\nahid\\OneDrive\\Dokumenter\\GitHub\\React-Homecare\\api\\api.csproj",
         "projectName": "api",
-        "projectPath": "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\api.csproj",
-        "packagesPath": "C:\\Users\\B\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\B\\Documents\\ITPE3200\\React-Homecare\\api\\obj\\",
+        "projectPath": "C:\\Users\\nahid\\OneDrive\\Dokumenter\\GitHub\\React-Homecare\\api\\api.csproj",
+        "packagesPath": "C:\\Users\\nahid\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nahid\\OneDrive\\Dokumenter\\GitHub\\React-Homecare\\api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\B\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\nahid\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -81,7 +81,7 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[10.0.0, )"
             },
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",

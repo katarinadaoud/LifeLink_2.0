@@ -6,6 +6,8 @@ import { useAuth } from "../auth/AuthContext";
 import * as MedicationService from "./MedicationService";
 import type { Medication } from "../types/medication";
 import type { Patient } from "../types/patient";
+import "../Medication.css";
+
 
 const MedicationUpdatePage: React.FC = () => {
   const { name } = useParams(); // route: /medications/:name/edit
@@ -18,7 +20,7 @@ const MedicationUpdatePage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Restrict access to Employee
+  //Restrict access to Employee
   useEffect(() => {
     if (user?.role !== "Employee") {
       navigate("/unauthorized");
@@ -65,7 +67,7 @@ const MedicationUpdatePage: React.FC = () => {
     setError(null);
 
     try {
-      // ✅ sender riktig parametre til updateMedication
+      // send update request to API
       await MedicationService.updateMedication(
         form.medicationName,
         form as Medication
@@ -77,7 +79,7 @@ const MedicationUpdatePage: React.FC = () => {
       setSaving(false);
     }
   };
-
+// Show loading state
   if (loading) {
     return (
       <div className="text-center mt-5">
@@ -88,19 +90,23 @@ const MedicationUpdatePage: React.FC = () => {
   }
 
   return (
-    <div className="container mt-4" style={{ maxWidth: "600px" }}>
-      <h2>Update Medication</h2>
-      <p className="text-muted mb-4">
+    /*main container using bootsrap layout */
+    <div className="container mt-4 update-container">
+      <h2 className="fw-bold text-primary mb-3">Update Medication</h2>
+      <p className="text-muted mb-4"> {/*subtitle - purpose of the page */}
         Edit the medication details below and click Save Changes.
       </p>
 
+    {/*use bootstrap layout, show error only if error exist */}
       {error && (
-        <p className="text-danger fw-semibold" style={{ marginTop: "-5px" }}>
+        <p className="text-danger fw-semibold error-top" >
           {error}
         </p>
       )}
 
       <Form onSubmit={handleSubmit}>
+
+        {/*medication name field */}
         <Form.Group className="mb-3">
           <Form.Label>Medication Name</Form.Label>
           <Form.Control
@@ -112,6 +118,8 @@ const MedicationUpdatePage: React.FC = () => {
           />
         </Form.Group>
 
+        {/*patient selection dropdown */}
+
         <Form.Group className="mb-3">
           <Form.Label>Patient</Form.Label>
           <Form.Control
@@ -121,7 +129,10 @@ const MedicationUpdatePage: React.FC = () => {
             onChange={handleChange}
             required
           >
+            
             <option value="">Select a patient...</option>
+            
+            {/*patient list automatically rendered */}
             {patients.map((patient) => (
               <option key={patient.patientId} value={patient.patientId}>
                 {patient.fullName}
@@ -130,6 +141,7 @@ const MedicationUpdatePage: React.FC = () => {
           </Form.Control>
         </Form.Group>
 
+            {/* optional indication field */}
         <Form.Group className="mb-3">
           <Form.Label>Indication</Form.Label>
           <Form.Control
@@ -140,6 +152,7 @@ const MedicationUpdatePage: React.FC = () => {
           />
         </Form.Group>
 
+            {/* dosage field */}
         <Form.Group className="mb-3">
           <Form.Label>Dosage</Form.Label>
           <Form.Control
@@ -150,6 +163,7 @@ const MedicationUpdatePage: React.FC = () => {
           />
         </Form.Group>
 
+            {/* start date  */}
         <Form.Group className="mb-3">
           <Form.Label>Start Date</Form.Label>
           <Form.Control
@@ -160,6 +174,7 @@ const MedicationUpdatePage: React.FC = () => {
           />
         </Form.Group>
 
+          {/* (optional) end date  */}
         <Form.Group className="mb-4">
           <Form.Label>End Date</Form.Label>
           <Form.Control
@@ -170,6 +185,7 @@ const MedicationUpdatePage: React.FC = () => {
           />
         </Form.Group>
 
+            {/* action buttons with bootstrap style */}
         <div className="d-flex justify-content-between">
           <Button
             variant="outline-secondary"
@@ -177,7 +193,8 @@ const MedicationUpdatePage: React.FC = () => {
           >
             Cancel
           </Button>
-          <Button className="btn btn-teal auth-submit" type="submit" disabled={saving}>
+          {/*submit button shows loading state when saving */}
+          <Button variant="primary" type="submit" disabled={saving}>
             {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>

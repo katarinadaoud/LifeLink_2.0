@@ -5,7 +5,7 @@ using HomeCareApp.Repositories.Interfaces;
 
 namespace HomeCareApp.Repositories.Implementations
 {
-    // Repository for CRUD operations on appointment entities
+    //Repository for CRUD operations on appointment entities
     public class AppointmentRepository : IAppointmentRepository
     {
         private readonly AppDbContext _db;
