@@ -93,7 +93,7 @@ namespace HomeCareApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[MedicationController] Medication creation failed for {MedicationName}", dto.MedicineName);
+                _logger.LogError(ex, "[MedicationController] Medication creation failed for {MedicationName}", dto.MedicationName);
                 return StatusCode(500, "Internal server error");
             }
         }

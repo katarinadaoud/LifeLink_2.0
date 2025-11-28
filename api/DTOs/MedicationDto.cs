@@ -8,7 +8,7 @@ namespace HomeCareApp.DTOs
         [Required]
         [StringLength(100, ErrorMessage = "Medication name cannot exceed 100 characters.")]
         [Display(Name = "Medication Name")]
-        public string MedicineName { get; set; } = "";
+        public string MedicationName { get; set; } = "";
         
         [Required]
         public int PatientId { get; set; }
@@ -31,7 +31,7 @@ namespace HomeCareApp.DTOs
         //create a DTO from the Medication entity
         public static MedicationDto FromEntity(Medication m) => new()
         {
-            MedicineName = m.MedicineName,
+            MedicationName = m.MedicineName,
             PatientId = m.PatientId,
             PatientName = m.Patient?.FullName ?? "",
             Indication = m.Indication,
@@ -43,7 +43,7 @@ namespace HomeCareApp.DTOs
         //convert the DTO back to a Medication entity
         public Medication ToEntity() => new()
         {
-            MedicineName = MedicineName,
+            MedicineName = MedicationName,
             PatientId = PatientId,
             Indication = Indication,
             Dosage = Dosage,
