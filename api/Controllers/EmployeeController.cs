@@ -88,12 +88,16 @@ public class EmployeeController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        //Map updated fields from DTO to entity
-        var updatedEmployee = employeeDto.ToEntity();
-        updatedEmployee.EmployeeId = id; 
-        updatedEmployee.Appointments = existingEmployee.Appointments;
+        // Log values to diagnose FK issues
+        _logger.LogDebug("[EmployeeController] UpdateEmployee - existing UserId: {ExistingUserId}, DTO UserId: {DtoUserId}", existingEmployee?.UserId, employeeDto?.UserId);
 
-        await _employeeRepository.Update(updatedEmployee);
+        //Map only scalar/primitive fields from DTO to the tracked existing employee to avoid FK and tracking issues
+        existingEmployee.FullName = employeeDto.FullName;
+        existingEmployee.Address = employeeDto.Address;
+        existingEmployee.Department = employeeDto.Department;
+        existingEmployee.UserId = string.IsNullOrWhiteSpace(employeeDto.UserId) ? existingEmployee.UserId : employeeDto.UserId;
+
+        await _employeeRepository.Update(existingEmployee);
         _logger.LogInformation("[EmployeeController] Successfully updated employee {EmployeeId}", id);
         return NoContent();
     }

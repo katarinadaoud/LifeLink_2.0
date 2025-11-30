@@ -26,29 +26,28 @@ const ProfileGuard: React.FC<ProfileGuardProps> = ({ children }) => {
                     return;
                 }
 
-                // Try to create profile, if it fails, user might need profile setup
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/Auth/create-profile`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (response.ok) {
-                    // Profile created or already exists
+                // Check whether profile exists by calling the correct GET endpoint
+                // Try both Patient and Employee endpoints based on the user's roles
+                let profileExists = false;
+                // Determine which endpoint to check: try Patient then Employee
+                const userId = user.sub || user.nameid || user.userid;
+                if (userId) {
+                    const patientResp = await fetch(`${import.meta.env.VITE_API_URL}/api/patient/user/${userId}`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (patientResp.ok) profileExists = true;
+                    const employeeResp = await fetch(`${import.meta.env.VITE_API_URL}/api/employee/user/${userId}`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (employeeResp.ok) profileExists = true;
+                }
+                if (profileExists) {
                     setHasProfile(true);
                 } else {
-                    const errorText = await response.text();
-                    
-                    // Check if error indicates profile already exists
-                    if (errorText.includes('already exists') || response.status === 400) {
-                        setHasProfile(true);
-                    } else {
-                        // User needs to complete profile
-                        setHasProfile(false);
-                        navigate('/profile-setup');
-                    }
+                    setHasProfile(false);
+                    navigate('/profile-setup');
                 }
             } catch (error) {
                 console.error('Error checking profile:', error);
