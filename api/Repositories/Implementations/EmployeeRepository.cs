@@ -110,7 +110,24 @@ namespace HomeCareApp.Repositories.Implementations
             try
             {
                 _logger.LogInformation("[EmployeeRepository] Update() - Updating employee: {EmployeeName} (ID: {EmployeeId})", employee.FullName, employee.EmployeeId);
-                _db.Entry(employee).State = EntityState.Modified;
+
+                // If EF is already tracking the entity instance, merge changes into the tracked instance instead of attaching a new one
+                var trackedEntry = _db.ChangeTracker.Entries<Employee>().FirstOrDefault(e => e.Entity.EmployeeId == employee.EmployeeId);
+                if (trackedEntry != null)
+                {
+                    _logger.LogDebug("[EmployeeRepository] Update() - Using tracked entity for employee ID {EmployeeId}", employee.EmployeeId);
+                    _logger.LogDebug("[EmployeeRepository] Update() - Tracked UserId: {TrackedUserId}, Incoming UserId: {IncomingUserId}", trackedEntry.Entity.UserId, employee.UserId);
+                    // If trackedEntry.Entity and the passed employee reference are the same instance, avoid CurrentValues.SetValues
+                    if (!object.ReferenceEquals(trackedEntry.Entity, employee))
+                    {
+                        trackedEntry.CurrentValues.SetValues(employee);
+                    }
+                }
+                else
+                {
+                    _db.Employees.Update(employee);
+                }
+
                 await _db.SaveChangesAsync();
                 _logger.LogInformation("[EmployeeRepository] Update() - Successfully updated employee: {EmployeeName} (ID: {EmployeeId})", employee.FullName, employee.EmployeeId);
                 return employee;
