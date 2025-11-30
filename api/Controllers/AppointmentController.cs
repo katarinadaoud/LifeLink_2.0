@@ -81,6 +81,12 @@ public class AppointmentController : ControllerBase
         {
             return BadRequest("Appointment cannot be null");
         }
+        // Validate appointment date is not in the past
+        if (appointmentDto.Date < DateTime.Now)
+        {
+            _logger.LogWarning("[AppointmentController] Attempted to create appointment in the past: {Date}", appointmentDto.Date);
+            return BadRequest("Appointment date cannot be in the past");
+        }
         var newAppointment = appointmentDto.ToEntity();
         bool returnOk = await _appointmentRepository.Create(newAppointment);
         if (returnOk)
@@ -105,6 +111,12 @@ public class AppointmentController : ControllerBase
         if (appointmentDto == null)
         {
             return BadRequest("Appointment data cannot be null");
+        }
+        // Prevent updating to a past date
+        if (appointmentDto.Date < DateTime.Now)
+        {
+            _logger.LogWarning("[AppointmentController] Attempted to update appointment to a past date: {Date}", appointmentDto.Date);
+            return BadRequest("Appointment date cannot be in the past");
         }
         // Find the appointment in the database
         var existingAppointment = await _appointmentRepository.GetAppointmentById(id);
