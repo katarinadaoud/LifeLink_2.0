@@ -29,6 +29,11 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   const [date, setDate] = useState<string>(
     initialData?.date ? new Date(initialData.date).toISOString().slice(0, 16) : ''
   );
+  const [formError, setFormError] = useState<string | null>(null);
+  // Compute local min date/time string for <input type="datetime-local">
+  const now = new Date();
+  const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
+  const minDateTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
   const [patientId, setPatientId] = useState<number>(initialData?.patientId || 0);
   const [employeeId, setEmployeeId] = useState<number>(initialData?.employeeId || 0);
 
@@ -88,6 +93,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   // Handle submit for both create and update
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setFormError(null);
+    // Prevent submission if date is missing or in the past (compared to now)
+    if (!date || new Date(date) < new Date()) {
+      setFormError('Appointment date must be in the future');
+      return;
+    }
     const appointment: Appointment = { 
       appointmentId, 
       subject, 
@@ -124,12 +135,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       {/* Date/time input for the appointment */}
       <Form.Group controlId="formAppointmentDate">
         <Form.Label>Date</Form.Label>
-        <Form.Control
-          type="datetime-local"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
+          <Form.Control
+            type="datetime-local"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            min={minDateTime}
+          />
+          {formError && <div style={{ color: 'red', marginTop: '0.5rem' }}>{formError}</div>}
       </Form.Group>
 
       {/* Optional free-text description of the appointment */}
