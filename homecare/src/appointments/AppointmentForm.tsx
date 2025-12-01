@@ -208,13 +208,15 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
       {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
 
-      {/* Submit and cancel buttons – text changes depending on create vs update */}
-      <Button className="btn btn-teal" type="submit">
-        {isUpdate ? 'Update Appointment' : 'Create Appointment'}
-      </Button>
-      <Button className="btn btn-delete ms-2" onClick={onCancel}>
-        Cancel
-      </Button>
+      {/* Submit and cancel buttons – wrapped with extra top spacing */}
+      <div className="mt-4 d-flex">
+        <Button className="btn btn-teal" type="submit">
+          {isUpdate ? 'Update Appointment' : 'Create Appointment'}
+        </Button>
+        <Button className="btn btn-delete ms-2" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
     </Form>
   );
 };

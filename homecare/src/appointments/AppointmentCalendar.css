@@ -52,7 +52,7 @@
 /* Label and input for searching appointments above the table/grid */
 .appointment-search-label {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500; /* keep mild emphasis (not a teal button) */
   color: var(--text-main);
 }
 
@@ -85,7 +85,7 @@
 }
 .calendar-title {
   font-size: 1.08rem;
-  font-weight: 600;
+  font-weight: 500; /* lighter, consistent with non-button headings */
   color: var(--primary);
   letter-spacing: 0.01em;
 }
@@ -128,7 +128,7 @@
 }
 .calendar-grid:first-of-type .day-header {
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 500; /* reduce bold for weekday labels */
   color: var(--text-muted);
   text-align: center;
   text-transform: uppercase;
@@ -198,7 +198,7 @@
 }
 .calendar-card-date {
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: 500; /* lighter date weight */
   color: var(--text-main);
 }
 .calendar-badge.badge {
@@ -230,7 +230,7 @@
   background: #f0fbfb;
   border-radius: var(--radius-sm);
   color: #111827;
-  font-weight: 600;
+  font-weight: 500; /* reduce chip boldness */
   border: 1px solid rgba(23, 126, 139, 0.18);
   border-left: 3px solid var(--accent);
   display: flex;
@@ -336,7 +336,7 @@
 }
 .modal-subject {
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 500; /* soften modal subject weight */
   color: var(--primary);
 }
 .modal-info {
@@ -434,7 +434,7 @@
   font-size: 0.9rem;
   padding: 0.35rem 0.9rem;
   border-radius: var(--radius-md);
-  font-weight: 500;
+  font-weight: 400; /* align with unified teal/delete action buttons */
 }
 
 /* Update = teal primary button, reusing the accent color */
@@ -499,7 +499,7 @@ button.btn.appointment-grid-btn-delete:focus {
   background-color: var(--teal-primary);
   border: 1px solid var(--teal-primary);
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 400; /* unified normal weight */
 }
 .appointment-actions-vertical button.appointment-action-update:hover,
 .appointment-actions-vertical button.appointment-action-update:focus {
@@ -513,7 +513,7 @@ button.btn.appointment-grid-btn-delete:focus {
   background-color: transparent;
   border: 1px solid transparent;
   color: var(--color-error-dark);
-  font-weight: 600;
+  font-weight: 400; /* unified normal weight */
 }
 .appointment-actions-vertical button.appointment-action-delete.btn:hover,
 .appointment-actions-vertical button.appointment-action-delete.btn:focus {

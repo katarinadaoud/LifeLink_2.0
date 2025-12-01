@@ -270,7 +270,7 @@ const NavMenu: React.FC = () => {
                     className="text-decoration-none d-none d-lg-block lifelink-welcome-link"
                   >
                     <span className="text-muted lifelink-welcome-text">
-                      Welcome, {user.username}
+                      Welcome,<br />{user.username}
                     </span>
                   </Link>
 

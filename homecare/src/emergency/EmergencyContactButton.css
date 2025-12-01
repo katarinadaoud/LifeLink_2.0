@@ -18,7 +18,7 @@
   color: #ffffff;
 
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 400; /* unify teal button weight */
 
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);
   transition:
@@ -60,6 +60,7 @@
   background-color: var(--teal-primary);
   border-color: var(--teal-primary);
   color: #ffffff;
+  font-weight: 400; /* unify */
 }
 
 .lifelink-emergency-call-btn:hover,

@@ -182,7 +182,7 @@ const MedicationListPage: React.FC = () => {
       {user && user.role === "Employee" && (
         <div className="mt-3 text-center">
           <Button 
-            className="btn btn-teal btn-large"
+            className="btn btn-teal"
             onClick={() => navigate("/medications/new")}
             
           >
