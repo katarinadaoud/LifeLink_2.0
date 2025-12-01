@@ -91,3 +91,20 @@ export const fetchPatientByUserId = async (userId: string) => {
   });
   return handleResponse(response);
 };
+
+// Get employee by userId (for current user)
+export const fetchEmployeeByUserId = async (userId: string) => {
+  const response = await fetch(`${API_URL}/api/Employee/user/${userId}`, {
+    headers: getAuthHeaders(),
+  });
+  return handleResponse(response);
+};
+
+// Confirm appointment (employee confirms patient request)
+export const confirmAppointment = async (appointmentId: number) => {
+  const response = await fetch(`${API_URL}/api/Appointment/${appointmentId}/confirm`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  return handleResponse(response);
+};

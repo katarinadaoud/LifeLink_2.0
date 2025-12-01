@@ -142,6 +142,28 @@ namespace HomeCareApp.Repositories.Implementations
             }
         }
 
+        public async Task<bool> SetConfirmed(int id, bool confirmed)
+        {
+            try
+            {
+                _logger.LogInformation("[AppointmentRepository] SetConfirmed({Id}) - Setting confirmation to {Confirmed}", id, confirmed);
+                var appointment = await _db.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == id);
+                if (appointment == null)
+                {
+                    _logger.LogWarning("[AppointmentRepository] SetConfirmed({Id}) - Appointment not found", id);
+                    return false;
+                }
+                appointment.IsConfirmed = confirmed;
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "[AppointmentRepository] SetConfirmed({Id}) failed: {Message}", id, ex.Message);
+                return false;
+            }
+        }
+
         
     }
 }

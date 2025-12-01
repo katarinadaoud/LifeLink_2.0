@@ -23,6 +23,9 @@ namespace HomeCareApp.DTOs
         [Required]
         public int EmployeeId { get; set; } 
 
+        // Confirmation state for request/confirm flow
+        public bool IsConfirmed { get; set; }
+
         // Display names for better user experience
         public string? PatientName { get; set; }
         public string? EmployeeName { get; set; }
@@ -36,6 +39,7 @@ namespace HomeCareApp.DTOs
             Date = appointment.Date,
             PatientId = appointment.PatientId ?? 0, // Using null operator to avoid null reference
             EmployeeId = appointment.EmployeeId ?? 0,
+            IsConfirmed = appointment.IsConfirmed,
             PatientName = appointment.Patient?.FullName ?? "Unknown Patient",
             EmployeeName = appointment.Employee?.FullName ?? "Unknown Employee"
         };
@@ -49,6 +53,7 @@ namespace HomeCareApp.DTOs
             Date = Date,
             PatientId = PatientId,
             EmployeeId = EmployeeId,
+            IsConfirmed = IsConfirmed,
             //Navigation properties will be set by EF Core
             Patient = null!,
             Employee = null!

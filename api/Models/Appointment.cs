@@ -25,6 +25,9 @@ namespace HomeCareApp.Models
         [Required]
         public int? EmployeeId { get; set; } //FK to employee
 
+        // Request/confirm state: false = pending request, true = confirmed booking
+        public bool IsConfirmed { get; set; } = false;
+
         //navigation properties
         [ValidateNever]
         public required Patient? Patient { get; set; }

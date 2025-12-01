@@ -622,3 +622,47 @@
   border-color: #fecaca !important;
   color: #7f1d1d !important;
 }
+
+/* Match grid/list color styling for "Confirm" button - green version of delete button */
+.appointment-actions-vertical .appointment-action-confirm,
+.appointment-actions-vertical .appointment-action-confirm:link,
+.appointment-actions-vertical .appointment-action-confirm:visited {
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  color: #15803d !important;
+  font-weight: 600 !important;
+}
+.appointment-actions-vertical .appointment-action-confirm:hover,
+.appointment-actions-vertical .appointment-action-confirm:focus {
+  background-color: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #14532d !important;
+}
+
+/* Confirm button for grid view */
+.btn-confirm {
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  color: #15803d !important;
+  font-weight: 600 !important;
+}
+.btn-confirm:hover,
+.btn-confirm:focus {
+  background-color: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #14532d !important;
+}
+
+/* Confirm button for modal (calendar view) */
+.btn-confirm-modal {
+  background-color: transparent !important;
+  border: 1px solid transparent !important;
+  color: #15803d !important;
+  font-weight: 600 !important;
+}
+.btn-confirm-modal:hover,
+.btn-confirm-modal:focus {
+  background-color: #dcfce7 !important;
+  border-color: #bbf7d0 !important;
+  color: #14532d !important;
+}

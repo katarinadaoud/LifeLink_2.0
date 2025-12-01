@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Row, Button } from 'react-bootstrap';
+import { Card, Col, Row, Button, Badge } from 'react-bootstrap';
 import type { Appointment } from '../types/appointment';
 import './AppointmentCalendar.css';
 
@@ -7,11 +7,13 @@ import './AppointmentCalendar.css';
 interface AppointmentGridProps {
   appointments: Appointment[];
   onAppointmentDeleted?: (appointmentId: number) => void;
+  onAppointmentConfirmed?: (appointmentId: number) => void;
   userRole?: string;
+  currentEmployeeId?: number | null;
 }
 
 // Presentational component that shows appointments as responsive Bootstrap cards
-const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppointmentDeleted, userRole }) => {
+const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppointmentDeleted, onAppointmentConfirmed, userRole, currentEmployeeId }) => {
 
   return (
     <div>
@@ -23,7 +25,15 @@ const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppoi
               {/* Make the card body fill the height so buttons can stick to the bottom */}
               <Card.Body className="d-flex flex-column">
                 {/* Show appointment id and subject as the card title */}
-                <Card.Title>{appointment.appointmentId}: {appointment.subject}</Card.Title>
+                <Card.Title>
+                  {appointment.appointmentId}: {appointment.subject}
+                  {' '}
+                  {appointment.isConfirmed ? (
+                    <Badge bg="success">Confirmed</Badge>
+                  ) : (
+                    <Badge bg="warning" text="dark">Pending</Badge>
+                  )}
+                </Card.Title>
                 <Card.Text>
                   {/* Format the stored date into a readable local date/time string */}
                   <strong>Date:</strong> {new Date(appointment.date).toLocaleString()}
@@ -45,6 +55,15 @@ const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppoi
 
                 {/* Action buttons are pushed to the bottom of the card using mt-auto */}
                 <div className="mt-auto d-flex justify-content-end gap-2">
+                  {/* Employee confirm button for pending requests - only show for assigned employee */}
+                  {userRole === 'Employee' && !appointment.isConfirmed && onAppointmentConfirmed && currentEmployeeId === appointment.employeeId && (
+                    <Button
+                      onClick={() => onAppointmentConfirmed(appointment.appointmentId!)}
+                      className="btn btn-confirm"
+                    >
+                      Confirm
+                    </Button>
+                  )}
                   {/* Only show update/delete buttons if a delete callback was provided */}
                   {onAppointmentDeleted && (
                     <>

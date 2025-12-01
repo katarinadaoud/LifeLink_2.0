@@ -6,7 +6,7 @@ import AppointmentCalendar from './AppointmentCalendar';
 import './AppointmentCalendar.css';
 import type { Appointment } from '../types/appointment';
 import * as AppointmentService from './AppointmentService';
-import { fetchPatientByUserId } from './AppointmentService';
+import { fetchPatientByUserId, fetchEmployeeByUserId } from './AppointmentService';
 import { useAuth } from '../auth/AuthContext';
 
 type ViewMode = 'table' | 'grid' | 'calendar';
@@ -17,6 +17,7 @@ const AppointmentListPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentEmployeeId, setCurrentEmployeeId] = useState<number | null>(null);
   const { user } = useAuth();
 
   const fetchAppointments = async () => {
@@ -43,7 +44,6 @@ const AppointmentListPage: React.FC = () => {
       }
 
       setAppointments(data);
-      console.log(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(
@@ -62,18 +62,27 @@ const AppointmentListPage: React.FC = () => {
     const savedViewMode = localStorage.getItem(
       'appointmentViewMode'
     ) as ViewMode;
-    console.log('[fetch appointments] Saved view mode:', savedViewMode);
     if (savedViewMode && ['table', 'grid', 'calendar'].includes(savedViewMode)) {
       setViewMode(savedViewMode);
     }
 
     if (user) {
       fetchAppointments();
+      // Get current employee's ID if user is an employee
+      if (user.role === 'Employee') {
+        const userId = user.sub || user.nameid;
+        fetchEmployeeByUserId(userId).then((employeeData) => {
+          if (employeeData?.employeeId) {
+            setCurrentEmployeeId(employeeData.employeeId);
+          }
+        }).catch((error) => {
+          console.error('Error fetching employee data:', error);
+        });
+      }
     }
   }, [user]);
 
   useEffect(() => {
-    console.log('[save view state] Saving view mode:', viewMode);
     localStorage.setItem('appointmentViewMode', viewMode);
   }, [viewMode]);
 
@@ -96,11 +105,21 @@ const AppointmentListPage: React.FC = () => {
             (appointment) => appointment.appointmentId !== appointmentId
           )
         );
-        console.log('Appointment deleted:', appointmentId);
       } catch (error) {
         console.error('Error deleting appointment:', error);
         setError('Failed to delete appointment.');
       }
+    }
+  };
+
+  const handleAppointmentConfirmed = async (appointmentId: number) => {
+    try {
+      await AppointmentService.confirmAppointment(appointmentId);
+      // Refresh appointments to show updated confirmation status
+      await fetchAppointments();
+    } catch (error) {
+      console.error('Error confirming appointment:', error);
+      setError('Failed to confirm appointment.');
     }
   };
 
@@ -162,14 +181,16 @@ const AppointmentListPage: React.FC = () => {
         </Form.Group>
       )}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="text-danger">{error}</p>}
 
       {/* Render appropriate view based on viewMode */}
       {viewMode === 'table' && (
         <AppointmentTable
           appointments={filteredAppointments}
           onAppointmentDeleted={user ? handleAppointmentDeleted : undefined}
+          onAppointmentConfirmed={user?.role === 'Employee' ? handleAppointmentConfirmed : undefined}
           userRole={user?.role}
+          currentEmployeeId={currentEmployeeId}
         />
       )}
 
@@ -177,7 +198,9 @@ const AppointmentListPage: React.FC = () => {
         <AppointmentGrid
           appointments={filteredAppointments}
           onAppointmentDeleted={user ? handleAppointmentDeleted : undefined}
+          onAppointmentConfirmed={user?.role === 'Employee' ? handleAppointmentConfirmed : undefined}
           userRole={user?.role}
+          currentEmployeeId={currentEmployeeId}
         />
       )}
 
@@ -185,7 +208,9 @@ const AppointmentListPage: React.FC = () => {
         <AppointmentCalendar
           appointments={appointments}
           onAppointmentDeleted={user ? handleAppointmentDeleted : undefined}
+          onAppointmentConfirmed={user?.role === 'Employee' ? handleAppointmentConfirmed : undefined}
           userRole={user?.role}
+          currentEmployeeId={currentEmployeeId}
         />
       )}
 

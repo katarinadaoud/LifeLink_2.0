@@ -14,6 +14,7 @@ namespace HomeCareApp.Repositories.Interfaces;
         Task<bool> Create(Appointment appointment);
         Task<bool> Update(Appointment appointment);
         Task<bool> Delete(int id);
+        Task<bool> SetConfirmed(int id, bool confirmed);
         
     }
 

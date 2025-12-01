@@ -10,6 +10,9 @@ export interface Appointment {
     patientId: number; // Foreign key to Patient
     employeeId: number; // Foreign key to Employee
 
+    // Request/confirm flow
+    isConfirmed: boolean; // false = pending request, true = confirmed booking
+
     // Display names for better user experience
     patientName?: string;
     employeeName?: string;
