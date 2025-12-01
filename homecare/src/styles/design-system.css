@@ -77,7 +77,6 @@
   background-color: var(--teal-primary);
   color: var(--color-white);
 }
-
 .bg-teal-hover:hover {
   background-color: var(--teal-hover);
 }
@@ -109,11 +108,15 @@ h2.text-teal,
 
 /* ----- TEAL BUTTON STYLING ----- */
 /* Kun farger - sizing håndteres av komponenter (Bootstrap size prop eller komponent-CSS) */
+/* Global button typography: no bold on any buttons */
+.btn { font-weight: 400; }
+.btn.fw-bold, .btn.btn-bold { font-weight: 400 !important; }
 .btn-teal {
   background-color: var(--teal-primary);
   border-color: var(--teal-primary);
   color: var(--color-white);
-  font-weight: 600;
+  font-weight: 400;
+  font-size: 1rem;
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
 }
@@ -151,7 +154,7 @@ h2.text-teal,
   background-color: var(--teal-primary);
   border-color: var(--teal-primary);
   color: var(--color-white);
-  font-weight: 600;
+  font-weight: 400;
   font-size: 1rem;
   padding: 0.35rem 0.9rem;
   border-radius: var(--radius-md);
@@ -171,7 +174,7 @@ h2.text-teal,
   background-color: var(--color-white);
   border-color: var(--color-error-light);
   color: var(--color-error-dark);
-  font-weight: 600;
+  font-weight: 400;
   font-size: 1rem;
   padding: 0.35rem 1.1rem;
   border-radius: var(--radius-md);
@@ -196,11 +199,13 @@ h2.text-teal,
 .table-header-teal {
   background-color: var(--teal-primary);
   color: var(--color-white);
+  font-weight: 400;
 }
 
 .table-header-teal th {
   background-color: var(--teal-primary);
   color: var(--color-white);
+  font-weight: 400;
 }
 
 /* ----- TEAL BADGE ----- */
@@ -309,6 +314,7 @@ h2.text-teal,
 button.view-toggle-btn.btn {
   padding: 9px 20px;
   font-size: 1rem;
+  font-weight: 400;
   border-radius: var(--radius-md);
   background: var(--color-white);
   color: var(--primary);
@@ -352,6 +358,7 @@ button.view-toggle-btn.btn.active:hover {
 .medication-toolbar .btn.btn-teal {
   padding: 9px 20px;
   font-size: 1rem;
+  font-weight: 400;
   border-radius: var(--radius-md);
   background: var(--color-white);
   color: var(--primary);
@@ -359,6 +366,11 @@ button.view-toggle-btn.btn.active:hover {
   box-shadow: none;
   transition: all 0.2s ease;
   margin-right: 0.5rem;
+}
+
+.appointment-toolbar .btn,
+.medication-toolbar .btn {
+  font-weight: 400;
 }
 
 .appointment-toolbar .btn.btn-teal:hover,

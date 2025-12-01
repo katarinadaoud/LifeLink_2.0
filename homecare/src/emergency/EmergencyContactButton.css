@@ -17,7 +17,7 @@
   background-color: var(--teal-primary);
   color: #ffffff;
 
-  font-size: 1.1rem;
+  font-size: 1rem; /* unify with teal button standard */
   font-weight: 400; /* unify teal button weight */
 
   box-shadow: 0 10px 20px rgba(15, 23, 42, 0.18);

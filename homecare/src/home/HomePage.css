@@ -48,7 +48,7 @@
 }
 
 .homepage-button-text {
-  font-size: 1.3rem;
+  font-size: 1rem; /* unify with button standard */
   font-weight: 400; /* unified normal weight for teal button text */
   text-align: center;
 }
