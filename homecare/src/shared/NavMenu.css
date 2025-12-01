@@ -200,6 +200,8 @@
   transition: all 0.3s ease;
   font-size: 1.1rem;
   padding: 0.75rem 1.5rem;
+  width: 8.6rem; /* Ensure Login and Register are exactly same width */
+  text-align: center;
 }
 
 /* Hover/focus effect equivalent to the onMouseOver/onMouseOut logic in TSX */

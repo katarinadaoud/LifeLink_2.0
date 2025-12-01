@@ -4,6 +4,8 @@ using HomeCareApp.Models;
 using HomeCareApp.DTOs;
 using HomeCareApp.Repositories.Interfaces;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference
+
 namespace HomeCareApp.Controllers;
 
 [ApiController]
@@ -34,10 +36,10 @@ public class EmployeeController : ControllerBase
             return NotFound("Employee list not found");
         }
 
-        //Map employee to DTOs using FromEntity
-        var employeeDtos = employees.Select(EmployeeDto.FromEntity);
+        //Map employee to DTOs using FromEntity and materialize to list
+        var employeeDtos = employees.Select(EmployeeDto.FromEntity).ToList();
         
-        _logger.LogInformation("[EmployeeController] Retrieved {Count} employees", employees.Count());
+        _logger.LogInformation("[EmployeeController] Retrieved {Count} employees", employeeDtos.Count);
         return Ok(employeeDtos);
     }
 
@@ -64,12 +66,18 @@ public class EmployeeController : ControllerBase
 
     //Update employee details in My Profile//
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateEmployee(int id, EmployeeDto employeeDto)
+    public async Task<IActionResult> UpdateEmployee(int id, [FromBody] EmployeeDto? employeeDto)
     {
         _logger.LogInformation("[EmployeeController] Updating employee with ID: {EmployeeId}", id);
         
+        if (employeeDto == null)
+        {
+            _logger.LogWarning("[EmployeeController] UpdateEmployee request body is null for ID {EmployeeId}", id);
+            return BadRequest("Request body is required");
+        }
+        
         //id must match the id in the url and dto, making sure the correct employee is updated
-        if (employeeDto.EmployeeId != id)
+        if (employeeDto!.EmployeeId != id)
         {
             _logger.LogWarning("[EmployeeController] ID mismatch: URL ID {UrlId} vs DTO ID {DtoId}", id, employeeDto.EmployeeId);
             return BadRequest("ID mismatch");
@@ -89,16 +97,18 @@ public class EmployeeController : ControllerBase
         }
 
         // Log values to diagnose FK issues
-        _logger.LogDebug("[EmployeeController] UpdateEmployee - existing UserId: {ExistingUserId}, DTO UserId: {DtoUserId}", existingEmployee?.UserId, employeeDto?.UserId);
+        _logger.LogDebug("[EmployeeController] UpdateEmployee - existing UserId: {ExistingUserId}, DTO UserId: {DtoUserId}", existingEmployee?.UserId, employeeDto!.UserId);
 
         //Map only scalar/primitive fields from DTO to the tracked existing employee to avoid FK and tracking issues
-        existingEmployee.FullName = employeeDto.FullName;
-        existingEmployee.Address = employeeDto.Address;
-        existingEmployee.Department = employeeDto.Department;
-        existingEmployee.UserId = string.IsNullOrWhiteSpace(employeeDto.UserId) ? existingEmployee.UserId : employeeDto.UserId;
+        existingEmployee.FullName = employeeDto!.FullName;
+        existingEmployee.Address = employeeDto!.Address;
+        existingEmployee.Department = employeeDto!.Department;
+        existingEmployee.UserId = string.IsNullOrWhiteSpace(employeeDto!.UserId) ? existingEmployee.UserId : employeeDto!.UserId;
 
         await _employeeRepository.Update(existingEmployee);
         _logger.LogInformation("[EmployeeController] Successfully updated employee {EmployeeId}", id);
         return NoContent();
     }
 }
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference

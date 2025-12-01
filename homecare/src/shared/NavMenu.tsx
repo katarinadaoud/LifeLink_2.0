@@ -286,7 +286,7 @@ const NavMenu: React.FC = () => {
               ) : (
                 // Not logged in state
                 <>
-                  <Link to="/login" className="me-3">
+                  <Link to="/login">
                     <Button
                       variant="outline-primary"
                       className="lifelink-auth-btn"
@@ -297,7 +297,6 @@ const NavMenu: React.FC = () => {
                   <Link to="/register">
                     <Button
                       variant="outline-primary"
-                      size="lg"
                       className="lifelink-auth-btn"
                     >
                       Register
