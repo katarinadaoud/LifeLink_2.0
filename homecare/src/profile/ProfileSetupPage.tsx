@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert, Card } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
+import './ProfilePage.css';
 
 interface PatientProfileData {
     fullName: string;

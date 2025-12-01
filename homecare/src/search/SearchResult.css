@@ -1,7 +1,7 @@
 /*search results page style*/
 
 .search-results-title {
-  color: #177e8b;
+  color: var(--teal-primary);
   margin-bottom: 2rem;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .search-loading-spinner {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 .search-loading-text {
@@ -36,7 +36,7 @@
 }
 
 .search-result-card-header {
-  background-color: #177e8b;
+  background-color: var(--teal-primary);
   color: white;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -44,7 +44,7 @@
 
 .search-result-card-title {
   font-size: 1.1rem;
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 .search-result-card-text {

@@ -42,7 +42,7 @@ export const fetchAppointmentById = async (appointmentId: string) => {
   return handleResponse(response);
 };
 // Post create appointment
-export const createAppointment = async (appointment: any) => {
+export const createAppointment = async (appointment: Omit<Appointment, 'appointmentId'>) => {
   const response = await fetch(`${API_URL}/api/Appointment`, {
     method: 'POST',
     headers: getAuthHeaders(), // Use the new helper here
@@ -51,7 +51,7 @@ export const createAppointment = async (appointment: any) => {
   return handleResponse(response);
 };
 // Put update appointment
-export const updateAppointment = async (appointmentId: number, appointment: any) => {
+export const updateAppointment = async (appointmentId: number, appointment: Partial<Appointment>) => {
   const response = await fetch(`${API_URL}/api/Appointment/${appointmentId}`, {
     method: 'PUT',
     headers: getAuthHeaders(), // Use the new helper here

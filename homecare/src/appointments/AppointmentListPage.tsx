@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import AppointmentTable from './AppointmentTable';
 import AppointmentGrid from './AppointmentGrid';
@@ -12,15 +12,15 @@ import { useAuth } from '../auth/AuthContext';
 type ViewMode = 'table' | 'grid' | 'calendar';
 
 const AppointmentListPage: React.FC = () => {
+  const { user } = useAuth();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentEmployeeId, setCurrentEmployeeId] = useState<number | null>(null);
-  const { user } = useAuth();
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -56,7 +56,7 @@ const AppointmentListPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     const savedViewMode = localStorage.getItem(
@@ -80,17 +80,20 @@ const AppointmentListPage: React.FC = () => {
         });
       }
     }
-  }, [user]);
+  }, [user, fetchAppointments]);
 
   useEffect(() => {
     localStorage.setItem('appointmentViewMode', viewMode);
   }, [viewMode]);
 
-  const filteredAppointments = appointments.filter((appointment) =>
-    appointment.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    appointment.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    appointment.patientName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    appointment.employeeName?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredAppointments = useMemo(() => 
+    appointments.filter((appointment) =>
+      appointment.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appointment.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appointment.patientName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      appointment.employeeName?.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+    [appointments, searchQuery]
   );
 
   const handleAppointmentDeleted = async (appointmentId: number) => {
@@ -125,44 +128,42 @@ const AppointmentListPage: React.FC = () => {
 
   return (
     <div className="container-fluid">
-      <div className="text-center mb-3">
-        <h1 className="fw-bold text-primary">My Appointments</h1>
-        <p className="mb-2">View and manage your healthcare appointments</p>
+      <div className="appointment-page-header text-center mb-3">
+        <h1 className="appointment-page-title fw-bold text-teal">My Appointments</h1>
+        <p className="appointment-page-description mb-2">View and manage your healthcare appointments</p>
       </div>
 
-      <div className="mb-3">
+      <div className="appointment-toolbar mb-3">
         <Button
           onClick={fetchAppointments}
-          className="btn btn-primary me-3"
+          className="btn btn-teal me-3"
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Refresh Appointments'}
         </Button>
 
         {/* View Mode Buttons */}
-        <div className="btn-group" role="group" aria-label="View mode selection">
-          <Button
-            variant={viewMode === 'table' ? 'primary' : 'outline-primary'}
-            onClick={() => setViewMode('table')}
-            title="List view with detailed information"
-          >
-            List View
-          </Button>
-          <Button
-            variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
-            onClick={() => setViewMode('grid')}
-            title="Card view with appointment details"
-          >
-            Card View
-          </Button>
-          <Button
-            variant={viewMode === 'calendar' ? 'primary' : 'outline-primary'}
-            onClick={() => setViewMode('calendar')}
-            title="Calendar view by month"
-          >
-            Calendar View
-          </Button>
-        </div>
+        <Button
+          className={`view-toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
+          onClick={() => setViewMode('table')}
+          title="List view with detailed information"
+        >
+          List View
+        </Button>
+        <Button
+          className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+          onClick={() => setViewMode('grid')}
+          title="Card view with appointment details"
+        >
+          Card View
+        </Button>
+        <Button
+          className={`view-toggle-btn ${viewMode === 'calendar' ? 'active' : ''}`}
+          onClick={() => setViewMode('calendar')}
+          title="Calendar view by month"
+        >
+          Calendar View
+        </Button>
       </div>
 
       {/* Search field (only show for table and grid views) */}
@@ -181,7 +182,7 @@ const AppointmentListPage: React.FC = () => {
         </Form.Group>
       )}
 
-      {error && <p className="text-danger">{error}</p>}
+      {error && <p className="error-text">{error}</p>}
 
       {/* Render appropriate view based on viewMode */}
       {viewMode === 'table' && (
@@ -218,7 +219,7 @@ const AppointmentListPage: React.FC = () => {
         <div className="mt-3 text-center">
           <Button
             href="/appointmentcreate"
-            className="btn btn-primary add-appointment-btn"  
+            className="btn btn-teal"
           >
             Add New Appointment
           </Button>

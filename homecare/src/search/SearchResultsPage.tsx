@@ -135,7 +135,7 @@ const SearchResultsPage: React.FC = () => {
                 <Alert variant="info">
                   <h5>No results found</h5>
                   <p>Try searching with different keywords or check your spelling.</p>
-                  <Button variant="outline-primary" onClick={() => navigate('/')}>
+                  <Button className="btn btn-teal" onClick={() => navigate('/')}>
                     Go to Home
                   </Button>
                 </Alert>

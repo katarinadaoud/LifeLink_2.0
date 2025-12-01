@@ -72,10 +72,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:3000", "http://localhost:5173", "https://localhost:5174") // React dev servers
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials();
+        builder
+            // Whitelist frontend origins
+            .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://localhost:5174")
+            // Explicitly allow only the methods your API exposes
+            .WithMethods("GET", "POST", "PUT", "DELETE")
+            // Explicitly allow only necessary headers
+            .WithHeaders("Content-Type", "Authorization")
+            // Allow cookies/auth headers if you later switch to cookies
+            .AllowCredentials();
     });
 });
 
@@ -155,6 +160,13 @@ if (app.Environment.IsDevelopment())
     // Enable Swagger UI for exploring the API in development
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+// Enforce HTTPS and HSTS in non-development environments
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+    app.UseHsts();
 }
 
 // Serve static files (e.g. images, Swagger assets, etc.)

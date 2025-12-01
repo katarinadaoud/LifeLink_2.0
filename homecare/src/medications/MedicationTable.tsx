@@ -25,7 +25,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
     <div className="d-flex flex-column align-items-center">
       <div className="table-scroll"> {/* Scrollable conton smaller screens */}
         <Table striped bordered hover className="text-center">
-          <thead className="table-header"> {/*table headers */}
+          <thead className="table-header-teal"> {/* table headers unified with appointments */}
             <tr>
               <th>Patient</th>
           <th>Name</th>
@@ -62,14 +62,12 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                 <td className="text-center">
                   <div className="appointment-actions-vertical">
                     <Button
-                      size="sm"
                       className="btn btn-teal"
                       onClick={() => onEdit?.(m.medicationName)}
                     >
                       Update
                     </Button>
                     <Button
-                      size="sm"
                       className="btn btn-delete"
                       onClick={() => onDelete?.(m.medicationName)}
                     >

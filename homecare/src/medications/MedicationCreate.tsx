@@ -171,11 +171,11 @@ export default function MedicationCreatePage() {
 
                 {/* Save and Cancel buttons */}
             <div className="d-flex gap-2">
-              <Button type="submit" disabled={saving}>
+              <Button className="btn btn-teal" type="submit" disabled={saving}>
                 {saving ? "Saving…" : "Save"}
               </Button>
               <Button
-                variant="outline-secondary"
+                className="btn btn-delete"
                 type="button"
                 onClick={() => navigate(-1)}
                 disabled={saving}

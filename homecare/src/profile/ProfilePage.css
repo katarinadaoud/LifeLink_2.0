@@ -1,12 +1,8 @@
 /* profilepage styling*/
 
 .profile-card-header {
-    background-color: #177e8b;
+    background-color: var(--teal-primary);
     color: white;
 }
 
-.profile-edit-btn {
-    background-color: #177e8b;
-    border-color: #177e8b;
-    color: white;
-}
+/* Note: Profile buttons now use .btn-teal from design-system.css */

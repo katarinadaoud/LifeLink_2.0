@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Col, Row, Button, Badge } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import type { Appointment } from '../types/appointment';
 import './AppointmentCalendar.css';
 
@@ -14,6 +15,7 @@ interface AppointmentGridProps {
 
 // Presentational component that shows appointments as responsive Bootstrap cards
 const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppointmentDeleted, onAppointmentConfirmed, userRole, currentEmployeeId }) => {
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -67,9 +69,9 @@ const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppoi
                   {/* Only show update/delete buttons if a delete callback was provided */}
                   {onAppointmentDeleted && (
                     <>
-                      {/* Link to the update route for this specific appointment */}
+                      {/* Navigate to the update route for this specific appointment */}
                       <Button
-                        href={`/appointmentupdate/${appointment.appointmentId}`}
+                        onClick={() => navigate(`/appointmentupdate/${appointment.appointmentId}`)}
                         className="btn btn-teal"
                       >
                         Update

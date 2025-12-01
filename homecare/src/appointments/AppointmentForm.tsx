@@ -163,7 +163,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             required
             min={minDateTime}
           />
-          {formError && <div className="error-text mt-2">{formError}</div>}
+          {formError && <div className="form-error">{formError}</div>}
       </Form.Group>
 
       {/* Optional free-text description of the appointment */}
@@ -218,13 +218,15 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         </Form.Control>
       </Form.Group>
 
-      {/* Submit and cancel buttons – text changes depending on create vs update */}
-      <Button className="btn btn-teal auth-submit" type="submit">
-        {isUpdate ? 'Update Appointment' : 'Create Appointment'}
-      </Button>
-      <Button className="btn btn-secondary ms-2 auth-submit" onClick={onCancel}>
-        Cancel
-      </Button>
+      {/* Submit and cancel buttons – wrapped with extra top spacing */}
+      <div className="mt-4 d-flex">
+        <Button className="btn btn-teal" type="submit">
+          {isUpdate ? 'Update Appointment' : 'Create Appointment'}
+        </Button>
+        <Button className="btn btn-delete ms-2" onClick={onCancel}>
+          Cancel
+        </Button>
+      </div>
     </Form>
   );
 };

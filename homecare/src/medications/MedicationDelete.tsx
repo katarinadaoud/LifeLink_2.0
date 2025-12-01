@@ -117,7 +117,7 @@ export default function MedicationDeletePage() {
             <Button
               variant="outline-secondary"
               onClick={() => navigate("/medications")}
-              disabled={deleting}
+              disabled={submitting}
             >
               Cancel
             </Button>

@@ -31,23 +31,24 @@
 }
 
 .homepage-action-button {
-  background-color: #177e8b;
-  border-color: #177e8b;
-  border-radius: 12px;
-  height: 130px;
+  min-height: 130px;
   max-width: 340px;
   min-width: 260px;
   padding: 1.5rem;
-  transition: all 0.3s ease;
+  margin-bottom: 1rem;
 }
 
-.homepage-action-button:hover {
-  background-color: transparent !important;
-  color: #177e8b !important;
+/* Note: Homepage buttons use .btn-teal from design-system.css for colors */
+
+/* Remove bottom margin on larger screens where buttons are side-by-side */
+@media (min-width: 768px) {
+  .homepage-action-button {
+    margin-bottom: 0;
+  }
 }
 
 .homepage-button-text {
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 1.3rem; /* larger for welcome page buttons */
+  font-weight: 600; /* slightly reduced bold for home page buttons */
   text-align: center;
 }

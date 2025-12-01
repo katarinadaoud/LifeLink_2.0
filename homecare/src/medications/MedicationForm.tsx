@@ -184,11 +184,11 @@ export default function MedicationForm({
       </Row>
       {/* Submit and Cancel buttons */}
       <div className="d-flex gap-2">
-        <Button type="submit" disabled={submitting}>
+        <Button className="btn btn-teal" type="submit" disabled={submitting}>
           {submitting ? 'Lagrer…' : (submitText ?? 'Save')}
         </Button>
         {onCancel && (
-          <Button variant="outline-secondary" type="button" onClick={onCancel} disabled={submitting}>
+          <Button className="btn btn-delete" type="button" onClick={onCancel} disabled={submitting}>
             Cancel
           </Button>
         )}

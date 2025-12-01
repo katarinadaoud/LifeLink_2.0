@@ -46,12 +46,12 @@ const HomePage: React.FC = () => {
         </div>
 
         <Row className="justify-content-center g-4">
-          <Col md={4} sm={6} className="d-flex justify-content-center">
+          <Col lg={4} md={6} sm={12} className="d-flex justify-content-center">
             <Button
-              variant="primary"
+              type="button"
               size="lg"
               onClick={handleAppointmentsClick}
-              className="d-flex justify-content-center align-items-center w-100 homepage-action-button"
+              className="d-flex justify-content-center align-items-center w-100 btn btn-teal homepage-action-button"
             >
               <span className="homepage-button-text">
                 Book Appointment
@@ -59,12 +59,12 @@ const HomePage: React.FC = () => {
             </Button>
           </Col>
 
-          <Col md={4} sm={6} className="d-flex justify-content-center">
+          <Col lg={4} md={6} sm={12} className="d-flex justify-content-center">
             <Button
-              variant="primary"
+              type="button"
               size="lg"
               onClick={handleMedicationsClick}
-              className="d-flex justify-content-center align-items-center w-100 homepage-action-button"
+              className="d-flex justify-content-center align-items-center w-100 btn btn-teal homepage-action-button"
             >
               <span className="homepage-button-text">
                 Manage Medications
@@ -72,12 +72,12 @@ const HomePage: React.FC = () => {
             </Button>
           </Col>
 
-          <Col md={4} sm={6} className="d-flex justify-content-center">
+          <Col lg={4} md={6} sm={12} className="d-flex justify-content-center">
             <Button
-              variant="primary"
+              type="button"
               size="lg"
               onClick={handleInboxClick}
-              className="d-flex justify-content-center align-items-center w-100 homepage-action-button"
+              className="d-flex justify-content-center align-items-center w-100 btn btn-teal homepage-action-button"
             >
               <span className="homepage-button-text">
                 Messages

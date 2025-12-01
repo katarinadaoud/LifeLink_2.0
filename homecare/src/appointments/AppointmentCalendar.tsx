@@ -235,9 +235,9 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
       <div className="calendar-legend">
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           <div>
-            <Badge bg="primary" className="me-2">Today</Badge>
+            <Badge className="me-2 bg-teal">Today</Badge>
             <span className="calendar-legend-text">
-              <strong>Tip:</strong> Click appointments for details
+              <strong>Tip:</strong> Click appointments for details:{' '}
             </span>
           </div>
           <div>
