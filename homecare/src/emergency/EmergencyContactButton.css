@@ -14,7 +14,7 @@
   border-radius: 50%;
   border: none;
 
-  background-color: #177e8b;
+  background-color: var(--teal-primary);
   color: #ffffff;
 
   font-size: 1.1rem;
@@ -57,8 +57,8 @@
 
 /* Call-button LifeLink-teal */
 .lifelink-emergency-call-btn {
-  background-color: #177e8b;
-  border-color: #177e8b;
+  background-color: var(--teal-primary);
+  border-color: var(--teal-primary);
   color: #ffffff;
 }
 

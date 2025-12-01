@@ -62,7 +62,7 @@ const NavMenu: React.FC = () => {
             className="fw-bold d-flex align-items-center lifelink-navbar-brand"
           >
             <span className="lifelink-logo-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" role="presentation" focusable="false">
+              <svg viewBox="0 0 64 64" role="presentation" focusable="false" aria-hidden="true">
                 {/* Hus – litt løftet inni hjertet */}
                 <path
                   d="M16 32 L32 16 L48 32 V48 H40 V36 H24 V48 H16 Z"
@@ -97,8 +97,9 @@ const NavMenu: React.FC = () => {
                   variant="outline-secondary"
                   onClick={handleNotificationClick}
                   className="position-relative me-2 lifelink-bell-btn"
+                  aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}
                 >
-                  <i className="bi bi-bell lifelink-bell-icon"></i>
+                  <i className="bi bi-bell lifelink-bell-icon" aria-hidden="true"></i>
                   {unreadCount > 0 && (
                     <Badge
                       bg="danger"
@@ -239,6 +240,7 @@ const NavMenu: React.FC = () => {
                         variant="outline-secondary"
                         type="submit"
                         className="lifelink-search-button"
+                        aria-label="Search"
                       >
                         ⌕
                       </Button>

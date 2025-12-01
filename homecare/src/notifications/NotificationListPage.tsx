@@ -139,22 +139,18 @@ const NotificationListPage: React.FC = () => {
               )}
             </h2>
             <div className="d-flex gap-2">
-              <ButtonGroup>
-                <Button 
-                  variant={filter === 'all' ? 'primary' : 'outline-primary'}
-                  onClick={() => setFilter('all')}
-                  className={filter === 'all' ? 'notification-filter-button-active' : 'notification-filter-button-inactive'}
-                >
-                  All
-                </Button>
-                <Button 
-                  variant={filter === 'unread' ? 'primary' : 'outline-primary'}
-                  onClick={() => setFilter('unread')}
-                  className={filter === 'unread' ? 'notification-filter-button-active' : 'notification-filter-button-inactive'}
-                >
-                  Unread
-                </Button>
-              </ButtonGroup>
+              <Button 
+                className={`view-toggle-btn ${filter === 'all' ? 'active' : ''}`}
+                onClick={() => setFilter('all')}
+              >
+                All
+              </Button>
+              <Button 
+                className={`view-toggle-btn ${filter === 'unread' ? 'active' : ''}`}
+                onClick={() => setFilter('unread')}
+              >
+                Unread
+              </Button>
               {unreadCount > 0 && (
                 <Button 
                   variant="outline-secondary" 

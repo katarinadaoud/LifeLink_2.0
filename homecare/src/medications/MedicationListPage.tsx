@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
 import * as MedicationService from './MedicationService';
@@ -13,6 +13,8 @@ type ViewMode = 'table' | 'grid';
 
 
 const MedicationListPage: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   // State for medications, loading, error, view mode, and search query
   const [medications, setMedications] = useState<Medication[]>([]);
@@ -20,10 +22,8 @@ const MedicationListPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const { user } = useAuth();
-  const navigate = useNavigate();
 
-  const fetchMedications = async () => { // fetch medications from API
+  const fetchMedications = useCallback(async () => { // fetch medications from API
     // Reset state
     setLoading(true);
     setError(null);
@@ -48,7 +48,6 @@ const MedicationListPage: React.FC = () => {
       }
       
       setMedications(data);
-      console.log(data);
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error(`There was a problem with the fetch operation: ${error.message}`);
@@ -59,12 +58,11 @@ const MedicationListPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   // Set the view mode from local storage when the medications are fetched
   useEffect(() => {
     const savedViewMode = localStorage.getItem('medicationViewMode') as ViewMode;
-    console.log('[fetch medications] Saved view mode:', savedViewMode);
     if (savedViewMode && ['table', 'grid'].includes(savedViewMode)) {
       setViewMode(savedViewMode);
     }
@@ -73,20 +71,22 @@ const MedicationListPage: React.FC = () => {
     if (user) {
       fetchMedications();
     }
-  }, [user]);
+  }, [user, fetchMedications]);
 
   // Save the view mode to local storage whenever it changes
   useEffect(() => {
-    console.log('[save view state] Saving view mode:', viewMode);
     localStorage.setItem('medicationViewMode', viewMode);
   }, [viewMode]);
 
   // Filter medications based on search query (lowercase = case insensitive)
-  const filteredMedications = medications.filter(medication =>
-    medication.medicationName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    medication.indication?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    medication.patientName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    medication.dosage?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredMedications = useMemo(() =>
+    medications.filter(medication =>
+      medication.medicationName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      medication.indication?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      medication.patientName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      medication.dosage?.toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+    [medications, searchQuery]
   );
 
     // Handle medication deletion
@@ -96,7 +96,6 @@ const MedicationListPage: React.FC = () => {
       try {
         await MedicationService.deleteMedication(medicationName);
         setMedications(prevMedications => prevMedications.filter(medication => medication.medicationName !== medicationName));
-        console.log('Medication deleted:', medicationName);
       } catch (error) {
         console.error('Error deleting medication:', error);
         setError('Failed to delete medication.');
@@ -108,45 +107,38 @@ const MedicationListPage: React.FC = () => {
 
   return ( 
     <div className="container-fluid">
-      <div className="text-center mb-3"> {/* Centered title and subtitle */}
-        <h1 className="mb-2 page-title">My Medications</h1>
+      <div className="medication-page-header text-center mb-3"> {/* Centered title and subtitle */}
+        <h1 className="page-title text-teal mb-2">My Medications</h1>
 
         {/*short description under the title */}
         <p className="mb-2 text-medium">View and manage your medications</p>
       </div>
-      <div className="mb-3">
+      <div className="medication-toolbar mb-3">
         {/* Refresh Button, reloads medication list from backend */}
         <Button 
           onClick={fetchMedications} 
-          className="btn btn-primary me-3 btn-medium" 
+          className="btn btn-teal me-3" 
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Refresh Medications'}
         </Button>
         
         {/* View Mode Buttons */}
-        <div className="btn-medium" role="group" aria-label="View mode selection">
-          {/* table view button */}
-          <Button 
-            variant={viewMode === 'table' ? 'primary' : 'outline-primary'}
-            onClick={() => setViewMode('table')}
-            title="List view with detailed information"
-            className='btn-medium'
-            
-          >
-             List View
-          </Button>
-          
-          {/* grid view button */}
-          <Button 
-            variant={viewMode === 'grid' ? 'primary' : 'outline-primary'}
-            onClick={() => setViewMode('grid')}
-            title="Card view with medication details"
-            className="btn-medium"
-          >
-             Card View
-          </Button>
-        </div>
+        <Button 
+          className={`view-toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
+          onClick={() => setViewMode('table')}
+          title="List view with detailed information"
+        >
+          List View
+        </Button>
+        
+        <Button 
+          className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+          onClick={() => setViewMode('grid')}
+          title="Card view with medication details"
+        >
+          Card View
+        </Button>
       </div>
       
       {/* Search field */}

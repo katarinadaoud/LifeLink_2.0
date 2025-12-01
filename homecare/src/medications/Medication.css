@@ -58,8 +58,8 @@
 
 /* Table header background */
 .table-header {
-  background-color: #177e8b !important;
-  color: white !important;
+  background-color: var(--teal-primary) !important;
+  color: var(--color-white) !important;
 }
 
 /* Max width container for update page  */

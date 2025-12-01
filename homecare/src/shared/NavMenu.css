@@ -37,7 +37,7 @@
   text-decoration: none;
 
   /* bruker samme font som resten av appen (ingen egen font-family her) */
-  color: #177e8b;
+  color: var(--teal-primary);
 
   transition:
     transform 0.18s ease,
@@ -49,7 +49,7 @@
 /* Sikre konsistent farge, ikke svart ved klikk/besøkt */
 .lifelink-navbar-brand:link,
 .lifelink-navbar-brand:visited {
-  color: #177e8b;
+  color: var(--teal-primary);
   text-decoration: none;
 }
 
@@ -110,16 +110,16 @@
 .lifelink-nav-link-main:focus,
 .lifelink-nav-link:hover,
 .lifelink-nav-link:focus {
-  color: #177e8b;
-  border-bottom-color: #177e8b;
+  color: var(--teal-primary);
+  border-bottom-color: var(--teal-primary);
 }
 
 /* Active link (works if Nav.Link gets the .active class) */
 .lifelink-nav-link-main.active,
 .lifelink-nav-link.active {
-  color: #177e8b;
+  color: var(--teal-primary);
   font-weight: 600;
-  border-bottom-color: #177e8b;
+  border-bottom-color: var(--teal-primary);
 }
 
 /* Mobile nav links (in collapsed menu) */
@@ -130,12 +130,12 @@
 
 /* Mobile primary links: profile / login / register */
 .lifelink-mobile-nav-link-primary {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 .lifelink-mobile-nav-link-primary:hover,
 .lifelink-mobile-nav-link-primary:focus {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 /* Mobile logout link */
@@ -173,12 +173,12 @@
 
 /* Desktop welcome link (wraps the span) */
 .lifelink-welcome-link {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 .lifelink-welcome-link:hover,
 .lifelink-welcome-link:focus {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 /* Pointer cursor for welcome text */
@@ -194,8 +194,8 @@
 
 /* Auth buttons (Login / Register) when not logged in */
 .btn.lifelink-auth-btn {
-  border-color: #177e8b;
-  color: #177e8b;
+  border-color: var(--teal-primary);
+  color: var(--teal-primary);
   background-color: transparent;
   transition: all 0.3s ease;
   font-size: 1.1rem;
@@ -205,9 +205,9 @@
 /* Hover/focus effect equivalent to the onMouseOver/onMouseOut logic in TSX */
 .btn.lifelink-auth-btn:hover,
 .btn.lifelink-auth-btn:focus {
-  background-color: #177e8b;
+  background-color: var(--teal-primary);
   color: #ffffff;
-  border-color: #177e8b;
+  border-color: var(--teal-primary);
 }
 
 /* === NYTT: hus + hjerte-ikon ved siden av LifeLink === */

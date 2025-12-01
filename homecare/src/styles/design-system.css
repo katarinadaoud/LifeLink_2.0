@@ -1,0 +1,371 @@
+/* ===================================
+   LIFELINK DESIGN SYSTEM
+   Sentralisert farge- og komponentstyling
+   VIKTIG: Bruk kun eksterne CSS - INGEN inline styles!
+   =================================== */
+
+/* ----- CSS VARIABLER ----- */
+:root {
+  /* Primary Teal Colors - EKSAKT SAMME FARGE OVERALT */
+  --teal-primary: #177e8b;
+  --teal-hover: #0f5f68;
+  --teal-light: #e0f2f4;
+  --teal-border: #177e8b;
+  
+  /* Semantic colors */
+  --color-error: #dc3545;
+  --color-error-light: #fee2e2;
+  --color-error-medium: #fecaca;
+  --color-error-dark: #b91c1c;
+  --color-error-darker: #7f1d1d;
+  
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  --color-info: #17a2b8;
+  
+  /* Neutral colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-light: #f8f9fa;
+  --color-gray-medium: #6c757d;
+  --color-gray-dark: #343a40;
+  
+  /* Background colors */
+  --bg-page: #f3f6fb;
+  --bg-card: #ffffff;
+  --bg-card-muted: #f8fafc;
+  
+  /* Text colors */
+  --text-main: #0f172a;
+  --text-muted: #6b7280;
+  
+  /* Border colors */
+  --border-soft: #e5e7eb;
+  
+  /* Primary color variants */
+  --primary: lab(47.92% -19.61 -15.42);
+  --primary-soft: #e6f7f6;
+  
+  /* Shadows */
+  --shadow-soft: 0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 4px 12px rgba(15, 23, 42, 0.10);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+}
+
+/* ----- GJENBRUKBARE UTILITY KLASSER ----- */
+
+/* Teal background */
+.bg-teal {
+  background-color: var(--teal-primary);
+  color: var(--color-white);
+}
+
+.bg-teal-hover:hover {
+  background-color: var(--teal-hover);
+}
+
+.bg-teal-light {
+  background-color: var(--teal-light);
+}
+
+/* Teal text */
+.text-teal {
+  color: var(--teal-primary);
+}
+
+/* Override Bootstrap text-primary with teal */
+h1.text-teal,
+h2.text-teal,
+.text-teal {
+  color: var(--teal-primary);
+}
+
+.text-teal-hover:hover {
+  color: var(--teal-hover);
+}
+
+/* Teal borders */
+.border-teal {
+  border-color: var(--teal-primary);
+}
+
+/* ----- TEAL BUTTON STYLING ----- */
+/* Kun farger - sizing håndteres av komponenter (Bootstrap size prop eller komponent-CSS) */
+.btn-teal {
+  background-color: var(--teal-primary);
+  border-color: var(--teal-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.btn-teal:hover,
+.btn-teal:focus {
+  background-color: var(--teal-hover);
+  border-color: var(--teal-hover);
+  color: var(--color-white);
+}
+
+.btn-teal:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Outline variant */
+.btn-teal-outline {
+  background-color: transparent;
+  border-color: var(--teal-primary);
+  color: var(--teal-primary);
+  transition: all var(--transition-base);
+}
+
+.btn-teal-outline:hover,
+.btn-teal-outline:focus {
+  background-color: var(--teal-primary);
+  border-color: var(--teal-primary);
+  color: var(--color-white);
+}
+
+/* ----- ACTION BUTTONS IN GRIDS/TABLES (Update/Delete) ----- */
+/* Update button in grids - teal background, white text, matches Add New button styling */
+.btn.btn-teal:not(.appointment-toolbar .btn):not(.medication-toolbar .btn) {
+  background-color: var(--teal-primary);
+  border-color: var(--teal-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.btn.btn-teal:not(.appointment-toolbar .btn):not(.medication-toolbar .btn):hover,
+.btn.btn-teal:not(.appointment-toolbar .btn):not(.medication-toolbar .btn):focus {
+  background-color: var(--teal-hover);
+  border-color: var(--teal-hover);
+  color: var(--color-white);
+}
+
+/* ----- DELETE BUTTON STYLING (hvit bakgrunn, rød tekst) ----- */
+/* Kun farger - sizing håndteres av komponenter (Bootstrap size prop eller komponent-CSS) */
+.btn-delete {
+  background-color: var(--color-white);
+  border-color: var(--color-error-light);
+  color: var(--color-error-dark);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.35rem 1.1rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.btn-delete:hover,
+.btn-delete:focus {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error-medium);
+  color: var(--color-error-darker);
+}
+
+/* ----- TEAL CARD HEADER ----- */
+.card-header-teal {
+  background-color: var(--teal-primary);
+  color: var(--color-white);
+  border-color: var(--teal-primary);
+}
+
+/* ----- TEAL TABLE HEADER ----- */
+.table-header-teal {
+  background-color: var(--teal-primary);
+  color: var(--color-white);
+}
+
+.table-header-teal th {
+  background-color: var(--teal-primary);
+  color: var(--color-white);
+}
+
+/* ----- TEAL BADGE ----- */
+.badge-teal {
+  background-color: var(--teal-primary);
+  color: var(--color-white);
+}
+
+/* ----- TEAL SPINNER ----- */
+.spinner-teal {
+  color: var(--teal-primary);
+  border-color: var(--teal-primary);
+}
+
+/* ----- TEAL HEADING ----- */
+.heading-teal {
+  color: var(--teal-primary);
+}
+
+/* ----- TEAL LINK ----- */
+.link-teal {
+  color: var(--teal-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.link-teal:hover,
+.link-teal:focus {
+  color: var(--teal-hover);
+  text-decoration: underline;
+}
+
+/* ----- TEAL NAV LINK ----- */
+.nav-link-teal {
+  color: var(--teal-primary);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.nav-link-teal:hover,
+.nav-link-teal:focus,
+.nav-link-teal.active {
+  color: var(--teal-primary);
+  border-bottom-color: var(--teal-primary);
+}
+
+/* ----- TEAL BORDER ACCENT ----- */
+.border-accent-teal {
+  border-left: 4px solid var(--teal-primary);
+}
+
+/* ----- TEAL INPUT FOCUS ----- */
+/* Behold !important her for å overstyre Bootstrap default focus styling */
+.form-control-teal:focus {
+  border-color: var(--teal-primary) !important;
+  box-shadow: 0 0 0 0.2rem rgba(23, 126, 139, 0.25) !important;
+}
+
+/* ----- ERROR STATE ----- */
+.error-text {
+  color: var(--color-error);
+}
+
+.form-error {
+  color: var(--color-error);
+  margin-top: var(--spacing-sm);
+}
+
+/* ----- RESPONSIVE TABLE WRAPPER ----- */
+.table-responsive-wrapper,
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* ----- UTILITY: TOGGLE BUTTON SIZING ----- */
+.btn-toggle {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+/* ----- UTILITY: LIGHT BACKGROUND ----- */
+.bg-light-gray {
+  background-color: var(--color-gray-light);
+}
+
+/* ----- UTILITY: VERTICAL BUTTON ACTIONS LAYOUT ----- */
+/* Used for stacking update/delete buttons vertically in tables/grids */
+.appointment-actions-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.appointment-actions-vertical .btn {
+  display: inline-block;
+  margin-left: 0;
+}
+
+/* ----- UTILITY: VIEW MODE BUTTON GROUP (List/Card/Calendar toggles) ----- */
+/* Reusable styling for view mode toggle buttons - white with teal text, teal fill when active */
+
+/* Base styling for toggle buttons */
+button.view-toggle-btn.btn {
+  padding: 9px 20px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--primary);
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+/* Spacing between buttons */
+button.view-toggle-btn.btn + button.view-toggle-btn.btn {
+  margin-left: 0.5rem;
+}
+
+/* Hover state for inactive toggles - light teal background */
+button.view-toggle-btn.btn:hover:not(.active) {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Active state - teal background with white text */
+button.view-toggle-btn.btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--color-white);
+}
+
+/* Hover on active button */
+button.view-toggle-btn.btn.active:hover {
+  background: var(--teal-hover);
+  border-color: var(--teal-hover);
+  color: var(--color-white);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* ----- REFRESH BUTTON IN TOOLBARS ----- */
+/* Override .btn-teal to match inactive view toggles - same size, spacing, and styling */
+.appointment-toolbar .btn.btn-teal,
+.medication-toolbar .btn.btn-teal {
+  padding: 9px 20px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  color: var(--primary);
+  border: 1px solid var(--border-soft);
+  box-shadow: none;
+  transition: all 0.2s ease;
+  margin-right: 0.5rem;
+}
+
+.appointment-toolbar .btn.btn-teal:hover,
+.medication-toolbar .btn.btn-teal:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-soft);
+}
+

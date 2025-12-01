@@ -9,8 +9,7 @@ const AppointmentCreatePage: React.FC = () => {
 
   const handleAppointmentCreated = async (appointment: Appointment) => {
     try {
-      const data = await AppointmentService.createAppointment(appointment);
-      console.log('Appointment created successfully:', data);
+      await AppointmentService.createAppointment(appointment);
       navigate('/appointments'); // Navigate back after successful creation
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);

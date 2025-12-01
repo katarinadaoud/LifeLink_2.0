@@ -26,7 +26,7 @@ const App: React.FC = () => {
     <AuthProvider>
       <Router>
         <NavMenu />
-        <Container className="mt-4">
+        <Container className="mt-4" as="main">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />

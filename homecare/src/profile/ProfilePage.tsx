@@ -499,14 +499,13 @@ const ProfilePage: React.FC = () => {
                                 {isEditing ? (
                                     <div>
                                         <Button 
-                                            variant="success" 
                                             onClick={handleSave} 
-                                            className="me-2"
+                                            className="btn btn-teal me-2"
                                         >
                                             Save Changes
                                         </Button>
                                         <Button 
-                                            variant="secondary" 
+                                            className="btn btn-delete"
                                             onClick={handleCancel}
                                         >
                                             Cancel
@@ -515,13 +514,13 @@ const ProfilePage: React.FC = () => {
                                 ) : (
                                     <div>
                                         <Button 
-                                            className="me-2 profile-edit-btn"
+                                            className="me-2 btn btn-teal"
                                             onClick={() => setIsEditing(true)}
                                         >
                                             Edit Profile
                                         </Button>
                                         <Button 
-                                            className="btn appointment-grid-btn-delete"
+                                            className="btn btn-delete"
                                             onClick={() => setShowDeleteModal(true)}
                                         >
                                             Delete Account
@@ -550,7 +549,7 @@ const ProfilePage: React.FC = () => {
                                         Cancel
                                     </Button>
                                     <Button 
-                                        className="btn appointment-grid-btn-delete"
+                                        className="btn btn-delete"
                                         onClick={handleDeleteAccount}
                                         disabled={isDeleting}
                                     >

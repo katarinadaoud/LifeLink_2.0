@@ -75,43 +75,13 @@ button:focus-visible { /*focus outline for accessibility*/
   }
 }
 
-/* Shared delete button style */
-.btn-delete,
-.btn.btn-delete {
-
-  /* Red delete button variant used across the app */
-  background-color: #ffffff; /*white background*/
-  border-color: #fee2e2; /*light red border*/
-  color: #b91c1c; /*red text*/
-}
-.btn-delete:hover,
-.btn.btn-delete:hover,
-.btn-delete:focus,
-.btn.btn-delete:focus {
-  background-color: #fee2e2; /*lighter red background hover*/
-  border-color: #fecaca; /*lighter red on hover*/
-  color: #7f1d1d; /*lighter red text on hover*/
-}
-
-/* Teal primary button variant used across the app */
-.btn-teal,
+/* NOTE: .btn-delete is now defined in design-system.css to avoid duplication */
 
 /* Auth form submit button sizing used by Login/Register pages */
 .auth-submit {
-  font-size: 1.05rem; /* slightly smaller */
-  padding: 0.5rem 1.4rem; /* slightly less wide */
+  font-size: 1rem;
+  padding: 0.5rem 1.4rem;
   margin-top: 0.9rem;
 }
-.btn.btn-teal { /* Bootstrap button compatibility */
-  background-color: #177e8b; /*primary teal color*/
-  border-color: #177e8b;
-  color: #ffffff;
-}
-.btn-teal:hover,
-.btn.btn-teal:hover,
-.btn-teal:focus,
-.btn.btn-teal:focus {
-  background-color: #0f5f68; /*Darker teal on hover*/
-  border-color: #0f5f68;
-  color: #ffffff;
-}
+
+/* NOTE: .btn-teal is now defined in design-system.css to avoid duplication */

@@ -62,14 +62,12 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                 <td className="text-center">
                   <div className="appointment-actions-vertical">
                     <Button
-                      size="sm"
                       className="btn btn-teal"
                       onClick={() => onEdit?.(m.medicationName)}
                     >
                       Update
                     </Button>
                     <Button
-                      size="sm"
                       className="btn btn-delete"
                       onClick={() => onDelete?.(m.medicationName)}
                     >

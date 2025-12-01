@@ -92,7 +92,7 @@ const MedicationUpdatePage: React.FC = () => {
   return (
     /*main container using bootsrap layout */
     <div className="container mt-4 update-container">
-      <h2 className="fw-bold text-primary mb-3">Update Medication</h2>
+      <h2 className="fw-bold text-teal mb-3">Update Medication</h2>
       <p className="text-muted mb-4"> {/*subtitle - purpose of the page */}
         Edit the medication details below and click Save Changes.
       </p>
@@ -186,16 +186,15 @@ const MedicationUpdatePage: React.FC = () => {
         </Form.Group>
 
             {/* action buttons with bootstrap style */}
-        <div className="d-flex justify-content-between">
+        <div className="d-flex gap-2">
+          <Button className="btn btn-teal" type="submit" disabled={saving}>
+            {saving ? "Saving..." : "Save Changes"}
+          </Button>
           <Button
-            variant="outline-secondary"
+            className="btn btn-delete"
             onClick={() => navigate("/medications")}
           >
             Cancel
-          </Button>
-          {/*submit button shows loading state when saving */}
-          <Button variant="primary" type="submit" disabled={saving}>
-            {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </Form>

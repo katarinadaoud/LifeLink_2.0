@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import type { Appointment } from '../types/appointment';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './AppointmentCalendar.css';
 
 interface AppointmentTableProps {
@@ -11,6 +11,7 @@ interface AppointmentTableProps {
 }
 
 const AppointmentTable: React.FC<AppointmentTableProps> = ({ appointments, onAppointmentDeleted, userRole }) => {
+  const navigate = useNavigate();
   const [showDescriptions, setShowDescriptions] = useState<boolean>(true);
   const toggleDescriptions = () => setShowDescriptions(prevShowDescriptions => !prevShowDescriptions);
 
@@ -19,15 +20,14 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({ appointments, onApp
       <div className="mb-3">
         <Button 
           onClick={toggleDescriptions} 
-          className="btn btn-secondary"
-          style={{ fontSize: '1.1rem', padding: '0.75rem 1.5rem' }}
+          className="btn btn-secondary btn-toggle"
         >
           {showDescriptions ? 'Hide Descriptions' : 'Show Descriptions'}
         </Button>
       </div>
-      <div style={{ width: '100%', overflowX: 'auto' }}>
+      <div className="table-wrapper">
         <Table striped bordered hover className="text-center">
-          <thead style={{ backgroundColor: '#177e8b', color: 'white' }}>
+          <thead className="table-header-teal">
             <tr>
               <th>Subject</th>
               <th>Date</th>
@@ -48,19 +48,20 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({ appointments, onApp
                 <td className="text-center appointment-actions">
                   {onAppointmentDeleted && (
                     <div className="appointment-actions-vertical">
-                      <Link
-                        to={`/appointmentupdate/${appointment.appointmentId}`}
+                      <button
+                        type="button"
+                        onClick={() => navigate(`/appointmentupdate/${appointment.appointmentId}`)}
                         className="appointment-action appointment-action-update"
                       >
                         Update
-                      </Link>
-                      <Link
-                        to="#"
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => onAppointmentDeleted(appointment.appointmentId!)}
                         className="appointment-action appointment-action-delete btn btn-delete"
                       >
                         Delete
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </td>

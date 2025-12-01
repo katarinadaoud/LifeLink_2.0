@@ -1,27 +1,17 @@
 /*notification style*/
 
 .notification-title {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
-.notification-filter-button-active {
-  background-color: #177e8b;
-  border-color: #177e8b;
-  color: white;
-}
-
-.notification-filter-button-inactive {
-  background-color: transparent;
-  border-color: #177e8b;
-  color: #177e8b;
-}
+/* NOTE: All/Unread filter buttons now use .btn-group styling from design-system.css */
 
 .notification-mark-all-button {
   font-size: 0.9rem;
 }
 
 .notification-loading-spinner {
-  color: #177e8b;
+  color: var(--teal-primary);
 }
 
 .notification-card {
@@ -38,7 +28,7 @@
 }
 
 .notification-item-title {
-  color: #177e8b;
+  color: var(--teal-primary);
   margin-bottom: 0.25rem;
 }
 

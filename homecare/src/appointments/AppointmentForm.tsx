@@ -142,7 +142,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             required
             min={minDateTime}
           />
-          {formError && <div style={{ color: 'red', marginTop: '0.5rem' }}>{formError}</div>}
+          {formError && <div className="form-error">{formError}</div>}
       </Form.Group>
 
       {/* Optional free-text description of the appointment */}
@@ -166,7 +166,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             type="text"
             value={currentPatient.fullName}
             disabled
-            style={{ backgroundColor: '#f8f9fa' }}
+            className="bg-light-gray"
           />
         ) : (
           // For employees/admins we show a dropdown with all patients
@@ -209,10 +209,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
       {/* {error && <p style={{ color: 'red' }}>{error}</p>} */}
 
       {/* Submit and cancel buttons – text changes depending on create vs update */}
-      <Button className="btn btn-teal auth-submit" type="submit">
+      <Button className="btn btn-teal" type="submit">
         {isUpdate ? 'Update Appointment' : 'Create Appointment'}
       </Button>
-      <Button className="btn btn-secondary ms-2 auth-submit" onClick={onCancel}>
+      <Button className="btn btn-delete ms-2" onClick={onCancel}>
         Cancel
       </Button>
     </Form>
