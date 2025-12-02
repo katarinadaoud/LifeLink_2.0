@@ -63,12 +63,12 @@ const NavMenu: React.FC = () => {
           >
             <span className="lifelink-logo-icon" aria-hidden="true">
               <svg viewBox="0 0 64 64" role="presentation" focusable="false" aria-hidden="true">
-                {/* Hus – litt løftet inni hjertet */}
+                {/* House – a little lifted inside heart */}
                 <path
                   d="M16 32 L32 16 L48 32 V48 H40 V36 H24 V48 H16 Z"
                   className="lifelink-logo-house"
                 />
-                {/* Bredt, tydelig hjerte rundt huset – litt lavere */}
+                {/* Broad, clear heart around the house – slightly lower */}
                 <path
                   d="
                     M32 8

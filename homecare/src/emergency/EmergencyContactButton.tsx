@@ -11,7 +11,7 @@ const EmergencyContactButton: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Kun pasienter skal se knappen
+  // only patients can see button
   if (!user || user.role !== 'Patient') {
     return null;
   }
@@ -38,18 +38,19 @@ const EmergencyContactButton: React.FC = () => {
 
   return (
     <>
-      {/* Flytende knapp nederst til høyre */}
+      {/* Floating button at bottom right */}
       <Button
         type="button"
         className="lifelink-emergency-btn"
         onClick={handleOpen}
         aria-label="Contact home care"
-      >
+      > {/* Icon and label */}
         <span className="lifelink-emergency-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
             <path fill="currentColor" d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1v3.5a1 1 0 01-1 1C7.61 21 3 16.39 3 9.62a1 1 0 011-1H7.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57.14.45.03.94-.24 1.02l-2.2 2.2z" />
           </svg>
-        </span>
+        </span> 
+        {/* Label hidden on small screens */}
         <span className="lifelink-emergency-label d-none d-sm-inline">
           Home care
         </span>
