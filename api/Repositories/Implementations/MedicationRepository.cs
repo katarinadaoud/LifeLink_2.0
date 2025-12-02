@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace HomeCareApp.Repositories.Implementations
 {
-    public class MedicationRepository : IMedicationRepository
+    public class MedicationRepository : IMedicationRepository // Repository for CRUD operations on medication entities
     {
-        private readonly AppDbContext _db;
-        private readonly ILogger<MedicationRepository> _logger;
+        private readonly AppDbContext _db; // EF Core DbContext (injected via DI)
+        private readonly ILogger<MedicationRepository> _logger; // Logger for logging information and errors
 
-        public MedicationRepository(AppDbContext db, ILogger<MedicationRepository> logger)
+        public MedicationRepository(AppDbContext db, ILogger<MedicationRepository> logger) // constructor with dependency injection
         {
             _db = db;
             _logger = logger;
@@ -46,9 +46,11 @@ namespace HomeCareApp.Repositories.Implementations
                     .Include(m => m.Patient)
                     .Where(m => m.PatientId == patientId);
 
+                // Filter to only active medications (EndDate is null or in the future)
                 var today = DateOnly.FromDateTime(DateTime.Today);
-                query = query.Where(m => m.EndDate == null || m.EndDate >= today);
+                query = query.Where(m => m.EndDate == null || m.EndDate >= today); 
 
+                // Order by StartDate descending
                 var medications = await query.OrderByDescending(m => m.StartDate).ToListAsync();
                 _logger.LogInformation("[MedicationRepository] GetByPatientAsync({PatientId}) - Successfully retrieved {Count} active medications", patientId, medications.Count);
                 return medications;
@@ -63,8 +65,12 @@ namespace HomeCareApp.Repositories.Implementations
         // Get a single medication by its name
         public async Task<Medication?> GetByNameAsync(string medicineName) // get medication by medicine name
         {
+
+            // Retrieves a medication by name, including its related patient.
+            // Logs detailed information for success, missing results, and exceptions.
             try
             {
+                
                 _logger.LogInformation("[MedicationRepository] GetByNameAsync({MedicineName}) - Retrieving medication", medicineName);
                 var medication = await _db.Medications
                     .Include(m => m.Patient)
@@ -114,7 +120,7 @@ namespace HomeCareApp.Repositories.Implementations
                 await _db.SaveChangesAsync();
                 _logger.LogInformation("[MedicationRepository] DeleteAsync() - Successfully deleted medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
             }
-            catch (Exception ex)
+            catch (Exception ex) // catch block for error handling
             {
                 _logger.LogError(ex, "[MedicationRepository] DeleteAsync() failed for medication: {MedicineName} - {Message}", med.MedicineName, ex.Message);
                 throw;

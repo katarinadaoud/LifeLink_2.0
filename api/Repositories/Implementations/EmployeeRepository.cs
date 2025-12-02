@@ -8,10 +8,10 @@ namespace HomeCareApp.Repositories.Implementations
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly AppDbContext _db;
-        private readonly ILogger<EmployeeRepository> _logger;
+        private readonly AppDbContext _db; // EF Core DbContext (injected via DI)
+        private readonly ILogger<EmployeeRepository> _logger; // Logger for logging information and errors
 
-        public EmployeeRepository(AppDbContext db, ILogger<EmployeeRepository> logger)
+        public EmployeeRepository(AppDbContext db, ILogger<EmployeeRepository> logger) // constructor with dependency injection
         {
             _db = db;
             _logger = logger;
@@ -19,13 +19,13 @@ namespace HomeCareApp.Repositories.Implementations
 
         public async Task<IEnumerable<Employee>> GetAll() //gets all employees
         {
-            try
+            try // try-catch block for error handling
             {
                 _logger.LogInformation("[EmployeeRepository] GetAll() - Retrieving all employees");
                 var employees = await _db.Employees
                     .Include(e => e.User)
                     .Include(e => e.Appointments)
-                    .ToListAsync();
+                    .ToListAsync(); // fetch employees with related user and appointments
                 _logger.LogInformation("[EmployeeRepository] GetAll() - Successfully retrieved {Count} employees", employees.Count());
                 return employees;
             }
@@ -38,7 +38,7 @@ namespace HomeCareApp.Repositories.Implementations
 
         public async Task<Employee?> GetEmployeeById(int id) // get employee by id, admin use.
         {
-            try
+            try // try-catch block for error handling
             {
                 _logger.LogInformation("[EmployeeRepository] GetEmployeeById({Id}) - Retrieving employee", id);
                 var employee = await _db.Employees
@@ -64,7 +64,7 @@ namespace HomeCareApp.Repositories.Implementations
 
         public async Task<Employee?> GetEmployeeByUserId(string userId) // get employee by user id, employee use.
         {
-            try
+            try // try-catch block for error handling
             {
                 _logger.LogInformation("[EmployeeRepository] GetEmployeeByUserId({UserId}) - Retrieving employee", userId);
                 var employee = await _db.Employees
@@ -88,9 +88,10 @@ namespace HomeCareApp.Repositories.Implementations
             }
         }
 
-        public async Task<Employee> Create(Employee employee) // create new employee
+        // create new employee and return created employee, if not throw exception
+        public async Task<Employee> Create(Employee employee) 
         {
-            try
+            try // try-catch block for error handling
             {
                 _logger.LogInformation("[EmployeeRepository] Create() - Creating employee: {EmployeeName}", employee.FullName);
                 _db.Employees.Add(employee);
@@ -111,19 +112,20 @@ namespace HomeCareApp.Repositories.Implementations
             {
                 _logger.LogInformation("[EmployeeRepository] Update() - Updating employee: {EmployeeName} (ID: {EmployeeId})", employee.FullName, employee.EmployeeId);
 
-                // If EF is already tracking the entity instance, merge changes into the tracked instance instead of attaching a new one
+                // if the entity is already being tracked, use the tracked entity to avoid conflicts
+                // This handles cases where the same employee entity might be fetched and updated in the same DbContext session
                 var trackedEntry = _db.ChangeTracker.Entries<Employee>().FirstOrDefault(e => e.Entity.EmployeeId == employee.EmployeeId);
                 if (trackedEntry != null)
                 {
                     _logger.LogDebug("[EmployeeRepository] Update() - Using tracked entity for employee ID {EmployeeId}", employee.EmployeeId);
                     _logger.LogDebug("[EmployeeRepository] Update() - Tracked UserId: {TrackedUserId}, Incoming UserId: {IncomingUserId}", trackedEntry.Entity.UserId, employee.UserId);
-                    // If trackedEntry.Entity and the passed employee reference are the same instance, avoid CurrentValues.SetValues
+                    // If trackedEntry.Entity and the passed employee reference are the same instance, avoid CurrentValues.SetValues. this means no changes to update.
                     if (!object.ReferenceEquals(trackedEntry.Entity, employee))
                     {
                         trackedEntry.CurrentValues.SetValues(employee);
                     }
                 }
-                else
+                else // not being tracked, so update normally
                 {
                     _db.Employees.Update(employee);
                 }
@@ -154,12 +156,12 @@ namespace HomeCareApp.Repositories.Implementations
                 }
                 else
                 {
-                    _logger.LogWarning("[EmployeeRepository] Delete({Id}) - Employee not found", id);
+                    _logger.LogWarning("[EmployeeRepository] Delete({Id}) - Employee not found", id); // employee to delete not found
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[EmployeeRepository] Delete({Id}) failed: {Message}", id, ex.Message);
+                _logger.LogError(ex, "[EmployeeRepository] Delete({Id}) failed: {Message}", id, ex.Message); // log error
                 throw;
             }
         }

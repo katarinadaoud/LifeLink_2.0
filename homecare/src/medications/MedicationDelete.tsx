@@ -17,11 +17,6 @@ export default function MedicationDeletePage() {
   const [err, setErr] = useState<string | null>(null); // error message state
   const [deleting, setDeleting] = useState(false); // deleting state
 
-  //  Restrict access to employees only
-  if (!user || user.role !== "Employee") {
-    return <p className="text-danger text-center mt-5">Not authorized.</p>;
-  }
-
   // Load medication 
   useEffect(() => {  // every time name changes or on mount
     const load = async () => { // async function to load medication details
@@ -57,7 +52,12 @@ export default function MedicationDeletePage() {
     }
   }
 
- 
+  //  Restrict access to employees only
+  if (!user || user.role !== "Employee") {
+    return <p className="text-danger text-center mt-5">Not authorized.</p>;
+  }
+
+  // Loading state
   if (loading)
     return (
       <div className="text-center mt-5">
@@ -117,7 +117,7 @@ export default function MedicationDeletePage() {
             <Button
               variant="outline-secondary"
               onClick={() => navigate("/medications")}
-              disabled={submitting}
+              disabled={deleting}
             >
               Cancel
             </Button>

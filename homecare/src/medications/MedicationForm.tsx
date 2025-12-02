@@ -125,11 +125,12 @@ export default function MedicationForm({
               placeholder="f.eks. Paracetamol"
               required
             />
+            {/* Validation error message */}
             <Form.Control.Feedback type="invalid">{errors.medicationName}</Form.Control.Feedback>
           </Form.Group>
         </Col>
 
-        <Col md={6}>
+        <Col md={6}> {/* Dosage field */}
           <Form.Group className="mb-3" controlId="dosage">
             <Form.Label>Dosage</Form.Label>
             <Form.Control
@@ -166,10 +167,12 @@ export default function MedicationForm({
               isInvalid={!!errors.startDate}
               required
             />
+            {/* Validation error message */}
             <Form.Control.Feedback type="invalid">{errors.startDate}</Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col md={6}>
+        {/* End Date field - optional */}
           <Form.Group className="mb-3" controlId="endDate">
             <Form.Label>End date (valgfritt)</Form.Label>
             <Form.Control

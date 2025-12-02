@@ -10,10 +10,10 @@ public class PatientRepository : IPatientRepository
 
 {
     private readonly AppDbContext _db; // EF Core DbContext (injected via DI)
-    private readonly ILogger<PatientRepository> _logger;
+    private readonly ILogger<PatientRepository> _logger; // Logger for logging information and errors
 
 
-    public PatientRepository(AppDbContext db, ILogger<PatientRepository> logger)
+    public PatientRepository(AppDbContext db, ILogger<PatientRepository> logger) // constructor with dependency injection
     {
         _db = db;
         _logger = logger;
@@ -21,7 +21,7 @@ public class PatientRepository : IPatientRepository
 
     public async Task<IEnumerable<Patient>> GetAll() //gets all patients
     {
-        try
+        try // try-catch block for error handling
         {
             _logger.LogInformation("[PatientRepository] GetAll() - Retrieving all patients");
             var patients = await _db.Patients.AsNoTracking().ToListAsync();
@@ -40,14 +40,14 @@ public class PatientRepository : IPatientRepository
         try
         {
             _logger.LogInformation("[PatientRepository] GetPatientById({Id}) - Retrieving patient", id);
-            var patient = await _db.Patients.FindAsync(id);
-            if (patient != null)
+            var patient = await _db.Patients.FindAsync(id); // fetch patient by id
+            if (patient != null) // if patient is found
             {
-                _logger.LogInformation("[PatientRepository] GetPatientById({Id}) - Patient found: {PatientName}", id, patient.FullName);
+                _logger.LogInformation("[PatientRepository] GetPatientById({Id}) - Patient found: {PatientName}", id, patient.FullName); // log patient name
             }
-            else
+            else // if patient is not found
             {
-                _logger.LogWarning("[PatientRepository] GetPatientById({Id}) - Patient not found", id);
+                _logger.LogWarning("[PatientRepository] GetPatientById({Id}) - Patient not found", id); // log warning
             }
             return patient;
         }
@@ -60,7 +60,7 @@ public class PatientRepository : IPatientRepository
 
     public async Task Create(Patient patient) // create new patient
     {
-        try
+        try // try-catch block for error handling. if patient creation fails, log the error
         {
             _logger.LogInformation("[PatientRepository] Create() - Creating patient: {PatientName}", patient.FullName);
             _db.Patients.Add(patient);
@@ -93,7 +93,8 @@ public class PatientRepository : IPatientRepository
     public async Task<bool> Delete(int id) // delete patient by id
     {
         try
-        {
+        { 
+            // try-catch block for error handling. if deletion fails, log the error
             _logger.LogInformation("[PatientRepository] Delete({Id}) - Attempting to delete patient", id);
             var patient = await _db.Patients.FindAsync(id);
             if (patient == null)

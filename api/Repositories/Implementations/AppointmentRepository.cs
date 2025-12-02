@@ -8,10 +8,10 @@ namespace HomeCareApp.Repositories.Implementations
     //Repository for CRUD operations on appointment entities
     public class AppointmentRepository : IAppointmentRepository
     {
-        private readonly AppDbContext _db;
-        private readonly ILogger<AppointmentRepository> _logger;
+        private readonly AppDbContext _db; // EF Core DbContext (injected via DI)
+        private readonly ILogger<AppointmentRepository> _logger; // Logger for logging information and errors
 
-        public AppointmentRepository(AppDbContext db, ILogger<AppointmentRepository> logger)
+        public AppointmentRepository(AppDbContext db, ILogger<AppointmentRepository> logger) // constructor with dependency injection
         {
             _db = db;
             _logger = logger;
@@ -105,7 +105,7 @@ namespace HomeCareApp.Repositories.Implementations
         existing.Date = appointment.Date;
         existing.PatientId = appointment.PatientId;
         existing.EmployeeId = appointment.EmployeeId;
-        // Important: Save the IsConfirmed status to database (was previously missing)
+        // Important: Save the IsConfirmed status to database
         existing.IsConfirmed = appointment.IsConfirmed;
 
         await _db.SaveChangesAsync();
@@ -145,6 +145,7 @@ namespace HomeCareApp.Repositories.Implementations
             }
         }
 
+         // set appointment confirmation status. If confirmed is true, appointment is confirmed, else unconfirmed.    
         public async Task<bool> SetConfirmed(int id, bool confirmed)
         {
             try
@@ -153,14 +154,16 @@ namespace HomeCareApp.Repositories.Implementations
                 var appointment = await _db.Appointments.FirstOrDefaultAsync(a => a.AppointmentId == id);
                 if (appointment == null)
                 {
+                    // appointment not found
                     _logger.LogWarning("[AppointmentRepository] SetConfirmed({Id}) - Appointment not found", id);
-                    return false;
+                    return false; 
                 }
+                // Important: Save the IsConfirmed status to database
                 appointment.IsConfirmed = confirmed;
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception ex) // catch any exception, log it and return false
             {
                 _logger.LogError(ex, "[AppointmentRepository] SetConfirmed({Id}) failed: {Message}", id, ex.Message);
                 return false;

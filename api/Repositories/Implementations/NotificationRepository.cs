@@ -48,7 +48,7 @@ namespace HomeCareApp.Repositories.Implementations
                 _logger.LogInformation("[NotificationRepository] GetByUserIdAsync({UserId}) - Successfully retrieved {Count} notifications", userId, notifications.Count());
                 return notifications;
             }
-            catch (Exception ex)
+            catch (Exception ex) // catch block for error handling
             {
                 _logger.LogError(ex, "[NotificationRepository] GetByUserIdAsync({UserId}) failed: {Message}", userId, ex.Message);
                 throw;
