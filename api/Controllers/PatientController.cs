@@ -89,6 +89,26 @@ public class PatientController : ControllerBase
             return NotFound("Patient not found.");
         }
 
+        // Check if phone number is already in use by another patient
+        if (!string.IsNullOrWhiteSpace(dto.phonenumber))
+        {
+            var allPatients = await _patientRepository.GetAll();
+            _logger.LogInformation("[PatientController] Checking phone number {PhoneNumber} for patient {PatientId}. Total patients: {Count}", 
+                dto.phonenumber, id, allPatients.Count());
+            
+            var duplicatePhone = allPatients.FirstOrDefault(p => 
+                !string.IsNullOrWhiteSpace(p.phonenumber) && 
+                p.phonenumber == dto.phonenumber && 
+                p.PatientId != id);
+            
+            if (duplicatePhone != null)
+            {
+                _logger.LogWarning("[PatientController] Phone number already in use: {PhoneNumber} by patient {DuplicatePatientId}", 
+                    dto.phonenumber, duplicatePhone.PatientId);
+                return BadRequest(new { message = "This phone number is already in use" });
+            }
+        }
+
         //Update only simple/scalar fields
         existing.FullName = dto.FullName;
         existing.Address = dto.Address;

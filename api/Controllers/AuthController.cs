@@ -45,6 +45,22 @@ namespace HomeCareApp.Controllers
                 return BadRequest(new[] { new { code = "InvalidRole", description = "Role must be either 'Patient' or 'Employee'" } });
             }
 
+            // Check if email is already in use
+            var existingUserByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+            if (existingUserByEmail != null)
+            {
+                _logger.LogWarning("[AuthController] Registration failed - email already in use: {Email}", registerDto.Email);
+                return BadRequest(new { message = "This email is already in use" });
+            }
+
+            // Check if username is already in use
+            var existingUserByUsername = await _userManager.FindByNameAsync(registerDto.Username);
+            if (existingUserByUsername != null)
+            {
+                _logger.LogWarning("[AuthController] Registration failed - username already in use: {Username}", registerDto.Username);
+                return BadRequest(new { message = "This username is already in use" });
+            }
+
             var user = new AuthUser
             {
                 UserName = registerDto.Username,
@@ -129,6 +145,20 @@ namespace HomeCareApp.Controllers
             if (existingPatient != null)
             {
                 return BadRequest("Patient profile already exists");
+            }
+
+            // Check if phone number is already in use by another patient
+            if (!string.IsNullOrWhiteSpace(profileDto.phonenumber))
+            {
+                var duplicatePhone = patients.FirstOrDefault(p => 
+                    !string.IsNullOrWhiteSpace(p.phonenumber) && 
+                    p.phonenumber == profileDto.phonenumber);
+                
+                if (duplicatePhone != null)
+                {
+                    _logger.LogWarning("[AuthController] Profile creation failed - phone number already in use: {PhoneNumber}", profileDto.phonenumber);
+                    return BadRequest(new { message = "This phone number is already in use" });
+                }
             }
 
             //Map patient using DTO ToEntity

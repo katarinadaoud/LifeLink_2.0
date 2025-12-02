@@ -88,6 +88,19 @@ public class AppointmentController : ControllerBase
             return BadRequest("Appointment date cannot be in the past");
         }
         var newAppointment = appointmentDto.ToEntity();
+        
+        // Check if the current user is an employee
+        var currentUserId = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        bool isEmployeeCreating = userRoles.Contains("Employee");
+        
+        // If employee creates the appointment, it's automatically confirmed
+        // If patient creates it, it remains pending until employee confirms
+        newAppointment.IsConfirmed = isEmployeeCreating;
+        
+        _logger.LogInformation("[AppointmentController] Creating appointment with IsConfirmed={IsConfirmed} (created by {Role})", 
+            newAppointment.IsConfirmed, isEmployeeCreating ? "Employee" : "Patient");
+        
         bool returnOk = await _appointmentRepository.Create(newAppointment);
         if (returnOk)
         {
