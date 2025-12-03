@@ -242,8 +242,13 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         </Form.Control>
       </Form.Group>
 
+<<<<<<< HEAD
       {/* Display error message if validation fails */}
       {formError && <div className="alert alert-danger mt-3">{formError}</div>}
+=======
+    
+      {formError && <div className="form-error">{formError}</div>}
+>>>>>>> e892a6ebfb30f064e909c2a7182f046856888ac6
 
       {/* Submit and cancel buttons – wrapped with extra top spacing */}
       <div className="mt-4 d-flex">
