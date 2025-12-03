@@ -271,7 +271,7 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
                     {success && <Alert variant="success">{success}</Alert>}
 
                     {user.role === 'Patient' && (
-                        <Form onSubmit={submitPatientProfile}>
+                        <Form onSubmit={submitPatientProfile} noValidate>
                             <Form.Group className="mb-3">
                                 <Form.Label>Full Name *</Form.Label>
                                 <Form.Control
@@ -353,7 +353,7 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
                     )}
 
                     {user.role === 'Employee' && (
-                        <Form onSubmit={submitEmployeeProfile}>
+                        <Form onSubmit={submitEmployeeProfile} noValidate>
                             <Form.Group className="mb-3">
                                 <Form.Label>Full Name *</Form.Label>
                                 <Form.Control

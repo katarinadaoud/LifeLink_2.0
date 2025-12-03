@@ -104,7 +104,7 @@ const MedicationUpdatePage: React.FC = () => {
         </p>
       )}
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
 
         {/*medication name field */}
         <Form.Group className="mb-3">

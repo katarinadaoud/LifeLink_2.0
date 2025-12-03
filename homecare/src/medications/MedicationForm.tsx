@@ -106,7 +106,6 @@ export default function MedicationForm({
             isInvalid={!!errors.patientId}
             min={1}
             placeholder="Skriv pasient-ID"
-            required
           />
           {/* Validation error message */}
           <Form.Control.Feedback type="invalid">{errors.patientId}</Form.Control.Feedback>
@@ -123,7 +122,6 @@ export default function MedicationForm({
               onChange={e => set('medicationName', e.target.value)}
               isInvalid={!!errors.medicationName}
               placeholder="f.eks. Paracetamol"
-              required
             />
             {/* Validation error message */}
             <Form.Control.Feedback type="invalid">{errors.medicationName}</Form.Control.Feedback>
@@ -138,7 +136,6 @@ export default function MedicationForm({
               onChange={e => set('dosage', e.target.value)}
               isInvalid={!!errors.dosage}
               placeholder="f.eks. 500 mg"
-              required
             />
             <Form.Control.Feedback type="invalid">{errors.dosage}</Form.Control.Feedback>
           </Form.Group>
@@ -165,7 +162,6 @@ export default function MedicationForm({
               value={values.startDate}
               onChange={e => set('startDate', e.target.value)}
               isInvalid={!!errors.startDate}
-              required
             />
             {/* Validation error message */}
             <Form.Control.Feedback type="invalid">{errors.startDate}</Form.Control.Feedback>

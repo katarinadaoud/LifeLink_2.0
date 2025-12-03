@@ -49,7 +49,7 @@ const RegisterPage: React.FC = () => { // Registration page component
             <h2 className="auth-title">Register</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} noValidate>
                 <Form.Group className="mb-3">
                     <Form.Label className="auth-label">Username</Form.Label>
                     <Form.Control 

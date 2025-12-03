@@ -95,7 +95,7 @@ export default function MedicationCreatePage() {
           <Card.Title>Add Medication</Card.Title>
 
           {/* Medication creation form */}
-          <Form onSubmit={onSubmit}>
+          <Form onSubmit={onSubmit} noValidate>
             <Form.Group className="mb-3">
 
               {/* Patient selection dropdown */}
