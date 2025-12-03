@@ -6,7 +6,7 @@
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
   padding: 1rem 0;
-  /* subtle shadow to lift the navbar slightly from the content */
+  /* subtle shadow to lift the navbar from the content */
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
@@ -23,7 +23,7 @@
   min-height: 70px;
 }
 
-/* Brand / logo – updated (no gradient and updated color) */
+/* Logo / brand styling */
 .lifelink-navbar-brand {
   position: relative;
   display: inline-flex;
@@ -33,10 +33,10 @@
   font-size: 1.9rem;      /* logo size */
   padding: 0.5rem 0;
   font-weight: 800;       /* more "logo" weight */
-  letter-spacing: 0.08em; /* a bit more spacing for premium look */
+  letter-spacing: 0.08em; /* a bit more spacing  */
   text-decoration: none;
 
-  /* uses the same font as the rest of the app (no separate font-family here) */
+  /* uses the same font as the rest of the app */
   color: var(--teal-primary);
 
   /* Smooth transition for transform, filter and color changes */
@@ -46,32 +46,31 @@
     color 0.18s ease;
 }
 
-
-
-/*give consistent color, not black on click/visited */
+/* Logo link states */
 .lifelink-navbar-brand:link,
 .lifelink-navbar-brand:visited {
   color: var(--teal-primary);
   text-decoration: none;
 }
 
-/* Hover/focus/active: subtle, slightly darker teal + shadow – not black */
+/* Hover/focus/active states */
 .lifelink-navbar-brand:hover,
 .lifelink-navbar-brand:focus,
 .lifelink-navbar-brand:active {
+  /* lift slightly and add shadow */
   transform: translateY(-1px);
   filter: drop-shadow(0 4px 8px rgba(15, 23, 42, 0.12));
   color: #0f6f7c;  /* subtle darker variant of teal */
   text-decoration: none;
 }
 
-/* Right-side containers (mobile & desktop) share height */
+/* Height for mobile and desktop navbars */
 .lifelink-mobile-right,
 .lifelink-desktop-right {
   height: 70px;
 }
 
-/* Notification button (both mobile & desktop) */
+/* Bell button next to search */
 .lifelink-bell-btn {
   border: none;
   font-size: 1.4rem;
@@ -101,17 +100,17 @@
 .lifelink-nav-link {
   font-size: 1.1rem;
   padding: 0.75rem 1rem; /* revert original padding */
-  position: relative; /* nudge downward without affecting Home */
-  top: 2px; /* visual alignment with Home link */
+  position: relative; /* for underline positioning */
+  top: 2px; /* align with main link */
 }
 
-/* Shared styling for desktop nav links (hover / active underline) */
+/* Shared styling for desktop nav links */
 .lifelink-nav-link-main,
 .lifelink-nav-link {
   border-bottom: 2px solid transparent;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
-
+/* Hover/focus effect */
 .lifelink-nav-link-main:hover,
 .lifelink-nav-link-main:focus,
 .lifelink-nav-link:hover,
@@ -120,7 +119,7 @@
   border-bottom-color: var(--teal-primary);
 }
 
-/* Active link (works if Nav.Link gets the .active class) */
+/* Active link styling */
 .lifelink-nav-link-main.active,
 .lifelink-nav-link.active {
   color: var(--teal-primary);
@@ -128,17 +127,17 @@
   border-bottom-color: var(--teal-primary);
 }
 
-/* Mobile nav links (in collapsed menu) */
+/* Mobile nav links */
 .lifelink-mobile-nav-link {
   font-size: 1.1rem;
   padding: 0.75rem 0;
 }
 
-/* Mobile primary links: profile / login / register */
+/* Primary mobile nav links */
 .lifelink-mobile-nav-link-primary {
   color: var(--teal-primary);
 }
-
+/* Hover/focus effect on primary mobile links */
 .lifelink-mobile-nav-link-primary:hover,
 .lifelink-mobile-nav-link-primary:focus {
   color: var(--teal-primary);
@@ -148,7 +147,6 @@
 .lifelink-mobile-nav-link-logout {
   color: #dc3545;
 }
-
 .lifelink-mobile-nav-link-logout:hover,
 .lifelink-mobile-nav-link-logout:focus {
   color: #dc3545;
@@ -168,7 +166,6 @@
   border-radius: 999px 0 0 999px;
   border-color: #d1d5db;
 }
-
 /* Search button styling */
 .lifelink-search-button {
   font-size: 1.1rem;
@@ -178,7 +175,6 @@
   border-color: #d1d5db;
   border-left: none;
 }
-
 /* Desktop welcome link (wraps the span) */
 .lifelink-welcome-link {
   color: var(--teal-primary);
@@ -190,12 +186,10 @@
 .lifelink-welcome-link:focus {
   color: var(--teal-primary);
 }
-
 /* Pointer cursor for welcome text */
 .lifelink-welcome-text {
   cursor: pointer;
 }
-
 /* Desktop logout button */
 .lifelink-logout-btn {
   font-size: 1rem;
@@ -204,7 +198,7 @@
 /* Narrow internal spacing to move search, bell, welcome closer to logout */
 .lifelink-desktop-right { gap: 0.75rem !important; }
 
-/* Auth buttons (Login / Register) when not logged in */
+/* Auth buttons when not logged in */
 .btn.lifelink-auth-btn {
   border-color: var(--teal-primary);
   color: var(--teal-primary);
@@ -224,10 +218,7 @@
   border-color: var(--teal-primary);
 }
 
-/* === NEW: house + heart icon next to LifeLink === */
-
-/* Circular icon wrapper for the LifeLink logo.
-   Centers its content and removes all default button styling. */
+/* Circular icon wrapper for the LifeLink logo, centers its content  */
 .lifelink-logo-icon {
   display: inline-flex;
   align-items: center;
@@ -240,7 +231,7 @@
   box-shadow: none;
 }
 
-/* SVG inside the icon – fills almost the entire container */
+/* SVG inside the logo icon */
 .lifelink-logo-icon svg {
   width: 3rem;
   height: 3rem;

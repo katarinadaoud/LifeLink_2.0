@@ -21,6 +21,7 @@ import NotificationListPage from './notifications/NotificationListPage'
 import EmergencyContactButton from './emergency/EmergencyContactButton'
 import './App.css'
 
+// The main application component with routing
 const App: React.FC = () => {
   return (
     <AuthProvider>

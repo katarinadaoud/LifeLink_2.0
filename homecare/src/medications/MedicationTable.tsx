@@ -41,7 +41,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
       <tbody>
         {rows.length === 0 ? (
           <tr>
-            {/* if no rowrs, show message*/}
+            {/* if no rows, show message*/}
             <td colSpan={userRole === "Employee" ? 7 : 6} className="text-center text-muted">
               No medications found.
             </td>

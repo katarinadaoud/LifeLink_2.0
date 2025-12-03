@@ -69,7 +69,7 @@ namespace HomeCareApp.Controllers
             return Ok(MedicationDto.FromEntity(medications));
         }
 
-        // Create a new medication//
+        // Create a new medication
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<MedicationDto>> Create(MedicationDto dto)
@@ -98,7 +98,7 @@ namespace HomeCareApp.Controllers
             }
         }
 
-        //Update medication//
+        //Update medication
         [HttpPut("{medicationName}")]
         [Authorize]
         public async Task<IActionResult> Update(string medicationName, MedicationDto dto)
@@ -142,7 +142,7 @@ namespace HomeCareApp.Controllers
             }
         }
 
-        //Delete medication//
+        //Delete medication
         [HttpDelete("{medicationName}")]
         [Authorize]
         public async Task<IActionResult> Delete(string medicationName)
@@ -175,7 +175,7 @@ namespace HomeCareApp.Controllers
         }
 
 
-        //Create notifications, only one simple method because it is only one user affected//
+        //Create notifications, only one simple method because it is only one user affected
         private async Task CreateMedicationNotification(Medication medication, string action)
         {
             try
@@ -195,7 +195,7 @@ namespace HomeCareApp.Controllers
                     _ => "Medication Changed"
                 };
 
-                var message = action switch
+                var message = action switch //  message based on action
                 {
                     "created" => $"A new medication '{medication.MedicineName}' has been added to your treatment plan. Dosage: {medication.Dosage}.",
                     "updated" => $"Your medication '{medication.MedicineName}' has been updated. New dosage: {medication.Dosage}.",
@@ -203,7 +203,7 @@ namespace HomeCareApp.Controllers
                     _ => $"Your medication '{medication.MedicineName}' has been changed."
                 };
 
-                var notification = new Notification
+                var notification = new Notification // Create notification entity
                 {
                     UserId = medication.Patient.UserId,
                     Title = title,
@@ -214,7 +214,7 @@ namespace HomeCareApp.Controllers
                     CreatedAt = DateTime.Now
                 };
 
-                await _notificationRepository.CreateAsync(notification);
+                await _notificationRepository.CreateAsync(notification); // Save notification
                 _logger.LogInformation("[MedicationController] Created {Action} notification for medication {MedicineName}", action, medication.MedicineName);
             }
             catch (Exception ex)

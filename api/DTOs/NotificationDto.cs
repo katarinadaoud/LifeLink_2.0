@@ -7,7 +7,7 @@ namespace HomeCareApp.DTOs
     {
         public int? NotificationId { get; set; }
 
-        [Required]
+        [Required] 
         public string UserId { get; set; } = string.Empty;
 
         [Required]

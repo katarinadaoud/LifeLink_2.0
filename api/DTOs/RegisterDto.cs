@@ -4,6 +4,7 @@ namespace HomeCareApp.DTOs
 {
     public class RegisterDto
     {
+        // DTO for user registration
         [Required]
         [Display(Name = "Username")]
         public string Username { get; set; } = string.Empty;

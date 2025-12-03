@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-    // options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+    
 });
 
 // Register Swagger/OpenAPI for API documentation and testing

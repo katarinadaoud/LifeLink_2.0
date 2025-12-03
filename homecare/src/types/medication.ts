@@ -1,4 +1,3 @@
-// src/types/medication.ts
 export interface Medication {
   medicationName: string;        
   dosage: string;                

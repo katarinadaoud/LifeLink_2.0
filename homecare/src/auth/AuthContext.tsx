@@ -37,24 +37,25 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                     setToken(null);
                 }
             } catch (error) {
-                // Invalid token format - clear everything
+                // Invalid token format -> clear everything
                 console.error("Invalid token", error);
                 localStorage.removeItem('token');
                 setUser(null);
                 setToken(null);
             }
         } else {
-            // No token - ensure user is cleared
+            // No token -> ensure user is cleared
             setUser(null);
         }
         setIsLoading(false);
     }, [token]);
 
+    // Login function
     const login = async (credentials: LoginDto): Promise<User> => { // Login and store token
         const { token } = await authService.login(credentials);
         localStorage.setItem('token', token);
-        const decodedUser: User = jwtDecode(token);
-        // console.log(token); // Debugging line to check the token
+        const decodedUser: User = jwtDecode(token); // Decode user info from token
+
         setUser(decodedUser);
         setToken(token);
         return decodedUser;

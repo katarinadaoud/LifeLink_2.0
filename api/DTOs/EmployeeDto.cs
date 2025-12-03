@@ -5,18 +5,18 @@ namespace HomeCareApp.DTOs
 {
     public class EmployeeDto
     {
-        public int EmployeeId { get; set; }
+        public int EmployeeId { get; set; } // Primary key
         
-        [Required]
+        [Required] // FullName is required when creating or updating an employee
         [RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Name must be numbers or letters and between 2 to 20 characters.")]
         [Display(Name = "Employee Name")]
         public string FullName { get; set; } = string.Empty;
         
-        [Required]
+        [Required] // Address is required when creating or updating an employee
         [StringLength(100, ErrorMessage = "Address cannot exceed 100 characters.")]
         public string Address { get; set; } = string.Empty;
         
-        [Required]
+        [Required] // Department is required when creating or updating an employee
         [StringLength(50, ErrorMessage = "Department cannot exceed 50 characters.")]
         public string Department { get; set; } = string.Empty;
         

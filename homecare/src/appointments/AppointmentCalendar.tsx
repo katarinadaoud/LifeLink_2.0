@@ -7,7 +7,7 @@ import './AppointmentCalendar.css';
 // Props for the calendar: list of appointments, optional delete handler and user role
 interface AppointmentCalendarProps {
   appointments: Appointment[]; // Array of all appointments to be displayed
-  onAppointmentDeleted?: (appointmentId: number) => void; // Optional callback when an appointment is deleted
+  onAppointmentDeleted?: (appointmentId: number) => void; // Optional callback when appointment is deleted
   onAppointmentConfirmed?: (appointmentId: number) => void; // Optional callback when employee confirms appointment
   userRole?: string; // Optional string that defines user type ("Patient", "Employee", etc.)
   currentEmployeeId?: number | null; // Current logged-in employee's ID
@@ -212,7 +212,8 @@ const AppointmentCalendar: React.FC<AppointmentCalendarProps> = ({
                               description: dayAppointments.map(apt => `• ${apt.subject} at ${new Date(apt.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`).join('\n'),
                               date: new Date(date),
                               patientId: 0,
-                              employeeId: 0
+                              employeeId: 0,
+                              isConfirmed: true
                             };
                             setSelectedAppointment(summaryAppointment);
                             setShowModal(true);

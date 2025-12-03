@@ -17,10 +17,10 @@ const getAuthHeaders = () => {
 
 const handleResponse = async (response: Response) => {
   if (response.ok) {  // HTTP status code success 200-299
-    if (response.status === 204) { // Delete returns 204 No content
+    if (response.status === 204) { // delete returns 204 - No content
       return null;
     }
-    return response.json(); // other returns response body as JSON
+    return response.json(); // returns response body as JSON
   } else {
     // Handle expired or invalid authentication token
     if (response.status === 401) {

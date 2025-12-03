@@ -145,7 +145,7 @@ export default function MedicationForm({
         </Col>
       </Row>
 
-      {/* Indication field - optional*/}
+      {/* Indication field (optional)*/}
       <Form.Group className="mb-3" controlId="indication">
         <Form.Label>Indication (valgfritt)</Form.Label>
         <Form.Control
@@ -172,7 +172,7 @@ export default function MedicationForm({
           </Form.Group>
         </Col>
         <Col md={6}>
-        {/* End Date field - optional */}
+        {/* End Date field (optional) */}
           <Form.Group className="mb-3" controlId="endDate">
             <Form.Label>End date (valgfritt)</Form.Label>
             <Form.Control

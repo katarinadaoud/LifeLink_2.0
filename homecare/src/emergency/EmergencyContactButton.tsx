@@ -30,7 +30,6 @@ const EmergencyContactButton: React.FC = () => {
     }
   };
 
-  // Generic Teams call link 
   // if Teams cannot initiate the call it will open the Teams web/app.
   const TEAMS_CALL_URL = `https://teams.microsoft.com/l/call/0/0?users=${encodeURIComponent(
     EMERGENCY_PHONE_DISPLAY
@@ -56,7 +55,7 @@ const EmergencyContactButton: React.FC = () => {
         </span>
       </Button>
 
-      
+      {/* Modal for emergency contact */}
       <Modal
         show={showModal}
         onHide={handleClose}
@@ -82,6 +81,7 @@ const EmergencyContactButton: React.FC = () => {
           </p>
         </Modal.Body>
 
+        {/* Modal footer with action buttons */}
         <Modal.Footer className="justify-content-between">
           <div>
             <Button variant="outline-secondary" href={TEAMS_CALL_URL} target="_blank" rel="noreferrer" className="me-2">

@@ -6,24 +6,24 @@ namespace HomeCareApp.DTOs
 {
     public class PatientDto
     {
-        public int? PatientId { get; set; }
+        public int? PatientId { get; set; } // Primary key
 
-        [Required]
+        [Required] // FullName is required when creating or updating a patient
         [RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Name must be numbers or letters and between 2 to 20 characters.")]
         [Display(Name = "Patient Name")]
         public string FullName { get; set; } = string.Empty;
 
-        [Required]
+        [Required] // Address is required when creating or updating a patient
         public string Address { get; set; } = string.Empty;
 
-        [Required]
+        [Required] // DateOfBirth is required when creating or updating a patient
         public DateTime DateOfBirth { get; set; }
 
         [RegularExpression(@"^[0-9]{8}$", ErrorMessage = "Phone number must be 8 digits.")]
         [DataType(DataType.PhoneNumber)]
         public string phonenumber { get; set; } = string.Empty;
 
-        [Required]
+        [Required] 
         [JsonPropertyName("healthRelated_info")]
         public string HealthRelated_info { get; set; } = string.Empty;
 

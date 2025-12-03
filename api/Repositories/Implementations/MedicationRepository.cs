@@ -63,11 +63,10 @@ namespace HomeCareApp.Repositories.Implementations
         }
 
         // Get a single medication by its name
-        public async Task<Medication?> GetByNameAsync(string medicineName) // get medication by medicine name
+        public async Task<Medication?> GetByNameAsync(string medicineName) 
         {
 
-            // Retrieves a medication by name, including its related patient.
-            // Logs detailed information for success, missing results, and exceptions.
+            // try-catch block for error handling
             try
             {
                 
@@ -75,11 +74,11 @@ namespace HomeCareApp.Repositories.Implementations
                 var medication = await _db.Medications
                     .Include(m => m.Patient)
                     .FirstOrDefaultAsync(m => m.MedicineName == medicineName);
-                if (medication != null)
+                if (medication != null) // medication found
                 {
                     _logger.LogInformation("[MedicationRepository] GetByNameAsync({MedicineName}) - Medication found for patient: {PatientName}", medicineName, medication.Patient?.FullName ?? "Unknown");
                 }
-                else
+                else // medication not found
                 {
                     _logger.LogWarning("[MedicationRepository] GetByNameAsync({MedicineName}) - Medication not found", medicineName);
                 }
@@ -103,7 +102,7 @@ namespace HomeCareApp.Repositories.Implementations
                 _logger.LogInformation("[MedicationRepository] AddAsync() - Successfully added medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
                 return med;
             }
-            catch (Exception ex)
+            catch (Exception ex) // catch block for error handling
             {
                 _logger.LogError(ex, "[MedicationRepository] AddAsync() failed for medication: {MedicineName} - {Message}", med.MedicineName, ex.Message);
                 throw;
@@ -111,9 +110,9 @@ namespace HomeCareApp.Repositories.Implementations
         }
 
         // Delete a medication
-        public async Task DeleteAsync(Medication med) // delete medication from database
+        public async Task DeleteAsync(Medication med) 
         {
-            try
+            try // try to delete medication
             {
                 _logger.LogInformation("[MedicationRepository] DeleteAsync() - Deleting medication: {MedicineName} for PatientId: {PatientId}", med.MedicineName, med.PatientId);
                 _db.Medications.Remove(med);

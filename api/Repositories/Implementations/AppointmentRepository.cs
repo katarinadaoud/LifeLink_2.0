@@ -37,7 +37,9 @@ namespace HomeCareApp.Repositories.Implementations
             }
         }
 
-        public async Task<Appointment?> GetAppointmentById(int id)
+
+        // get appointment by id
+        public async Task<Appointment?> GetAppointmentById(int id) 
         {
             try
             {
@@ -50,7 +52,7 @@ namespace HomeCareApp.Repositories.Implementations
                 {
                     _logger.LogInformation("[AppointmentRepository] GetAppointmentById({Id}) - Appointment found for patient: {PatientName}", id, appointment.Patient?.FullName ?? "Unknown");
                 }
-                else
+                else // appointment not found
                 {
                     _logger.LogWarning("[AppointmentRepository] GetAppointmentById({Id}) - Appointment not found", id);
                 }
@@ -84,7 +86,7 @@ namespace HomeCareApp.Repositories.Implementations
         // update existing appointment
         public async Task<bool> Update(Appointment appointment)
 {
-    try
+    try // try to update appointment
     {
         _logger.LogInformation("[AppointmentRepository] Update() - Updating appointment: {AppointmentId}", appointment.AppointmentId);
 
@@ -105,6 +107,7 @@ namespace HomeCareApp.Repositories.Implementations
         existing.Date = appointment.Date;
         existing.PatientId = appointment.PatientId;
         existing.EmployeeId = appointment.EmployeeId;
+
         // Important: Save the IsConfirmed status to database
         existing.IsConfirmed = appointment.IsConfirmed;
 
@@ -112,7 +115,7 @@ namespace HomeCareApp.Repositories.Implementations
         _logger.LogInformation("[AppointmentRepository] Update() - Successfully updated appointment {AppointmentId}, IsConfirmed: {IsConfirmed}", appointment.AppointmentId, appointment.IsConfirmed);
         return true;
     }
-    catch (Exception ex)
+    catch (Exception ex) // catch any exception, log it and return false
     {
         _logger.LogError(ex, "[AppointmentRepository] Update() failed: {Message}", ex.Message);
         return false;
@@ -123,7 +126,7 @@ namespace HomeCareApp.Repositories.Implementations
         public async Task<bool> Delete(int id)
         {
             try
-            {
+            { // try to delete appointment
                 _logger.LogInformation("[AppointmentRepository] Delete({Id}) - Attempting to delete appointment", id);
                 var appointment = await _db.Appointments.FindAsync(id);
                 if (appointment == null)
@@ -132,6 +135,7 @@ namespace HomeCareApp.Repositories.Implementations
                     return false;
                 }
 
+                // delete appointment
                 _logger.LogInformation("[AppointmentRepository] Delete({Id}) - Deleting appointment", id);
                 _db.Appointments.Remove(appointment);
                 await _db.SaveChangesAsync();
@@ -158,7 +162,7 @@ namespace HomeCareApp.Repositories.Implementations
                     _logger.LogWarning("[AppointmentRepository] SetConfirmed({Id}) - Appointment not found", id);
                     return false; 
                 }
-                // Important: Save the IsConfirmed status to database
+                // Save the IsConfirmed status to database
                 appointment.IsConfirmed = confirmed;
                 await _db.SaveChangesAsync();
                 return true;

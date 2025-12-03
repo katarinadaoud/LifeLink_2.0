@@ -1,8 +1,6 @@
 /* profilepage styling*/
-
 .profile-card-header {
     background-color: var(--teal-primary);
     color: white;
 }
 
-/* Note: Profile buttons now use .btn-teal from design-system.css */

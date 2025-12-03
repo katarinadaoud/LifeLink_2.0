@@ -20,7 +20,7 @@ namespace HomeCareApp.Controllers
             _logger = logger;
         }
 
-        //Get all notifications for current user//
+        //Get all notifications for current user
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NotificationDto>>> GetMyNotifications()
         {
@@ -31,6 +31,7 @@ namespace HomeCareApp.Controllers
                 return Unauthorized("User not found");
             }
 
+            //Get notifications from repository
             _logger.LogInformation("[NotificationController] Getting all notifications for UserId: {UserId}", currentUserId);
             var notifications = await _notificationRepo.GetByUserIdAsync(currentUserId);
             var notificationDtos = notifications.Select(NotificationDto.FromEntity);
@@ -56,7 +57,7 @@ namespace HomeCareApp.Controllers
             return Ok(count);
         }
 
-        //Get only unread notifications for current user//
+        //Get only unread notifications for current user
         [HttpGet("unread")]
         public async Task<ActionResult<IEnumerable<NotificationDto>>> GetUnreadNotifications()
         {
@@ -66,7 +67,7 @@ namespace HomeCareApp.Controllers
                 _logger.LogWarning("[NotificationController] Unauthorized access attempt for unread notifications - User not found");
                 return Unauthorized("User not found");
             }
-
+            //Get unread notifications from repository
             _logger.LogInformation("[NotificationController] Getting unread notifications for UserId: {UserId}", currentUserId);
             var notifications = await _notificationRepo.GetUnreadByUserIdAsync(currentUserId);
             var notificationDtos = notifications.Select(NotificationDto.FromEntity);
@@ -75,7 +76,7 @@ namespace HomeCareApp.Controllers
             return Ok(notificationDtos);
         }
 
-        //Mark notification as read//
+        //Mark notification as read
         [HttpPut("{id}/mark-read")]
         public async Task<ActionResult> MarkAsRead(int id)
         {
@@ -102,6 +103,7 @@ namespace HomeCareApp.Controllers
                 return Forbid("You can only mark your own notifications as read");
             }
 
+            //Mark as read in repository
             var success = await _notificationRepo.MarkAsReadAsync(id);
             if (!success)
             {
@@ -113,7 +115,7 @@ namespace HomeCareApp.Controllers
             return NoContent();
         }
 
-        //Mark all notifications as read for current user//
+        //Mark all notifications as read for current user
         [HttpPut("mark-all-read")]
         public async Task<ActionResult> MarkAllAsRead()
         {
@@ -137,7 +139,7 @@ namespace HomeCareApp.Controllers
             return NoContent();
         }
 
-        //Delete notification by id//
+        //Delete notification by id
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteNotification(int id)
         {
@@ -148,6 +150,7 @@ namespace HomeCareApp.Controllers
                 return Unauthorized("User not found");
             }
 
+            //Delete notification from repository
             _logger.LogInformation("[NotificationController] Attempting to delete notification {NotificationId} for UserId: {UserId}", id, currentUserId);
 
             var notification = await _notificationRepo.GetByIdAsync(id);
@@ -157,12 +160,13 @@ namespace HomeCareApp.Controllers
                 return NotFound("Notification not found");
             }
 
-            if (notification.UserId != currentUserId)
+            if (notification.UserId != currentUserId) // Verify ownership
             {
                 _logger.LogWarning("[NotificationController] Forbidden delete attempt: UserId {UserId} attempted to delete notification {NotificationId} belonging to {OwnerId}", currentUserId, id, notification.UserId);
                 return Forbid("You can only delete your own notifications");
             }
 
+            //Delete notification
             var success = await _notificationRepo.DeleteAsync(id);
             if (!success)
             {

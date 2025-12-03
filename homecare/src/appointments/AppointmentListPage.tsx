@@ -12,6 +12,7 @@ import { useAuth } from '../auth/AuthContext';
 type ViewMode = 'table' | 'grid' | 'calendar';
 
 const AppointmentListPage: React.FC = () => {
+  /// Get authenticated user info
   const { user } = useAuth();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,11 +21,12 @@ const AppointmentListPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentEmployeeId, setCurrentEmployeeId] = useState<number | null>(null);
 
+  // Fetch appointments based on user role
   const fetchAppointments = useCallback(async () => {
     setLoading(true);
     setError(null);
 
-    try {
+    try { 
       let data: Appointment[];
 
       if (user?.role === 'Patient') {
@@ -35,7 +37,7 @@ const AppointmentListPage: React.FC = () => {
           data = await AppointmentService.fetchAppointmentsByPatientId(
             patientData.patientId
           );
-        } else {
+        } else { // No patient ID found
           data = [];
           console.error('Patient ID not found for user');
         }
@@ -43,8 +45,9 @@ const AppointmentListPage: React.FC = () => {
         data = await AppointmentService.fetchAppointments();
       }
 
-      setAppointments(data);
-    } catch (error: unknown) {
+      setAppointments(data); 
+
+    } catch (error: unknown) { // Error handling
       if (error instanceof Error) {
         console.error(
           `There was a problem with the fetch operation: ${error.message}`
@@ -58,7 +61,8 @@ const AppointmentListPage: React.FC = () => {
     }
   }, [user]);
 
-  useEffect(() => {
+  // Initial data fetch and view mode load
+  useEffect(() => { 
     const savedViewMode = localStorage.getItem(
       'appointmentViewMode'
     ) as ViewMode;
@@ -82,6 +86,7 @@ const AppointmentListPage: React.FC = () => {
     }
   }, [user, fetchAppointments]);
 
+  // Save the view mode to local storage whenever it changes
   useEffect(() => {
     localStorage.setItem('appointmentViewMode', viewMode);
   }, [viewMode]);
@@ -96,6 +101,8 @@ const AppointmentListPage: React.FC = () => {
     [appointments, searchQuery]
   );
 
+  // Handle appointment deletion
+  
   const handleAppointmentDeleted = async (appointmentId: number) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete the appointment ${appointmentId}?`

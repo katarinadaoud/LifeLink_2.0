@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HomeCareApp.DTOs
 {
+ // DTO for login credentials
     public class LoginDto
     {
         [Required]

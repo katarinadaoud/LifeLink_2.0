@@ -1,10 +1,7 @@
-c/* Note: .error-text is now defined in design-system.css to avoid duplication */
-
 /* Title in MedicationListPage  */
 .page-title {
   font-size: 2.5rem;
 }
-
 /* Subtitle in MedicationListPage  */
 .page-subtitle {
   font-size: 1.1rem;
@@ -15,33 +12,27 @@ c/* Note: .error-text is now defined in design-system.css to avoid duplication *
   font-size: 1rem;
   padding: 8px 16px;
 }
-
 /* Large buttons */
 .btn-large {
   font-size: 1.1rem;
   padding: 10px 20px;
 }
-
 /* Bold label in Search */
 .label-strong {
   font-size: 1rem;
   font-weight: bold;
 }
-
 /* Search input  */
 .input-medium {
   font-size: 1rem;
 }
-
 /* Text size */
 .text-medium {
   font-size: 1rem;
 }
-
 .text-large {
   font-size: 1.1rem;
 }
-
 /* Table scroll wrapper */
 .table-scroll {
   width: 100%;
@@ -54,7 +45,6 @@ c/* Note: .error-text is now defined in design-system.css to avoid duplication *
 .update-container {
   max-width: 600px;
 }
-
 /* MarginTop from MedicationUpdatePage */
 .error-top {
   margin-top: -5px;

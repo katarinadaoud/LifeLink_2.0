@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Row, Col, Button, Alert, Spinner, Badge, ButtonGroup } from 'react-bootstrap';
+import { Container, Card, Row, Col, Button, Alert, Spinner, Badge } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
 import { NotificationService } from './NotificationService';
 import type { NotificationDto } from '../types/notification';
@@ -124,7 +124,7 @@ const NotificationListPage: React.FC = () => {
   }
 
 
-  //notification section on page//
+  //notification section on page
   return (
     <Container className="mt-4">
       <Row>

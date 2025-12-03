@@ -83,14 +83,14 @@ public class EmployeeController : ControllerBase
             return BadRequest("ID mismatch");
         }
 
-        var existingEmployee = await _employeeRepository.GetEmployeeById(id);
+        var existingEmployee = await _employeeRepository.GetEmployeeById(id); //Fetch the existing employee from the database
         if (existingEmployee == null)
         {
             _logger.LogWarning("[EmployeeController] Employee with ID {EmployeeId} not found for update", id);
             return NotFound();
         }
 
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid) //Validate the incoming model
         {
             _logger.LogWarning("[EmployeeController] Invalid model state for employee update {EmployeeId}", id);
             return BadRequest(ModelState);

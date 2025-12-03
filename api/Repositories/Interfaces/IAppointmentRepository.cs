@@ -10,7 +10,7 @@ namespace HomeCareApp.Repositories.Interfaces;
         Task<IEnumerable<Appointment>> GetAll(); //<IEnumerable> when you want to get all appointments
         Task<Appointment?> GetAppointmentById(int id); //when you want to get a specific appointment
 
-        //bools to indicate success or failure
+        // bools to indicate success or failure
         Task<bool> Create(Appointment appointment);
         Task<bool> Update(Appointment appointment);
         Task<bool> Delete(int id);

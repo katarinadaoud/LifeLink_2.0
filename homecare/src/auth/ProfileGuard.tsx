@@ -2,24 +2,25 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
-interface ProfileGuardProps {
+interface ProfileGuardProps { // Props for ProfileGuard component
     children: React.ReactNode;
 }
-
+// Component to ensure user has a profile before accessing certain routes
 const ProfileGuard: React.FC<ProfileGuardProps> = ({ children }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [hasProfile, setHasProfile] = useState<boolean | null>(null);
     const [isChecking, setIsChecking] = useState(true);
 
+    // Check if user has a profile on mount or when user changes
     useEffect(() => {
-        const checkProfile = async () => {
+        const checkProfile = async () => { // Function to check if profile exists
             if (!user) {
                 setIsChecking(false);
                 return;
             }
 
-            try {
+            try { // Get token from local storage
                 const token = localStorage.getItem('token');
                 if (!token) {
                     setIsChecking(false);
@@ -30,7 +31,7 @@ const ProfileGuard: React.FC<ProfileGuardProps> = ({ children }) => {
                 // Try both Patient and Employee endpoints based on the user's roles
                 let profileExists = false;
                 // Determine which endpoint to check: try Patient then Employee
-                const userId = user.sub || user.nameid || user.userid;
+                const userId = user.sub || user.nameid;
                 if (userId) {
                     const patientResp = await fetch(`${import.meta.env.VITE_API_URL}/api/patient/user/${userId}`, {
                         method: 'GET',
@@ -65,13 +66,13 @@ const ProfileGuard: React.FC<ProfileGuardProps> = ({ children }) => {
         }
     }, [user, navigate]);
 
-    if (isChecking) {
+    if (isChecking) { // Show loading state while checking profile
         return <div className="d-flex justify-content-center mt-5">
             <div>Checking profile...</div>
         </div>;
     }
 
-    if (!user) {
+    if (!user) { 
         return <>{children}</>;
     }
 

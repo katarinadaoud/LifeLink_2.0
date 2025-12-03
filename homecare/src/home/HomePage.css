@@ -4,13 +4,11 @@
   padding-top: 2.5rem;
   padding-bottom: 2.75rem;
 }
-
 .homepage-title { /* Main title on homepage */
   color: #111827;
   font-size: 2.25rem;
   letter-spacing: 0.04em; /* slight spacing for elegance */
 }
-
 .homepage-description { /* Subtitle / description text */
   max-width: 60ch;
   margin: 0 auto 1.75rem auto;
@@ -19,18 +17,15 @@
   line-height: 1.7; /* increased line height for readability */
   padding: 0 1rem; /* horizontal padding on small screens */
 }
-
 .homepage-main-section { /* Main action section styling */
   padding-top: 1.5rem;
   padding-bottom: 2.5rem;
 }
-
 /* Section titles on homepage */
 .homepage-section-title {
   color: #111827;
   font-size: 1.7rem;
 }
-
 /* Container for action buttons */
 .homepage-action-button {
   min-height: 130px;
@@ -39,16 +34,12 @@
   padding: 1.5rem;
   margin-bottom: 1rem;
 }
-
-/* Note: Homepage buttons use .btn-teal from design-system.css for colors */
-
 /* Remove bottom margin on larger screens where buttons are side-by-side */
 @media (min-width: 768px) {
   .homepage-action-button {
     margin-bottom: 0;
   }
 }
-
 .homepage-button-text {
   font-size: 1.3rem; /* larger for welcome page buttons */
   font-weight: 600; /* slightly reduced bold for home page buttons */

@@ -1,10 +1,5 @@
-/*
-  Bootstrap primary is mapped to LifeLink teal.
-  Prefer using .btn-teal for buttons.
-
-   LIFELINK DESIGN SYSTEM
-   Centralized color and component styling
-   */
+/* LIFELINK DESIGN SYSTEM
+Centralized color and component styling */
 
 :root {
   /* Primary Teal Colors - EXACT SAME COLOR EVERYWHERE */
@@ -107,9 +102,7 @@ h2.text-teal,
   border-color: var(--teal-primary);
 }
 
-/* ----- TEAL BUTTON STYLING ----- */
-/* Only colors - sizing handled by components (Bootstrap size prop or component CSS) */
-/* Global button typography: no bold on any buttons */
+/* Teal buttons */
 .btn { font-weight: 400; }
 .btn.fw-bold, .btn.btn-bold { font-weight: 400 !important; }
 .btn-teal {
@@ -148,7 +141,6 @@ h2.text-teal,
   border-color: var(--teal-hover);
   color: var(--color-white);
 }
-
 .btn-teal:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -169,9 +161,9 @@ h2.text-teal,
   color: var(--color-white);
 }
 
-/* ----- ACTION BUTTONS IN GRIDS/TABLES (Update/Delete) ----- */
+/* Action buttons in grids/tables */
 
-/* Update button in grids - teal background, white text, matches Add New button styling */
+/* Teal buttons, excluding buttons inside appointment- and medication toolbars */
 .btn.btn-teal:not(.appointment-toolbar .btn):not(.medication-toolbar .btn) {
   background-color: var(--teal-primary);
   border-color: var(--teal-primary);
@@ -183,8 +175,7 @@ h2.text-teal,
   transition: all var(--transition-base);
 }
 
-/* Hover/focus styles for teal buttons,
-   excluding buttons inside appointment- and medication toolbars */
+/* Hover/focus styles for teal buttons (excluding buttons inside appointment and medication toolbars) */
 .btn.btn-teal:not(.appointment-toolbar .btn):not(.medication-toolbar .btn):hover,
 .btn.btn-teal:not(.appointment-toolbar .btn):not(.medication-toolbar .btn):focus {
   background-color: var(--teal-hover);
@@ -192,8 +183,7 @@ h2.text-teal,
   color: var(--color-white);
 }
 
-/* ----- DELETE BUTTON STYLING (white background, red text) ----- */
-/* Only colors - sizing handled by components (Bootstrap size prop or component CSS) */
+/* Delete button */
 .btn-delete {
   background-color: var(--color-white);
   border-color: var(--color-error-light);
@@ -204,8 +194,7 @@ h2.text-teal,
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
 }
-
-/* Hover and focus states for delete buttons (error color palette) */
+/* Hover and focus states for delete buttons */
 .btn-delete:hover,
 .btn-delete:focus {
   background-color: var(--color-error-light);
@@ -213,44 +202,43 @@ h2.text-teal,
   color: var(--color-error-darker);
 }
 
-/* ----- TEAL CARD HEADER ----- */
+/* Teal card header*/
 .card-header-teal {
   background-color: var(--teal-primary);
   color: var(--color-white);
   border-color: var(--teal-primary);
 }
 
-/* ----- TEAL TABLE HEADER ----- */
+/* Teal table header */
 .table-header-teal {
   background-color: var(--teal-primary);
   color: var(--color-white);
   font-weight: 400;
 }
-
 .table-header-teal th {
   background-color: var(--teal-primary);
   color: var(--color-white);
   font-weight: 400;
 }
 
-/* ----- TEAL BADGE ----- */
+/* Teal badge */
 .badge-teal {
   background-color: var(--teal-primary);
   color: var(--color-white);
 }
 
-/* ----- TEAL SPINNER ----- */
+/* Teal spinner */
 .spinner-teal {
   color: var(--teal-primary);
   border-color: var(--teal-primary);
 }
 
-/* ----- TEAL HEADING ----- */
+/* teal heading */ 
 .heading-teal {
   color: var(--teal-primary);
 }
 
-/* ----- TEAL LINK ----- */
+/* teal link */
 .link-teal {
   color: var(--teal-primary);
   text-decoration: none;
@@ -263,7 +251,7 @@ h2.text-teal,
   text-decoration: underline;
 }
 
-/* ----- TEAL NAV LINK ----- */
+/* teal nav link */
 .nav-link-teal {
   color: var(--teal-primary);
   border-bottom: 2px solid transparent;
@@ -277,47 +265,45 @@ h2.text-teal,
   border-bottom-color: var(--teal-primary);
 }
 
-/* ----- TEAL BORDER ACCENT ----- */
+/* teal border accent */
 .border-accent-teal {
   border-left: 4px solid var(--teal-primary);
 }
 
-/* ----- TEAL INPUT FOCUS ----- */
-/* KEEP! important here to override Bootstrap default focus styling */
+/* teal input focus */
 .form-control-teal:focus {
   border-color: var(--teal-primary) !important;
   box-shadow: 0 0 0 0.2rem rgba(23, 126, 139, 0.25) !important;
 }
 
-/* ----- ERROR STATE ----- */
+/* error state*/
 .error-text {
   color: var(--color-error);
 }
-
 .form-error {
   color: var(--color-error);
   margin-top: var(--spacing-sm);
 }
 
-/* ----- RESPONSIVE TABLE WRAPPER ----- */
+/* responsive table wrapper */
 .table-responsive-wrapper,
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
 }
 
-/* ----- UTILITY: TOGGLE BUTTON SIZING ----- */
+/* utility: toggle button sizing */
 .btn-toggle {
   font-size: 1rem;
   padding: 0.75rem 1.5rem;
 }
 
-/* ----- UTILITY: LIGHT BACKGROUND ----- */
+/* utility: light background */
 .bg-light-gray {
   background-color: var(--color-gray-light);
 }
 
-/* ----- UTILITY: VERTICAL BUTTON ACTIONS LAYOUT ----- */
+/* utility: vertical button actions layout*/
 /* Used for stacking update/delete buttons vertically in tables/grids */
 .appointment-actions-vertical {
   display: flex;
@@ -332,8 +318,7 @@ h2.text-teal,
   margin-left: 0;
 }
 
-/* ----- UTILITY: VIEW MODE BUTTON GROUP (List/Card/Calendar toggles) ----- */
-/* Reusable styling for view mode toggle buttons - white with teal text, teal fill when active */
+/* Reusable styling for view mode toggle buttons*/
 
 /* Base styling for toggle buttons */
 button.view-toggle-btn.btn {
@@ -377,8 +362,8 @@ button.view-toggle-btn.btn.active:hover {
   transform: translateY(-1px);
 }
 
-/* ----- REFRESH BUTTON IN TOOLBARS ----- */
-/* Override .btn-teal to match inactive view toggles - same size, spacing, and styling */
+/* Refresh button in toolbars*/
+/*same size, spacing, and styling */
 .appointment-toolbar .btn.btn-teal,
 .medication-toolbar .btn.btn-teal {
   padding: 9px 20px;
@@ -392,15 +377,11 @@ button.view-toggle-btn.btn.active:hover {
   transition: all 0.2s ease;
   margin-right: 0.5rem;
 }
-
-/* Styling for toolbar buttons.
-   Default buttons use lighter weight, while teal buttons inside toolbars
-   get a softer hover state to match the toolbar design. */
+/* Styling for toolbar buttons */
 .appointment-toolbar .btn,
 .medication-toolbar .btn {
   font-weight: 400;
 }
-
 .appointment-toolbar .btn.btn-teal:hover,
 .medication-toolbar .btn.btn-teal:hover {
   background: var(--primary-soft);

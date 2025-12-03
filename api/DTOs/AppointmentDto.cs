@@ -1,29 +1,29 @@
 using System.ComponentModel.DataAnnotations;
 using HomeCareApp.Models;
 
-namespace HomeCareApp.DTOs
+namespace HomeCareApp.DTOs 
 {
-    public class AppointmentDto
+    public class AppointmentDto 
     {
-        public int? AppointmentId { get; set; }
+        public int? AppointmentId { get; set; } // Nullable for new appointments
 
-        [Required]
+        [Required] // Subject is required when creating or updating an appointment
         [RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Subject must be numbers or letters and between 2 to 20 characters.")]
         [Display(Name = "Appointment subject")]
-        public string Subject { get; set; } = string.Empty;
+        public string Subject { get; set; } = string.Empty; 
 
-        public string Description { get; set; } = string.Empty;
-
-        [Required]
-        public DateTime Date { get; set; }
+        public string Description { get; set; } = string.Empty; // Optional description
 
         [Required]
-        public int PatientId { get; set; } 
+        public DateTime Date { get; set; } // Appointment date and time 
+
+        [Required]
+        public int PatientId { get; set; } // Foreign key to Patient
         
         [Required]
-        public int EmployeeId { get; set; } 
+        public int EmployeeId { get; set; } // Foreign key to Employee
 
-        // Confirmation state for request/confirm flow
+        // Confirmation state for request/confirm appointments
         public bool IsConfirmed { get; set; }
 
         // Display names for better user experience

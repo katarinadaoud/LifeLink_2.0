@@ -112,20 +112,20 @@ namespace HomeCareApp.Repositories.Implementations
             {
                 _logger.LogInformation("[EmployeeRepository] Update() - Updating employee: {EmployeeName} (ID: {EmployeeId})", employee.FullName, employee.EmployeeId);
 
-                // if the entity is already being tracked, use the tracked entity to avoid conflicts
-                // This handles cases where the same employee entity might be fetched and updated in the same DbContext session
+                // Check if the entity is already being tracked
                 var trackedEntry = _db.ChangeTracker.Entries<Employee>().FirstOrDefault(e => e.Entity.EmployeeId == employee.EmployeeId);
                 if (trackedEntry != null)
                 {
                     _logger.LogDebug("[EmployeeRepository] Update() - Using tracked entity for employee ID {EmployeeId}", employee.EmployeeId);
                     _logger.LogDebug("[EmployeeRepository] Update() - Tracked UserId: {TrackedUserId}, Incoming UserId: {IncomingUserId}", trackedEntry.Entity.UserId, employee.UserId);
-                    // If trackedEntry.Entity and the passed employee reference are the same instance, avoid CurrentValues.SetValues. this means no changes to update.
+
+                    // Update the tracked entity's values
                     if (!object.ReferenceEquals(trackedEntry.Entity, employee))
                     {
                         trackedEntry.CurrentValues.SetValues(employee);
                     }
                 }
-                else // not being tracked, so update normally
+                else // update normally
                 {
                     _db.Employees.Update(employee);
                 }

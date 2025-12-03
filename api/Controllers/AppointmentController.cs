@@ -315,7 +315,7 @@ public class AppointmentController : ControllerBase
             }
 
     
-            var patientNotification = new Notification
+            var patientNotification = new Notification // Notify patient about cancellation
             {
                 UserId = appointment.Patient.UserId,
                 Title = "Appointment Cancelled",
@@ -326,7 +326,7 @@ public class AppointmentController : ControllerBase
                 CreatedAt = DateTime.Now
             };
 
-            var employeeNotification = new Notification
+            var employeeNotification = new Notification // Notify employee about cancellation
             {
                 UserId = appointment.Employee!.UserId,
                 Title = "Appointment Cancelled",
@@ -341,11 +341,11 @@ public class AppointmentController : ControllerBase
             await _notificationRepository.CreateAsync(patientNotification);
             await _notificationRepository.CreateAsync(employeeNotification);
 
-            _logger.LogInformation("[AppointmentController] Created deletion notifications for appointment {AppointmentId}", appointment.AppointmentId);
+            _logger.LogInformation("[AppointmentController] Created deletion notifications for appointment {AppointmentId}", appointment.AppointmentId); // Successfully created notifications
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "[AppointmentController] Failed to create deletion notifications for appointment {AppointmentId}", appointment.AppointmentId);
+            _logger.LogError(ex, "[AppointmentController] Failed to create deletion notifications for appointment {AppointmentId}", appointment.AppointmentId); // Error during notification creation
         }
     }
 
@@ -369,13 +369,13 @@ public class AppointmentController : ControllerBase
             return Forbid("Only the assigned healthcare provider can confirm this appointment");
         }
 
-        if (appointment.IsConfirmed)
+        if (appointment.IsConfirmed) // Already confirmed
         {
             _logger.LogInformation("[AppointmentController] Appointment {AppointmentId} already confirmed", id);
             return Ok(new { Message = "Appointment already confirmed" });
         }
 
-        bool success = await _appointmentRepository.SetConfirmed(id, true);
+        bool success = await _appointmentRepository.SetConfirmed(id, true); // Set to confirmed
         if (!success)
         {
             _logger.LogError("[AppointmentController] Failed to confirm appointment {AppointmentId}", id);
@@ -387,7 +387,7 @@ public class AppointmentController : ControllerBase
         {
             if (appointment.Patient?.UserId != null)
             {
-                var patientNotification = new Notification
+                var patientNotification = new Notification // Notify patient of confirmation
                 {
                     UserId = appointment.Patient.UserId,
                     Title = "Appointment Confirmed",
@@ -397,13 +397,13 @@ public class AppointmentController : ControllerBase
                     IsRead = false,
                     CreatedAt = DateTime.Now
                 };
-                await _notificationRepository.CreateAsync(patientNotification);
+                await _notificationRepository.CreateAsync(patientNotification); // Send notification
                 _logger.LogInformation("[AppointmentController] Sent confirmation notification to patient for appointment {AppointmentId}", id);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "[AppointmentController] Failed to send confirmation notification for appointment {AppointmentId}", id);
+            _logger.LogError(ex, "[AppointmentController] Failed to send confirmation notification for appointment {AppointmentId}", id); // Error during notification sending
         }
 
         _logger.LogInformation("[AppointmentController] Appointment {AppointmentId} confirmed successfully", id);

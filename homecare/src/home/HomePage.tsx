@@ -24,6 +24,7 @@ const HomePage: React.FC = () => {
     navigate('/notifications');
   };
 
+  // Render the homepage with welcome message and main features
   return (
     <div className="text-center bg-white homepage-container">
       <h1 className="fw-bold mb-3 homepage-title">
@@ -46,6 +47,8 @@ const HomePage: React.FC = () => {
         </div>
 
         <Row className="justify-content-center g-4">
+
+          {/* Appointment booking button */}
           <Col lg={4} md={6} sm={12} className="d-flex justify-content-center">
             <Button
               type="button"
@@ -59,6 +62,7 @@ const HomePage: React.FC = () => {
             </Button>
           </Col>
 
+          {/* Medication management button */}
           <Col lg={4} md={6} sm={12} className="d-flex justify-content-center">
             <Button
               type="button"
@@ -72,6 +76,7 @@ const HomePage: React.FC = () => {
             </Button>
           </Col>
 
+          {/* Message button (leads to the notification site) */}
           <Col lg={4} md={6} sm={12} className="d-flex justify-content-center">
             <Button
               type="button"

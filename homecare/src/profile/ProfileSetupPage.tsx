@@ -4,7 +4,7 @@ import { Form, Button, Container, Alert, Card } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
 import './ProfilePage.css';
 
-interface PatientProfileData {
+interface PatientProfileData { //data structure for patient profile
     fullName: string;
     address: string;
     dateOfBirth: string;
@@ -12,21 +12,21 @@ interface PatientProfileData {
     healthRelatedInfo: string;
 }
 
-interface EmployeeProfileData {
+interface EmployeeProfileData { //data structure for employee profile
     fullName: string;
     address: string;
     department: string;
 }
 
-const ProfileSetupPage: React.FC = () => {
-    //components and hooks
+const ProfileSetupPage: React.FC = () => { //main functional component for profile setup
+    
     const { user } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [patientData, setPatientData] = useState<PatientProfileData>({
+    const [patientData, setPatientData] = useState<PatientProfileData>({ //state for patient profile data
         fullName: '',
         address: '',
         dateOfBirth: '',
@@ -34,7 +34,7 @@ const ProfileSetupPage: React.FC = () => {
         healthRelatedInfo: ''
     });
 
-    const [employeeData, setEmployeeData] = useState<EmployeeProfileData>({
+    const [employeeData, setEmployeeData] = useState<EmployeeProfileData>({ //state for employee profile data
         fullName: '',
         address: '',
         department: ''
@@ -49,6 +49,7 @@ const ProfileSetupPage: React.FC = () => {
         return null;
     };
 
+    //phone number validation
     const validatePhoneNumber = (phone: string): string | null => {
         if (phone && !/^\d{8}$/.test(phone.replace(/\s/g, ''))) {
             return 'Phone number must be 8 digits';
@@ -56,6 +57,7 @@ const ProfileSetupPage: React.FC = () => {
         return null;
     };
 
+    //  date of birth validation
     const validateDateOfBirth = (date: string): string | null => {
         if (date) {
             const birthDate = new Date(date);
@@ -157,10 +159,11 @@ const ProfileSetupPage: React.FC = () => {
                 fullName: patientData.fullName,
                 address: patientData.address,
                 dateOfBirth: patientData.dateOfBirth,
-                phonenumber: patientData.phoneNumber, // frontend: phoneNumber -> server: phonenumber
-                HealthRelated_info: patientData.healthRelatedInfo // frontend: healthRelatedInfo -> server: HealthRelated_info
+                phonenumber: patientData.phoneNumber, //frontend: phoneNumber -> server: phonenumber
+                HealthRelated_info: patientData.healthRelatedInfo //frontend: healthRelatedInfo -> server: HealthRelated_info
             };
             
+            //send POST request to complete patient profile
             const response = await fetch(`http://localhost:5090/api/Auth/complete-patient-profile`, {
                 method: 'POST',
                 headers: {

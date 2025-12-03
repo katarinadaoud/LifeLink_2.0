@@ -1,21 +1,23 @@
+/* global styles */
+
 :root { /*styling applied to the entire app*/
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; /*default font*/
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark; /*support both light and dark themes*/
+
   /*default to dark mode*/
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
-  font-synthesis: none;
+  font-synthesis: none; /*prevent browser font alterations*/
   text-rendering: optimizeLegibility; /*increases font claity*/
   
   /*improves font in rendering*/
   -webkit-font-smoothing: antialiased; 
   -moz-osx-font-smoothing: grayscale; /
 }
-/*LINKS*/
+  /*links*/
 a {
   font-weight: 500;
   color: #646cff; /* default link color*/
@@ -24,22 +26,20 @@ a {
 a:hover {
   color: #535bf2;
 }
-
+/* Body styles */
 body {
   margin: 0; /*remove default margin*/
   min-width: 320px; /*ensure usability on small screens*/
   min-height: 100vh; /*full viewport height*/
 }
-
-/* HEADINGS */
+/* headings */
 h1 {
   font-size: 3.2em; /*large main headings*/
   line-height: 1.1; /*tight line spacing*/
 }
 
-/*Buttons*/
-
-/* Rounded corners, buttonsize, display hand cursor on hover*/
+/*buttons*/
+/*rounded corners, buttonsize, display hand cursor on hover*/
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -74,9 +74,6 @@ button:focus-visible { /*focus outline for accessibility*/
     background-color: #f9f9f9;
   }
 }
-
-/* NOTE: .btn-delete is now defined in design-system.css to avoid duplication */
-
 /* Auth form submit button sizing used by Login/Register pages */
 .auth-submit {
   font-size: 1rem;
@@ -84,4 +81,3 @@ button:focus-visible { /*focus outline for accessibility*/
   margin-top: 0.9rem;
 }
 
-/* NOTE: .btn-teal is now defined in design-system.css to avoid duplication */

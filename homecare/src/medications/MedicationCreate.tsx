@@ -126,7 +126,7 @@ export default function MedicationCreatePage() {
                 onChange={(e) => set("medicationName", e.target.value)}
               />
             </Form.Group>
-                {/* Indication field - optional*/}
+                {/* Indication field (optional)*/}
             <Form.Group className="mb-3">
               <Form.Label>Indication</Form.Label>
               <Form.Control
@@ -157,7 +157,7 @@ export default function MedicationCreatePage() {
                 onChange={(e) => set("startDate", e.target.value)}
               />
             </Form.Group>
-                {/* End Date field - optional */}
+                {/* End Date field (optional) */}
             <Form.Group className="mb-3">
               <Form.Label>End Date (optional)</Form.Label>
               <Form.Control

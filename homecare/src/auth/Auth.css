@@ -5,30 +5,22 @@
   margin-bottom: 2rem;
   color: var(--teal-primary);
 }
-
-
 .auth-label {
   font-size: 1.1rem; /* Slightly larger font for labels */
   font-weight: 500;
 }
-
-
 .auth-input {
   font-size: 1.1rem; /* Slightly larger font for inputs */
   padding: 0.75rem;
 }
-
-
-/* Note: Auth buttons now use .btn-teal from design-system.css for colors */
-/* Only define sizing/spacing specific to auth forms */
+/* Submit button style */
 .auth-submit {
-  font-size: 1rem;
+  font-size: 1rem; /* Standard font size for buttons */
   padding: 0.75rem 2rem;
   margin-top: 1rem;
 }
-
-
+/* Container for auth forms */
 .auth-container {
-  margin-top: 3rem;
+  margin-top: 3rem; /* Space above the container */
   max-width: 500px;
 }

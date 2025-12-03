@@ -4,13 +4,14 @@ import { Form, Button, Container, Alert } from 'react-bootstrap';
 import * as authService from './AuthService';
 import './Auth.css';
 
-const RegisterPage: React.FC = () => {
+const RegisterPage: React.FC = () => { // Registration page component
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: '',
         role: 'Patient' as 'Patient' | 'Employee',
     });
+    // State for error and success messages
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const navigate = useNavigate();
@@ -43,6 +44,7 @@ const RegisterPage: React.FC = () => {
     };
 
     return (
+        // Registration form UI
         <Container className="auth-container">
             <h2 className="auth-title">Register</h2>
             {error && <Alert variant="danger">{error}</Alert>}
@@ -59,7 +61,7 @@ const RegisterPage: React.FC = () => {
                         required 
                     />
                 </Form.Group>
-
+            {/* Email field */}
                 <Form.Group className="mb-3">
                     <Form.Label className="auth-label">Email</Form.Label>
                     <Form.Control 
@@ -71,7 +73,7 @@ const RegisterPage: React.FC = () => {
                         required 
                     />
                 </Form.Group>
-
+                {/* Password field */}
                 <Form.Group className="mb-3">
                     <Form.Label className="auth-label">Password</Form.Label>
                     <Form.Control 
@@ -84,6 +86,7 @@ const RegisterPage: React.FC = () => {
                     />
                 </Form.Group>
 
+                {/* Role selection field */}
                 <Form.Group className="mb-3">
                     <Form.Label className="auth-label">I am a:</Form.Label>
                     <Form.Select 

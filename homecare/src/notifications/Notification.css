@@ -1,11 +1,7 @@
 /*notification style*/
-
 .notification-title {
   color: var(--teal-primary);
 }
-
-/* NOTE: All/Unread filter buttons now use .btn-group styling from design-system.css */
-
 .notification-mark-all-button {
   font-size: 0.9rem;
 }
@@ -13,7 +9,6 @@
 .notification-loading-spinner {
   color: var(--teal-primary);
 }
-
 /* Individual notification card */
 .notification-card {
   margin-bottom: 1rem;
@@ -32,7 +27,6 @@
   color: var(--teal-primary);
   margin-bottom: 0.25rem;
 }
-
 /* Bold vs normal title */
 .notification-item-title-bold {
   font-weight: bold;
@@ -41,12 +35,10 @@
 .notification-item-title-normal {
   font-weight: normal;
 }
-
 /* New badge for unread notifications */
 .notification-new-badge {
   font-size: 0.7rem;
 }
-
 /* Notification message text */
 .notification-message-bold {
   font-weight: 500;

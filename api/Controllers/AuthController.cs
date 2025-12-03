@@ -171,18 +171,18 @@ namespace HomeCareApp.Controllers
             return Ok(new { Message = "Patient profile created successfully" });
         }
 
-        //Completes employee profile after registration//
+        //Completes employee profile after registration
         [Authorize]
         [HttpPost("complete-employee-profile")]
         public async Task<IActionResult> CompleteEmployeeProfile([FromBody] EmployeeDto profileDto)
         {
-            var user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync(); //Get current user
             if (user == null)
             {
                 return NotFound("User not found");
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user); 
             if (!roles.Contains("Employee"))
             {
                 return BadRequest("User is not an employee");
@@ -197,7 +197,7 @@ namespace HomeCareApp.Controllers
             }
 
             
-            var employee = profileDto.ToEntity(user.Id);
+            var employee = profileDto.ToEntity(user.Id); //Map employee using DTO ToEntity
             employee.User = user; 
 
             await _employeeRepository.Create(employee);
@@ -282,15 +282,16 @@ namespace HomeCareApp.Controllers
             
             AuthUser? user = null;
             string? actualUserId = null;
+
             
         
-            var possibleIds = new List<string?> { userIdFromSub, userIdFromNameId, userIdFromUserid }
+            var possibleIds = new List<string?> { userIdFromSub, userIdFromNameId, userIdFromUserid } //collect all possible user IDs
                 .Concat(allNameIdentifierClaims)
                 .Where(id => !string.IsNullOrEmpty(id))
                 .Distinct()
                 .ToList();
                 
-            foreach (var id in possibleIds)
+            foreach (var id in possibleIds) //try to find user by GUID IDs first
             {
                 if (string.IsNullOrEmpty(id)) continue;
                 
@@ -306,7 +307,7 @@ namespace HomeCareApp.Controllers
                 }
             }
             
-            if (user == null && !string.IsNullOrEmpty(username))
+            if (user == null && !string.IsNullOrEmpty(username)) //try by username next
             {
                 user = await _userManager.FindByNameAsync(username);
                 if (user != null)
@@ -316,7 +317,7 @@ namespace HomeCareApp.Controllers
                 }
             }
             
-            if (user == null)
+            if (user == null) //try non-GUID IDs last
             {
                 foreach (var id in possibleIds)
                 {
@@ -347,7 +348,7 @@ namespace HomeCareApp.Controllers
             {
                 try
                 {
-                    if (role == "Patient")
+                    if (role == "Patient") //delete patient record
                     {
                         var patients = await _patientRepository.GetAll();
                         var patient = patients.FirstOrDefault(p => p.UserId == actualUserId);
@@ -361,7 +362,7 @@ namespace HomeCareApp.Controllers
                             _logger.LogWarning("[AuthController] No patient record found for UserId: {UserId}", actualUserId);
                         }
                     }
-                    else if (role == "Employee")
+                    else if (role == "Employee") //delete employee record
                     {
                         var employees = await _employeeRepository.GetAll();
                         var employee = employees.FirstOrDefault(e => e.UserId == actualUserId);
@@ -383,7 +384,7 @@ namespace HomeCareApp.Controllers
                 }
             }
 
-            var result = await _userManager.DeleteAsync(user);
+            var result = await _userManager.DeleteAsync(user); //delete user account
             if (result.Succeeded)
             {
                 _logger.LogInformation("[AuthAPIController] user account deleted for {Username}", user.UserName);

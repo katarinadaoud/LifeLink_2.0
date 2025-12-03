@@ -4,7 +4,7 @@ import { Container, Row, Col, Card, Button, Spinner, Alert } from 'react-bootstr
 import { useAuth } from '../auth/AuthContext';
 import './SearchResult.css';
 
-interface SearchResult {
+interface SearchResult { //data structure for search result
   type: 'appointment' | 'medication' | 'profile';
   id: string;
   title: string;
@@ -13,6 +13,7 @@ interface SearchResult {
   details?: any;
 }
 
+//main functional component for search results page
 const SearchResultsPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const SearchResultsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   
   const query = searchParams.get('q') || '';
-
+//perform search when query changes
   useEffect(() => {
     if (!query) {
       navigate('/');
@@ -31,6 +32,7 @@ const SearchResultsPage: React.FC = () => {
     performSearch(query);
   }, [query]);
 
+  //simple search function
   const performSearch = async (searchQuery: string) => {
     setLoading(true);
     setError(null);
@@ -47,7 +49,7 @@ const SearchResultsPage: React.FC = () => {
         details: null
       });
     }
-
+    //medication search
     if (query.includes('medication') || query.includes('medicine') || query.includes('pills')) {
       searchResults.push({
         type: 'medication',
@@ -57,7 +59,7 @@ const SearchResultsPage: React.FC = () => {
         details: null
       });
     }
-
+    //profile search
     if (query.includes('profile') || query.includes('settings') || query.includes('account')) {
       searchResults.push({
         type: 'profile',
@@ -67,7 +69,7 @@ const SearchResultsPage: React.FC = () => {
         details: null
       });
     }
-
+    //set results and loading state
     setResults(searchResults);
     setLoading(false);
   };
