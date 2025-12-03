@@ -14,7 +14,6 @@ const MedicationUpdatePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [originalName, setOriginalName] = useState<string>(""); // Store original name
   const [form, setForm] = useState<Partial<Medication>>({});
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,8 +51,6 @@ const MedicationUpdatePage: React.FC = () => {
           MedicationService.getMedication(id),
           MedicationService.fetchPatients()
         ]);
-        
-        setOriginalId(medicationData.medicationId ?? parseInt(id)); // Save original ID
         
         // Format dates for date inputs (YYYY-MM-DD format)
         const formattedData = {
@@ -120,9 +117,9 @@ const MedicationUpdatePage: React.FC = () => {
     setError(null);
 
     try {
-      // send update request to API using ORIGINAL ID, not the edited one
+      // send update request to API using ID from URL params
       await MedicationService.updateMedication(
-        originalId!,
+        parseInt(id!),
         form as Medication
       );
       navigate("/medications");
