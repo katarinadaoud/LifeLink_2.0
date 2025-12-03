@@ -25,7 +25,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
     <div className="d-flex flex-column align-items-center">
       <div className="table-scroll"> {/* Scrollable conton smaller screens */}
         <Table striped bordered hover className="text-center">
-          <thead className="table-header-teal"> {/* table headers unified with appointments */}
+          <thead className="table-header-teal">
             <tr>
               <th>Patient</th>
           <th>Name</th>
