@@ -10,10 +10,11 @@ import "./Medication.css";
 
 
 const MedicationUpdatePage: React.FC = () => {
-  const { name } = useParams(); // route: /medications/:name/edit
+  const { name } = useParams(); // route: /medications/:name/edit (original name from URL)
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const [originalName, setOriginalName] = useState<string>(""); // Store original name
   const [form, setForm] = useState<Partial<Medication>>({});
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +38,16 @@ const MedicationUpdatePage: React.FC = () => {
           MedicationService.fetchPatients()
         ]);
         
-        setForm(medicationData);
+        setOriginalName(medicationData.medicationName ?? name ?? ""); // Save original name
+        
+        // Format dates for date inputs (YYYY-MM-DD format)
+        const formattedData = {
+          ...medicationData,
+          startDate: medicationData.startDate ? new Date(medicationData.startDate).toISOString().split('T')[0] : "",
+          endDate: medicationData.endDate ? new Date(medicationData.endDate).toISOString().split('T')[0] : ""
+        };
+        
+        setForm(formattedData);
         setPatients(patientsData);
       } catch (e: any) {
         setError(e.message ?? "Failed to load medication.");
@@ -59,7 +69,17 @@ const MedicationUpdatePage: React.FC = () => {
     e.preventDefault();
 
     if (!form.medicationName) {
-      alert("Medication name is required.");
+      setError("Medication name is required.");
+      return;
+    }
+
+    if (!form.patientId) {
+      setError("Please select a patient.");
+      return;
+    }
+
+    if (!form.startDate) {
+      setError("Start date is required.");
       return;
     }
 
@@ -67,9 +87,9 @@ const MedicationUpdatePage: React.FC = () => {
     setError(null);
 
     try {
-      // send update request to API
+      // send update request to API using ORIGINAL name, not the edited one
       await MedicationService.updateMedication(
-        form.medicationName,
+        originalName,
         form as Medication
       );
       navigate("/medications");
@@ -104,7 +124,7 @@ const MedicationUpdatePage: React.FC = () => {
         </p>
       )}
 
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
 
         {/*medication name field */}
         <Form.Group className="mb-3">

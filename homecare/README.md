@@ -14,6 +14,7 @@ Axios
 Backend: 
 .NET 8 Web Api
 Entity Framework Core 8
+Framework Core Tools 10.0.0
 SQLite database
 ASP.NET Identity
 Repository and Service architecture

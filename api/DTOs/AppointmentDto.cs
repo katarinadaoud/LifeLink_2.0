@@ -7,7 +7,7 @@ namespace HomeCareApp.DTOs
     {
         public int? AppointmentId { get; set; } // Nullable for new appointments
 
-        [Required] // Subject is required when creating or updating an appointment
+        [Required(ErrorMessage = "The Subject field is required.")] // Subject is required when creating or updating an appointment
         [RegularExpression(@"[0-9a-zA-ZæøåÆØÅ. \-]{2,20}", ErrorMessage = "The Subject must be numbers or letters and between 2 to 20 characters.")]
         [Display(Name = "Appointment subject")]
         public string Subject { get; set; } = string.Empty; 

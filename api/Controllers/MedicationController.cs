@@ -101,9 +101,9 @@ namespace HomeCareApp.Controllers
         //Update medication
         [HttpPut("{medicationName}")]
         [Authorize]
-        public async Task<IActionResult> Update(string medicationName, MedicationDto dto)
+        public async Task<IActionResult> Update(string medicationName, [FromBody] MedicationDto medicationDto)
         {
-            if (dto == null)
+            if (medicationDto == null)
             {
                 return BadRequest("Medication data cannot be null");
             }
@@ -119,11 +119,11 @@ namespace HomeCareApp.Controllers
                 }
 
                 //Update medication properties
-                existingMedication.Dosage = dto.Dosage;
-                existingMedication.StartDate = dto.StartDate;
-                existingMedication.EndDate = dto.EndDate;
-                existingMedication.PatientId = dto.PatientId;
-                existingMedication.Indication = dto.Indication;
+                existingMedication.Dosage = medicationDto.Dosage;
+                existingMedication.StartDate = medicationDto.StartDate;
+                existingMedication.EndDate = medicationDto.EndDate;
+                existingMedication.PatientId = medicationDto.PatientId;
+                existingMedication.Indication = medicationDto.Indication;
 
                 //we don't need to call AddAsync. Changes will be saved automatically.
                 

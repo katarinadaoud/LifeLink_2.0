@@ -9,7 +9,7 @@ import { useAuth } from '../auth/AuthContext';
 
 // Reusable form component for both creating and updating appointments
 interface AppointmentFormProps {
-  onAppointmentChanged: (newAppointment: Appointment) => void; // Callback to parent when form is submitted
+  onAppointmentChanged: (newAppointment: Appointment) => Promise<void>; // Callback to parent when form is submitted
   appointmentId?: number;                                      // Optional ID (used when updating)
   isUpdate?: boolean;                                          // Flag to distinguish create vs update
   initialData?: Appointment;                                   // Optional initial values when editing
@@ -101,9 +101,30 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     event.preventDefault();
     setFormError(null);
     
-    // Prevent submission if date is missing or in the past (compared to now)
-    if (!date || new Date(date) < new Date()) {
-      setFormError('Appointment date must be in the future');
+    // Prevent submission if date is missing
+    if (!date) {
+      setFormError('Appointment date or time is invalid');
+      return;
+    }
+    
+    const selectedDate = new Date(date);
+    const currentDate = new Date();
+    
+    // Check if date is valid
+    if (isNaN(selectedDate.getTime())) {
+      setFormError('Appointment date or time is invalid');
+      return;
+    }
+    
+    // Prevent dates before 2025
+    if (selectedDate.getFullYear() < 2025) {
+      setFormError('Appointment date or time is invalid');
+      return;
+    }
+    
+    // Prevent submission if date is in the past
+    if (selectedDate < currentDate) {
+      setFormError('Appointment date or time is invalid');
       return;
     }
     
@@ -153,7 +174,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     };
     
     // Let the parent component decide whether this becomes a POST or PUT
-    onAppointmentChanged(appointment); // Call the passed function with the appointment data
+    try {
+      await onAppointmentChanged(appointment); // Call the passed function with the appointment data
+    } catch (error: any) {
+      // Display backend validation errors
+      setFormError(error.message || 'Failed to save appointment');
+    }
   };
 
   // While we are still loading employees/patients, show a simple loading message
@@ -162,7 +188,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} noValidate>
       {/* Subject field with basic pattern validation */}
       <Form.Group controlId="formAppointmentSubject">
         <Form.Label>Subject</Form.Label>
@@ -171,7 +197,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           placeholder="Enter appointment subject"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          required
           pattern="[0-9a-zA-ZæøåÆØÅ. \-]{2,50}" // Regular expression pattern
           title="The Subject must be numbers or letters and between 2 to 50 characters."
         />       
@@ -184,7 +209,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             type="datetime-local"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            required
             min={minDateTime}
           />
       </Form.Group>
@@ -209,7 +233,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             as="select"
             value={patientId}
             onChange={(e) => setPatientId(Number(e.target.value))}
-            required
             disabled={loading}
           >
             <option value={0}>Select a patient...</option>
@@ -229,7 +252,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           as="select"
           value={employeeId}
           onChange={(e) => setEmployeeId(Number(e.target.value))}
-          required
           disabled={loading}
         >
           <option value={0}>{user?.role === 'Patient' ? 'Select a healthcare provider...' : 'Select an employee...'}</option>
@@ -241,8 +263,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         </Form.Control>
       </Form.Group>
 
-    
-      {formError && <div className="form-error">{formError}</div>}
+      {/* Display error message if validation fails */}
+      {formError && <div className="alert alert-danger mt-3">{formError}</div>}
 
       {/* Submit and cancel buttons – wrapped with extra top spacing */}
       <div className="mt-4 d-flex">

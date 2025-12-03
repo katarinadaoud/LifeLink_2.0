@@ -8,12 +8,8 @@ const AppointmentCreatePage: React.FC = () => {
   const navigate = useNavigate(); //Create a navigate function
 
   const handleAppointmentCreated = async (appointment: Appointment) => {
-    try {
-      await AppointmentService.createAppointment(appointment);
-      navigate('/appointments'); // Navigate back after successful creation
-    } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-    }
+    await AppointmentService.createAppointment(appointment);
+    navigate('/appointments'); // Navigate back after successful creation
   }
   
   return (

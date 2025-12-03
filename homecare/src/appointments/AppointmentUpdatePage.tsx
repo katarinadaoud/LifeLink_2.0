@@ -30,14 +30,8 @@ const AppointmentUpdatePage: React.FC = () => { // Component for updating an app
 
   // Handle appointment update
   const handleAppointmentUpdated = async (appointment: Appointment) => {
-
-    try {
-      const data = await AppointmentService.updateAppointment(Number(appointmentId), appointment);
-      console.log('Appointment updated successfully:', data);
-      navigate('/appointments'); // Navigate back after successful creation
-    } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-    }
+    await AppointmentService.updateAppointment(Number(appointmentId), appointment);
+    navigate('/appointments'); // Navigate back after successful creation
   }
 
   // Render loading, error, or the appointment form

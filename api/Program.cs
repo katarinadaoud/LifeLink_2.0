@@ -21,6 +21,20 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     
+})
+.ConfigureApiBehaviorOptions(options =>
+{
+    // Customize model validation error responses to return plain text messages
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        // Get the first error message from model state
+        var firstError = context.ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .FirstOrDefault() ?? "Validation error occurred.";
+        
+        return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(firstError);
+    };
 });
 
 // Register Swagger/OpenAPI for API documentation and testing

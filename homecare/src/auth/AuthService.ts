@@ -22,7 +22,6 @@ export const login = async (credentials: LoginDto): Promise<{ token: string }> =
             throw new Error(responseText || `Login failed with status ${response.status}`);
         }
     }
-    console.log(response);
     return response.json();
 };
 
