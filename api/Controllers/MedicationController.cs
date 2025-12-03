@@ -27,12 +27,7 @@ namespace HomeCareApp.Controllers
         {
             //find medication list
             var medications = await _medicationRepository.GetAllAsync();
-            if (medications == null)
-            {
-                _logger.LogError("[MedicationController] Medication list not found while executing _medicationRepository.GetAllAsync()");
-                return NotFound("Medication list not found");
-            }
-
+            
             //Map medication to DTOs
             var medicationDtos = medications.Select(MedicationDto.FromEntity);
 
@@ -53,20 +48,20 @@ namespace HomeCareApp.Controllers
             return Ok(medications.Select(MedicationDto.FromEntity));
         }
 
-        // Get a medication by its name//
-        [HttpGet("{medicationName}")]
-        public async Task<ActionResult<MedicationDto>> GetByName(string medicationName)
+        // Get a medication by its ID
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MedicationDto>> GetById(int id)
         {
-            _logger.LogInformation("[MedicationController] Getting medication by name: {MedicationName}", medicationName);
+            _logger.LogInformation("[MedicationController] Getting medication by ID: {MedicationId}", id);
             
-            var medications = await _medicationRepository.GetByNameAsync(medicationName);
-            if (medications == null)
+            var medication = await _medicationRepository.GetByIdAsync(id);
+            if (medication == null)
             {
-                _logger.LogWarning("[MedicationController] Medication not found: {MedicationName}", medicationName);
+                _logger.LogWarning("[MedicationController] Medication not found: {MedicationId}", id);
                 return NotFound();
             }
             
-            return Ok(MedicationDto.FromEntity(medications));
+            return Ok(MedicationDto.FromEntity(medication));
         }
 
         // Create a new medication
@@ -89,7 +84,7 @@ namespace HomeCareApp.Controllers
                 
                 _logger.LogInformation("[MedicationController] Successfully created medication: {MedicationName} for PatientId: {PatientId}", entity.MedicineName, entity.PatientId);
                 
-                return CreatedAtAction(nameof(GetByName), new { medicationName = entity.MedicineName }, MedicationDto.FromEntity(createdMedication));
+                return CreatedAtAction(nameof(GetById), new { id = createdMedication.MedicationId }, MedicationDto.FromEntity(createdMedication));
             }
             catch (Exception ex)
             {
@@ -99,9 +94,9 @@ namespace HomeCareApp.Controllers
         }
 
         //Update medication
-        [HttpPut("{medicationName}")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Update(string medicationName, [FromBody] MedicationDto medicationDto)
+        public async Task<IActionResult> Update(int id, [FromBody] MedicationDto medicationDto)
         {
             if (medicationDto == null)
             {
@@ -111,10 +106,10 @@ namespace HomeCareApp.Controllers
             try
             {
                 //Find the existing medication
-                var existingMedication = await _medicationRepository.GetByNameAsync(medicationName);
+                var existingMedication = await _medicationRepository.GetByIdAsync(id);
                 if (existingMedication == null)
                 {
-                    _logger.LogWarning("[MedicationController] Medication not found for update: {MedicationName}", medicationName);
+                    _logger.LogWarning("[MedicationController] Medication not found for update: {MedicationId}", id);
                     return NotFound("Medication not found");
                 }
 
@@ -124,6 +119,7 @@ namespace HomeCareApp.Controllers
                 existingMedication.EndDate = medicationDto.EndDate;
                 existingMedication.PatientId = medicationDto.PatientId;
                 existingMedication.Indication = medicationDto.Indication;
+                existingMedication.MedicineName = medicationDto.MedicationName;
 
                 //we don't need to call AddAsync. Changes will be saved automatically.
                 
@@ -131,29 +127,29 @@ namespace HomeCareApp.Controllers
                 //Create notification for medication update
                 await CreateMedicationNotification(existingMedication, "updated");
                 
-                _logger.LogInformation("[MedicationController] Successfully updated medication: {MedicationName} for PatientId: {PatientId}", medicationName, existingMedication.PatientId);
+                _logger.LogInformation("[MedicationController] Successfully updated medication: {MedicationName} for PatientId: {PatientId}", existingMedication.MedicineName, existingMedication.PatientId);
                 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[MedicationController] Medication update failed for {MedicationName}", medicationName);
+                _logger.LogError(ex, "[MedicationController] Medication update failed for {MedicationId}", id);
                 return StatusCode(500, "Internal server error");
             }
         }
 
         //Delete medication
-        [HttpDelete("{medicationName}")]
+        [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(string medicationName)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
                 //Get medication details before deletion for notifications
-                var medicationToDelete = await _medicationRepository.GetByNameAsync(medicationName);
+                var medicationToDelete = await _medicationRepository.GetByIdAsync(id);
                 if (medicationToDelete == null)
                 {
-                    _logger.LogWarning("[MedicationController] Medication not found for deletion: {MedicationName}", medicationName);
+                    _logger.LogWarning("[MedicationController] Medication not found for deletion: {MedicationId}", id);
                     return NotFound("Medication not found");
                 }
 
@@ -163,13 +159,13 @@ namespace HomeCareApp.Controllers
                 //Delete using repository
                 await _medicationRepository.DeleteAsync(medicationToDelete);
                 
-                _logger.LogInformation("[MedicationController] Successfully deleted medication: {MedicationName} for PatientId: {PatientId}", medicationName, medicationToDelete.PatientId);
+                _logger.LogInformation("[MedicationController] Successfully deleted medication: {MedicationName} for PatientId: {PatientId}", medicationToDelete.MedicineName, medicationToDelete.PatientId);
                 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[MedicationController] Medication deletion failed for {MedicationName}", medicationName);
+                _logger.LogError(ex, "[MedicationController] Medication deletion failed for {MedicationId}", id);
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -180,7 +176,7 @@ namespace HomeCareApp.Controllers
         {
             try
             {
-                var fullMedication = await _medicationRepository.GetByNameAsync(medication.MedicineName);
+                var fullMedication = await _medicationRepository.GetByIdAsync(medication.MedicationId);
                 // Check if patient information is available
                 if (fullMedication?.Patient?.UserId == null)
                 {
@@ -210,7 +206,7 @@ namespace HomeCareApp.Controllers
                     Title = title,
                     Message = message,
                     Type = "medication",
-                    RelatedId = null, // Medications use string key, not int
+                    RelatedId = fullMedication.MedicationId,
                     IsRead = false,
                     CreatedAt = DateTime.Now
                 };

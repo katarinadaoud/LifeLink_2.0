@@ -1,0 +1,3 @@
+2025-12-03 20:48:21.500 +01:00 [INF] Applying migration '20251203192820_ChangeMedicationPrimaryKeyToId'.
+2025-12-03 20:48:21.551 +01:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Appointments" ADD "IsConfirmed" INTEGER NOT NULL DEFAULT 0;

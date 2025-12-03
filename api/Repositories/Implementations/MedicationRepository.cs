@@ -62,31 +62,31 @@ namespace HomeCareApp.Repositories.Implementations
             }
         }
 
-        // Get a single medication by its name
-        public async Task<Medication?> GetByNameAsync(string medicineName) 
+        // Get a single medication by its ID
+        public async Task<Medication?> GetByIdAsync(int medicationId) 
         {
 
             // try-catch block for error handling
             try
             {
                 
-                _logger.LogInformation("[MedicationRepository] GetByNameAsync({MedicineName}) - Retrieving medication", medicineName);
+                _logger.LogInformation("[MedicationRepository] GetByIdAsync({MedicationId}) - Retrieving medication", medicationId);
                 var medication = await _db.Medications
                     .Include(m => m.Patient)
-                    .FirstOrDefaultAsync(m => m.MedicineName == medicineName);
+                    .FirstOrDefaultAsync(m => m.MedicationId == medicationId);
                 if (medication != null) // medication found
                 {
-                    _logger.LogInformation("[MedicationRepository] GetByNameAsync({MedicineName}) - Medication found for patient: {PatientName}", medicineName, medication.Patient?.FullName ?? "Unknown");
+                    _logger.LogInformation("[MedicationRepository] GetByIdAsync({MedicationId}) - Medication found for patient: {PatientName}", medicationId, medication.Patient?.FullName ?? "Unknown");
                 }
                 else // medication not found
                 {
-                    _logger.LogWarning("[MedicationRepository] GetByNameAsync({MedicineName}) - Medication not found", medicineName);
+                    _logger.LogWarning("[MedicationRepository] GetByIdAsync({MedicationId}) - Medication not found", medicationId);
                 }
                 return medication;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "[MedicationRepository] GetByNameAsync({MedicineName}) failed: {Message}", medicineName, ex.Message);
+                _logger.LogError(ex, "[MedicationRepository] GetByIdAsync({MedicationId}) failed: {Message}", medicationId, ex.Message);
                 throw;
             }
         }

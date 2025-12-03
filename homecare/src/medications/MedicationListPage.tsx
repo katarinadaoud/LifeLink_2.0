@@ -90,12 +90,12 @@ const MedicationListPage: React.FC = () => {
   );
 
     // Handle medication deletion
-  const handleMedicationDeleted = async (medicationName: string) => {
+  const handleMedicationDeleted = async (medicationId: number, medicationName: string) => {
     const confirmDelete = window.confirm(`Are you sure you want to delete the medication ${medicationName}?`);
     if (confirmDelete) {
       try {
-        await MedicationService.deleteMedication(medicationName);
-        setMedications(prevMedications => prevMedications.filter(medication => medication.medicationName !== medicationName));
+        await MedicationService.deleteMedication(medicationId);
+        setMedications(prevMedications => prevMedications.filter(medication => medication.medicationId !== medicationId));
       } catch (error) {
         console.error('Error deleting medication:', error);
         setError('Failed to delete medication.');
@@ -103,7 +103,7 @@ const MedicationListPage: React.FC = () => {
     }
   };
   // navigate to edit page.
-  const handleEdit = (name: string) => navigate(`/medications/${name}/edit`);
+  const handleEdit = (id: number) => navigate(`/medications/${id}/edit`);
 
   return ( 
     <div className="container-fluid">

@@ -59,9 +59,9 @@ export async function getMyMedications(): Promise<Medication[]> {
   return handleResponse(response);
 }
 
-// get medication by name 
-export async function getMedication(medicationName: string): Promise<Medication> {
-  const response = await fetch(`${API_URL}/api/medication/${medicationName}`, {
+// get medication by ID 
+export async function getMedication(medicationId: string): Promise<Medication> {
+  const response = await fetch(`${API_URL}/api/medication/${medicationId}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -80,10 +80,10 @@ export async function createMedication(data: Partial<Medication>): Promise<Medic
 
 // update existing medication
 export async function updateMedication(
-  medicationName: string,
+  medicationId: number,
   data: Partial<Medication>
 ): Promise<void> {
-  const response = await fetch(`${API_URL}/api/medication/${medicationName}`, {
+  const response = await fetch(`${API_URL}/api/medication/${medicationId}`, {
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -91,9 +91,9 @@ export async function updateMedication(
   return handleResponse(response);
 }
 
-// delete medication by name
-export async function deleteMedication(medicationName: string): Promise<void> {
-  const response = await fetch(`${API_URL}/api/medication/${medicationName}`, {
+// delete medication by ID
+export async function deleteMedication(medicationId: number): Promise<void> {
+  const response = await fetch(`${API_URL}/api/medication/${medicationId}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });

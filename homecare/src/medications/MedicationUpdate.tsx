@@ -10,7 +10,7 @@ import "./Medication.css";
 
 
 const MedicationUpdatePage: React.FC = () => {
-  const { name } = useParams(); // route: /medications/:name/edit (original name from URL)
+  const { id } = useParams(); // route: /medications/:id/edit (original id from URL)
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -20,6 +20,15 @@ const MedicationUpdatePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
+
+  // Validation functions
+  const validateEndDate = (endDate: string, startDate: string): string | null => {
+    if (endDate && startDate && endDate < startDate) {
+      return 'End date cannot be before start date';
+    }
+    return null;
+  };
 
   //Restrict access to Employee
   useEffect(() => {
@@ -28,17 +37,23 @@ const MedicationUpdatePage: React.FC = () => {
     }
   }, [user, navigate]);
 
-  // Fetch medication details and patients by name
+  // Fetch medication details and patients by id
   useEffect(() => {
     const load = async () => {
       try {
+        if (!id) {
+          setError("Missing medication ID.");
+          setLoading(false);
+          return;
+        }
+        
         // Load both medication data and patients list
         const [medicationData, patientsData] = await Promise.all([
-          MedicationService.getMedication(name ?? ""),
+          MedicationService.getMedication(id),
           MedicationService.fetchPatients()
         ]);
         
-        setOriginalName(medicationData.medicationName ?? name ?? ""); // Save original name
+        setOriginalId(medicationData.medicationId ?? parseInt(id)); // Save original ID
         
         // Format dates for date inputs (YYYY-MM-DD format)
         const formattedData = {
@@ -56,12 +71,22 @@ const MedicationUpdatePage: React.FC = () => {
       }
     };
     load();
-  }, [name]);
+  }, [id]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const newForm = { ...form, [name]: value };
+    setForm(newForm);
+    
+    // Real-time validation for end date
+    if (name === 'endDate' || name === 'startDate') {
+      const endDateError = validateEndDate(
+        name === 'endDate' ? value : form.endDate || '',
+        name === 'startDate' ? value : form.startDate || ''
+      );
+      setValidationErrors(prev => ({ ...prev, endDate: endDateError || '' }));
+    }
   };
 
   // Submit updates
@@ -82,14 +107,22 @@ const MedicationUpdatePage: React.FC = () => {
       setError("Start date is required.");
       return;
     }
+    
+    // Validate end date
+    const endDateError = validateEndDate(form.endDate || '', form.startDate || '');
+    if (endDateError) {
+      setValidationErrors({ endDate: endDateError });
+      setError("Please fix the validation errors before submitting.");
+      return;
+    }
 
     setSaving(true);
     setError(null);
 
     try {
-      // send update request to API using ORIGINAL name, not the edited one
+      // send update request to API using ORIGINAL ID, not the edited one
       await MedicationService.updateMedication(
-        originalName,
+        originalId!,
         form as Medication
       );
       navigate("/medications");
@@ -202,7 +235,11 @@ const MedicationUpdatePage: React.FC = () => {
             name="endDate"
             value={form.endDate ?? ""}
             onChange={handleChange}
+            isInvalid={!!validationErrors.endDate}
           />
+          <Form.Control.Feedback type="invalid">
+            {validationErrors.endDate}
+          </Form.Control.Feedback>
         </Form.Group>
 
             {/* action buttons with bootstrap style */}

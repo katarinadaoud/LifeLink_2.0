@@ -1,0 +1,6 @@
+2025-12-03 20:50:01.001 +01:00 [INF] Applying migration '20251104093338_InitialAppMigration'.
+2025-12-03 20:50:01.043 +01:00 [INF] Applying migration '20251111125603_AddMedicationTable'.
+2025-12-03 20:50:01.056 +01:00 [INF] Applying migration '20251111155442_AddNotificationTable'.
+2025-12-03 20:50:01.067 +01:00 [INF] Applying migration '20251127103728_RemoveTestData'.
+2025-12-03 20:50:01.077 +01:00 [INF] Applying migration '20251203192820_ChangeMedicationPrimaryKeyToId'.
+2025-12-03 20:50:01.103 +01:00 [INF] Applying migration '20251203194736_MedicationId'.

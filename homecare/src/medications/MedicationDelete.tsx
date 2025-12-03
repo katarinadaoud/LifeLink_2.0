@@ -8,7 +8,7 @@ import "./Medication.css";
 
 
 export default function MedicationDeletePage() {
-  const { name } = useParams(); // route: /medications/:name/delete
+  const { id } = useParams<{ id: string }>(); // route: /medications/:id/delete
   const { user } = useAuth();  // get current logged in user
   const navigate = useNavigate();
 
@@ -18,15 +18,15 @@ export default function MedicationDeletePage() {
   const [deleting, setDeleting] = useState(false); // deleting state
 
   // Load medication 
-  useEffect(() => {  // every time name changes or on mount
+  useEffect(() => {  // every time id changes or on mount
     const load = async () => { // async function to load medication details
-      if (!name) { 
-        setErr("Missing medication name.");
+      if (!id) { 
+        setErr("Missing medication ID.");
         setLoading(false);
         return;
       }
-      try { // fetch medication by name
-        const data = await getMedication(name);
+      try { // fetch medication by id
+        const data = await getMedication(id);
         setMed(data);
       } catch (e: any) {
         setErr(e.message ?? "Failed to load medication."); // set error message if fetch fails
@@ -35,16 +35,16 @@ export default function MedicationDeletePage() {
       }
     };
     load();
-  }, [name]);
+  }, [id]);
 
   // Confirm delete 
   async function onConfirm() {
-    if (!med) return; // if no medication, do nothing
+    if (!med || !med.medicationId) return; // if no medication or no id, do nothing
     setDeleting(true);
     setErr(null);
 
     try { // call delete API
-      await deleteMedication(med.medicationName);
+      await deleteMedication(med.medicationId);
       navigate("/medications");
     } catch (e: any) {
       setErr(e.message ?? "Failed to delete medication.");

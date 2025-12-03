@@ -51,6 +51,9 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
 
     //phone number validation
     const validatePhoneNumber = (phone: string): string | null => {
+        if (!phone.trim()) {
+            return 'Phone number is required';
+        }
         if (phone && !/^\d{8}$/.test(phone.replace(/\s/g, ''))) {
             return 'Phone number must be 8 digits';
         }
@@ -59,6 +62,9 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
 
     //  date of birth validation
     const validateDateOfBirth = (date: string): string | null => {
+        if (!date.trim()) {
+            return 'Date of birth is required';
+        }
         if (date) {
             const birthDate = new Date(date);
             const today = new Date();

@@ -38,6 +38,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   });
   const [formError, setFormError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
   // Compute local min date/time string for <input type="datetime-local">
   const now = new Date();
   const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
@@ -57,6 +58,89 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   const navigate = useNavigate();
   const { user } = useAuth(); // Get current authenticated user and role
+
+  // Client-side validation functions
+  const validateSubject = (subject: string): string | null => {
+    if (!subject.trim()) {
+      return 'Subject is required';
+    }
+    if (subject.trim().length < 2) {
+      return 'Subject must be at least 2 characters long';
+    }
+    if (subject.length > 50) {
+      return 'Subject must be 50 characters or less';
+    }
+    if (!/^[0-9a-zA-ZæøåÆØÅ. \-]+$/.test(subject)) {
+      return 'Subject can only contain letters, numbers, spaces, periods, and hyphens';
+    }
+    return null;
+  };
+
+  const validateDate = (date: string): string | null => {
+    if (!date.trim()) {
+      return 'Date and time are required';
+    }
+    
+    const selectedDate = new Date(date);
+    const currentDate = new Date();
+    
+    if (isNaN(selectedDate.getTime())) {
+      return 'Please enter a valid date and time';
+    }
+    
+    if (selectedDate.getFullYear() < 2025) {
+      return 'Appointment date must be in 2025 or later';
+    }
+    
+    if (selectedDate < currentDate) {
+      return 'Appointment date must be in the future';
+    }
+    
+    return null;
+  };
+
+  const validateEmployeeId = (employeeId: number): string | null => {
+    if (!employeeId || employeeId === 0) {
+      return 'Please select a healthcare provider';
+    }
+    return null;
+  };
+
+  const validatePatientId = (patientId: number): string | null => {
+    if (user?.role !== 'Patient' && (!patientId || patientId === 0)) {
+      return 'Please select a patient';
+    }
+    return null;
+  };
+
+  // Handle input changes with real-time validation
+  const handleSubjectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSubject(value);
+    const error = validateSubject(value);
+    setValidationErrors(prev => ({ ...prev, subject: error || '' }));
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDate(value);
+    const error = validateDate(value);
+    setValidationErrors(prev => ({ ...prev, date: error || '' }));
+  };
+
+  const handleEmployeeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(e.target.value);
+    setEmployeeId(value);
+    const error = validateEmployeeId(value);
+    setValidationErrors(prev => ({ ...prev, employeeId: error || '' }));
+  };
+
+  const handlePatientChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = Number(e.target.value);
+    setPatientId(value);
+    const error = validatePatientId(value);
+    setValidationErrors(prev => ({ ...prev, patientId: error || '' }));
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -101,36 +185,20 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
     event.preventDefault();
     setFormError(null);
     
-    // Prevent submission if date is missing
-    if (!date) {
-      setFormError('Appointment date or time is invalid');
-      return;
-    }
+    // Validate all fields before submission
+    const errors = {
+      subject: validateSubject(subject) || '',
+      date: validateDate(date) || '',
+      employeeId: validateEmployeeId(employeeId) || '',
+      patientId: validatePatientId(patientId) || ''
+    };
+
+    setValidationErrors(errors);
     
-    const selectedDate = new Date(date);
-    const currentDate = new Date();
-    
-    // Check if date is valid
-    if (isNaN(selectedDate.getTime())) {
-      setFormError('Appointment date or time is invalid');
-      return;
-    }
-    
-    // Prevent dates before 2025
-    if (selectedDate.getFullYear() < 2025) {
-      setFormError('Appointment date or time is invalid');
-      return;
-    }
-    
-    // Prevent submission if date is in the past
-    if (selectedDate < currentDate) {
-      setFormError('Appointment date or time is invalid');
-      return;
-    }
-    
-    // Validate employee selection
-    if (!employeeId || employeeId === 0) {
-      setFormError('Please select a healthcare provider');
+    // Check if there are any validation errors
+    const hasErrors = Object.values(errors).some(error => error !== '');
+    if (hasErrors) {
+      setFormError('Please fix the validation errors before submitting');
       return;
     }
     
@@ -142,11 +210,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         return;
       }
       finalPatientId = currentPatient.patientId;
-    } else {
-      if (!patientId || patientId === 0) {
-        setFormError('Please select a patient');
-        return;
-      }
     }
     
     // Create date that preserves the selected local time when sent to server
@@ -189,28 +252,36 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit} noValidate>
-      {/* Subject field with basic pattern validation */}
+      {/* Subject field with validation */}
       <Form.Group controlId="formAppointmentSubject">
-        <Form.Label>Subject</Form.Label>
+        <Form.Label>Subject *</Form.Label>
         <Form.Control
           type="text"
           placeholder="Enter appointment subject"
           value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          pattern="[0-9a-zA-ZæøåÆØÅ. \-]{2,50}" // Regular expression pattern
-          title="The Subject must be numbers or letters and between 2 to 50 characters."
-        />       
+          onChange={handleSubjectChange}
+          isInvalid={!!validationErrors.subject}
+          required
+        />
+        <Form.Control.Feedback type="invalid">
+          {validationErrors.subject}
+        </Form.Control.Feedback>
       </Form.Group>
 
-      {/* Date/time input for the appointment */}
+      {/* Date/time input for the appointment with validation */}
       <Form.Group controlId="formAppointmentDate">
-        <Form.Label>Date</Form.Label>
+        <Form.Label>Date and Time *</Form.Label>
           <Form.Control
             type="datetime-local"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={handleDateChange}
             min={minDateTime}
+            isInvalid={!!validationErrors.date}
+            required
           />
+          <Form.Control.Feedback type="invalid">
+            {validationErrors.date}
+          </Form.Control.Feedback>
       </Form.Group>
 
       {/* Optional free-text description of the appointment */}
@@ -225,15 +296,16 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         />
       </Form.Group>
 
-      {/* Patient selection - only shown for employees/admins */}
+      {/* Patient selection - only shown for employees/admins with validation */}
       {user?.role !== 'Patient' && (
         <Form.Group controlId="formAppointmentPatientId">
-          <Form.Label>Patient</Form.Label>
-          <Form.Control
-            as="select"
+          <Form.Label>Patient *</Form.Label>
+          <Form.Select
             value={patientId}
-            onChange={(e) => setPatientId(Number(e.target.value))}
+            onChange={handlePatientChange}
             disabled={loading}
+            isInvalid={!!validationErrors.patientId}
+            required
           >
             <option value={0}>Select a patient...</option>
             {patients.map((patient) => (
@@ -241,18 +313,22 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 {patient.fullName}
               </option>
             ))}
-          </Form.Control>
+          </Form.Select>
+          <Form.Control.Feedback type="invalid">
+            {validationErrors.patientId}
+          </Form.Control.Feedback>
         </Form.Group>
       )}
 
-      {/* Employee (healthcare provider) dropdown */}
+      {/* Employee (healthcare provider) dropdown with validation */}
       <Form.Group controlId="formAppointmentEmployeeId">
-        <Form.Label>{user?.role === 'Patient' ? 'Healthcare Provider' : 'Employee'}</Form.Label>
-        <Form.Control
-          as="select"
+        <Form.Label>{user?.role === 'Patient' ? 'Healthcare Provider *' : 'Employee *'}</Form.Label>
+        <Form.Select
           value={employeeId}
-          onChange={(e) => setEmployeeId(Number(e.target.value))}
+          onChange={handleEmployeeChange}
           disabled={loading}
+          isInvalid={!!validationErrors.employeeId}
+          required
         >
           <option value={0}>{user?.role === 'Patient' ? 'Select a healthcare provider...' : 'Select an employee...'}</option>
           {employees.map((employee) => (
@@ -260,7 +336,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               {employee.fullName}
             </option>
           ))}
-        </Form.Control>
+        </Form.Select>
+        <Form.Control.Feedback type="invalid">
+          {validationErrors.employeeId}
+        </Form.Control.Feedback>
       </Form.Group>
 
       {/* Display error message if validation fails */}

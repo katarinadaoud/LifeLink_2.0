@@ -26,14 +26,9 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAppointments()
     {
-        //Retrieve all appointments: if the list is empty, return NotFound
+        //Retrieve all appointments: return empty list if no appointments found
         var appointments = await _appointmentRepository.GetAll();
-        if (!appointments.Any())
-        {
-            _logger.LogError("[AppointmentController] Appointment list not found while executing _appointmentRepository.GetAll()");
-            return NotFound("Appointment list not found");
-        }
-
+        
         //Map the appointments to DTO
         var appointmentDtos = appointments.Select(AppointmentDto.FromEntity);
         
