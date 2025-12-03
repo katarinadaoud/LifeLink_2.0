@@ -198,14 +198,13 @@ Notifications
 
 
 Known issues to fix:
-Further recommended security hardening and future improvements are descriped in the project documentation
+BUG: DateOfBirth field lacks validation and accepts dates later than today
+Further recommended security hardening and future improvements are described in the project documentation
+
+
 
 Contributors:
-Susanne Røren Gulbrandsen
-Katarina Briså Daoud
-Vilde Nerem
-Nahid Bani Hashem
-
+Candidatenumber: 142, 169, 127 and 254 
 
 
 
