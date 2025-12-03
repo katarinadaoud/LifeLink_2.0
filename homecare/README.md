@@ -178,22 +178,33 @@ Appointments
 
 Authentication and roles:
 - JWT-based login
-- Three roles: Patient, employee and admin
-- Role-based UI and API access
+- Two roles: Patient andemployee
+- Role-based UI and API access based on the role claim in the JWT
+
+Security configuration (backend)
+- CORS restricted to the known frontend origins, allowing only the HTTP methods GET, POST, PUT and DELETE and the headers Content-Type and Authorization (AllowCredentials unchanged).
+
+- HTTPS redirection and HSTS enabled in non-Development environments, so production traffic is forced over HTTPS while local Development can still run over HTTP.
+
+- JWT signing key removed from appsettings.json and no longer stored in the repository.
+
+- Separate development JWT configuration in appsettings.Development.json with a clear “dev only” dummy key plus issuer and audience, so the project runs locally without extra setup.
+
+- Strict JWT validation in Program.cs (issuer, audience, lifetime, signing key and claim handling) to ensure only valid tokens can access the API.
 
 Notifications
 - CRUD
-- Functionality for employee and patient (admin)??
+- Functionality for employee and patient
+
 
 Known issues to fix:
-
+Further recommended security hardening and future improvements are descriped in the project documentation
 
 Contributors:
 Susanne Røren Gulbrandsen
 Katarina Briså Daoud
 Vilde Nerem
 Nahid Bani Hashem
-
 
 
 
