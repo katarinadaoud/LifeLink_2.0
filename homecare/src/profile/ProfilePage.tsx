@@ -33,10 +33,14 @@ const ProfilePage: React.FC = () => {
 
     //client-side validation functions
     const validatePhoneNumber = (phone: string): string | null => {
+        if (!phone.trim()) {
+            return 'Phone number is required';
+        }
+
         if (phone && !/^\d{8}$/.test(phone.replace(/\s/g, ''))) {
             return 'Phone number must be 8 digits';
         }
-        return null;
+        return null;    
     };
 
     const validateFullName = (name: string): string | null => {
