@@ -279,7 +279,7 @@
 .calendar-today {
   border-color: rgba(13, 148, 136, 0.95);
   box-shadow: 0 0 0 1px rgba(13, 148, 136, 0.18);
-  background: #e6f7f6;
+  background: #e6f7f6; /* Added: highlight today's card background */
 }
 .calendar-today .calendar-card-date { /* Emphasize date number for today */
   color: #111827;

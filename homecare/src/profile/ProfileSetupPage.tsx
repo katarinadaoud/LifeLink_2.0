@@ -309,6 +309,7 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
                                     name="dateOfBirth"
                                     value={patientData.dateOfBirth}
                                     onChange={handlePatientChange}
+                                    max={new Date().toISOString().slice(0, 10)} /* Added: prevent selecting future dates */
                                     isInvalid={!!validationErrors.dateOfBirth}
                                     required
                                 />
