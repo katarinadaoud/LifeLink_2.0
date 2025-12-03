@@ -58,17 +58,14 @@ api/
 - Program.cs     # Application 
 
 # INSTALLATION
-1. Clone the repository
-   git clone <https://github.com/susannegulbrandsen/React-Homecare.git>
-
-2. Install backend dependencies
+1. Install backend dependencies
    cd api
    dotnet restore
 
-3. Apply EF migrations
+2. Apply EF migrations
    dotnet ef database update
 
-4. Install frontend dependencies
+3. Install frontend dependencies
    cd ../homecare
    npm install
 

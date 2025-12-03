@@ -136,7 +136,7 @@ const NavMenu: React.FC = () => {
               <Nav.Link
                 as={Link}
                 to="/"
-                className="lifelink-nav-link-main"
+                className="lifelink-nav-link"
               >
                 Home
               </Nav.Link>
