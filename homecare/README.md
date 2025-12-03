@@ -2,8 +2,7 @@
 Our application is a full-stack healthcare management system built as a project in Webprogrammering at OsloMet.
 The application allows administrators, employees and patients to manage appointments, medications, and personal information using a role-based access model that controls what each user can see and do. We have built this with React + TypeScript on the frontend and .Net8 Web API on the backend. 
 
-TECH STACK
-
+# TECH STACK
 Frontend:
 React + TypeScript
 Vite
@@ -20,7 +19,7 @@ ASP.NET Identity
 Repository and Service architecture
 Automapper
 
-PROJECT STRUCTURE
+# PROJECT STRUCTURE
 
 Frontend (/homecare)
 src/
@@ -39,7 +38,7 @@ src/
 - main..tsx
 - index.css
 
-Backend (api/)
+# Backend (api/)
 api/
 - APILogs        # Api request logs
 - bin/           # Build output
@@ -58,7 +57,7 @@ api/
 - homecare.db    # Main application database
 - Program.cs     # Application 
 
-INSTALLATION
+# INSTALLATION
 1. Clone the repository
    git clone <https://github.com/susannegulbrandsen/React-Homecare.git>
 
@@ -73,7 +72,7 @@ INSTALLATION
    cd ../homecare
    npm install
 
-RUNNING THE APPLICATION
+# RUNNING THE APPLICATION
 Start the backend:
 cd api
 dotnet watch run
@@ -87,7 +86,7 @@ npm run dev
 
 frontend runs at:  http://localhost:5173/
 
-UNIT TESTING (Backend)
+# UNIT TESTING (Backend)
 
 The project includes a dedicated test project: /Homecare.Api.Tests
 The group implemented server-side unit tests for the AppointmentController using xUnit and Moq.
@@ -99,7 +98,7 @@ RUNNING THE UNIT TESTS
 cd Homecare.Api.Tests
 dotnet test
 
-FEATURES
+# FEATURES
 
 Patients:
 - Create, update, delete patient
@@ -137,13 +136,13 @@ Notifications
 - Functionality for employee and patient
 
 
-Known issues to fix:
-BUG: DateOfBirth field lacks validation and accepts dates later than today
+# KNOWN ISSUES TO FIX
+BUG:
 Further recommended security hardening and future improvements are described in the project documentation
 
 
 
-Contributors:
+# CONTRIBUTORS
 Candidatenumber: 142, 169, 127 and 254 
 
 
