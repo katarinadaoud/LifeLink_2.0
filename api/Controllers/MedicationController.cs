@@ -180,10 +180,11 @@ namespace HomeCareApp.Controllers
         {
             try
             {
+                var fullMedication = await _medicationRepository.GetByNameAsync(medication.MedicineName);
                 // Check if patient information is available
-                if (medication.Patient?.UserId == null)
+                if (fullMedication?.Patient?.UserId == null)
                 {
-                    _logger.LogWarning("[MedicationController] Missing patient UserId for medication {MedicineName}", medication.MedicineName);
+                    _logger.LogWarning("[MedicationController] Missing patient UserId for medication {MedicineName} (PatientId: {PatientId})", medication.MedicineName, medication.PatientId);
                     return;
                 }
 
@@ -197,15 +198,15 @@ namespace HomeCareApp.Controllers
 
                 var message = action switch //  message based on action
                 {
-                    "created" => $"A new medication '{medication.MedicineName}' has been added to your treatment plan. Dosage: {medication.Dosage}.",
-                    "updated" => $"Your medication '{medication.MedicineName}' has been updated. New dosage: {medication.Dosage}.",
-                    "deleted" => $"The medication '{medication.MedicineName}' has been removed from your treatment plan.",
-                    _ => $"Your medication '{medication.MedicineName}' has been changed."
+                    "created" => $"A new medication '{fullMedication.MedicineName}' has been added to your treatment plan. Dosage: {medication.Dosage}.",
+                    "updated" => $"Your medication '{fullMedication.MedicineName}' has been updated. New dosage: {medication.Dosage}.",
+                    "deleted" => $"The medication '{fullMedication.MedicineName}' has been removed from your treatment plan.",
+                    _ => $"Your medication '{fullMedication.MedicineName}' has been changed."
                 };
 
                 var notification = new Notification // Create notification entity
                 {
-                    UserId = medication.Patient.UserId,
+                    UserId = fullMedication.Patient.UserId,
                     Title = title,
                     Message = message,
                     Type = "medication",
@@ -215,7 +216,8 @@ namespace HomeCareApp.Controllers
                 };
 
                 await _notificationRepository.CreateAsync(notification); // Save notification
-                _logger.LogInformation("[MedicationController] Created {Action} notification for medication {MedicineName}", action, medication.MedicineName);
+                _logger.LogInformation("[MedicationController] Created {Action} notification for medication {MedicineName} (PatientId: {PatientId})", action, fullMedication.MedicineName, fullMedication.PatientId
+                );
             }
             catch (Exception ex)
             {
