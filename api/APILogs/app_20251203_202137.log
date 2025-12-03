@@ -1617,3 +1617,42 @@ Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving 
 2025-12-03 21:03:43.727 +01:00 [INF] Executed action HomeCareApp.Controllers.NotificationController.GetUnreadCount (api) in 0.8133ms
 2025-12-03 21:03:43.727 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
 2025-12-03 21:03:43.727 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - 200 1 application/json; charset=utf-8 1.5538ms
+2025-12-03 21:04:12.709 +01:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5090/api/Notification/unread-count - null null
+2025-12-03 21:04:12.709 +01:00 [INF] CORS policy execution successful.
+2025-12-03 21:04:12.709 +01:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5090/api/Notification/unread-count - 204 null null 0.2402ms
+2025-12-03 21:04:12.713 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - application/json null
+2025-12-03 21:04:12.713 +01:00 [INF] CORS policy execution successful.
+2025-12-03 21:04:12.714 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
+2025-12-03 21:04:12.714 +01:00 [INF] Route matched with {action = "GetUnreadCount", controller = "Notification"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Int32]] GetUnreadCount() on controller HomeCareApp.Controllers.NotificationController (api).
+2025-12-03 21:04:12.714 +01:00 [INF] [NotificationController] Getting unread count for UserId: 93277291-1b56-4026-a89e-cdcfc3663adc
+2025-12-03 21:04:12.714 +01:00 [INF] [NotificationRepository] GetUnreadCountAsync(93277291-1b56-4026-a89e-cdcfc3663adc) - Getting unread count for user
+2025-12-03 21:04:12.716 +01:00 [INF] [NotificationRepository] GetUnreadCountAsync(93277291-1b56-4026-a89e-cdcfc3663adc) - User has 0 unread notifications
+2025-12-03 21:04:12.717 +01:00 [INF] [NotificationController] Found 0 unread notifications for UserId: 93277291-1b56-4026-a89e-cdcfc3663adc
+2025-12-03 21:04:12.717 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Int32'.
+2025-12-03 21:04:12.717 +01:00 [INF] Executed action HomeCareApp.Controllers.NotificationController.GetUnreadCount (api) in 2.9345ms
+2025-12-03 21:04:12.717 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
+2025-12-03 21:04:12.717 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - 200 1 application/json; charset=utf-8 4.0539ms
+2025-12-03 21:04:13.723 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - application/json null
+2025-12-03 21:04:13.724 +01:00 [INF] CORS policy execution successful.
+2025-12-03 21:04:13.724 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
+2025-12-03 21:04:13.724 +01:00 [INF] Route matched with {action = "GetUnreadCount", controller = "Notification"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Int32]] GetUnreadCount() on controller HomeCareApp.Controllers.NotificationController (api).
+2025-12-03 21:04:13.724 +01:00 [INF] [NotificationController] Getting unread count for UserId: 93277291-1b56-4026-a89e-cdcfc3663adc
+2025-12-03 21:04:13.724 +01:00 [INF] [NotificationRepository] GetUnreadCountAsync(93277291-1b56-4026-a89e-cdcfc3663adc) - Getting unread count for user
+2025-12-03 21:04:13.726 +01:00 [INF] [NotificationRepository] GetUnreadCountAsync(93277291-1b56-4026-a89e-cdcfc3663adc) - User has 0 unread notifications
+2025-12-03 21:04:13.726 +01:00 [INF] [NotificationController] Found 0 unread notifications for UserId: 93277291-1b56-4026-a89e-cdcfc3663adc
+2025-12-03 21:04:13.726 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Int32'.
+2025-12-03 21:04:13.726 +01:00 [INF] Executed action HomeCareApp.Controllers.NotificationController.GetUnreadCount (api) in 1.7771ms
+2025-12-03 21:04:13.726 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
+2025-12-03 21:04:13.726 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - 200 1 application/json; charset=utf-8 2.6997ms
+2025-12-03 21:04:13.727 +01:00 [INF] Request starting HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - application/json null
+2025-12-03 21:04:13.728 +01:00 [INF] CORS policy execution successful.
+2025-12-03 21:04:13.728 +01:00 [INF] Executing endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
+2025-12-03 21:04:13.728 +01:00 [INF] Route matched with {action = "GetUnreadCount", controller = "Notification"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Int32]] GetUnreadCount() on controller HomeCareApp.Controllers.NotificationController (api).
+2025-12-03 21:04:13.728 +01:00 [INF] [NotificationController] Getting unread count for UserId: 93277291-1b56-4026-a89e-cdcfc3663adc
+2025-12-03 21:04:13.728 +01:00 [INF] [NotificationRepository] GetUnreadCountAsync(93277291-1b56-4026-a89e-cdcfc3663adc) - Getting unread count for user
+2025-12-03 21:04:13.730 +01:00 [INF] [NotificationRepository] GetUnreadCountAsync(93277291-1b56-4026-a89e-cdcfc3663adc) - User has 0 unread notifications
+2025-12-03 21:04:13.730 +01:00 [INF] [NotificationController] Found 0 unread notifications for UserId: 93277291-1b56-4026-a89e-cdcfc3663adc
+2025-12-03 21:04:13.730 +01:00 [INF] Executing OkObjectResult, writing value of type 'System.Int32'.
+2025-12-03 21:04:13.730 +01:00 [INF] Executed action HomeCareApp.Controllers.NotificationController.GetUnreadCount (api) in 2.3026ms
+2025-12-03 21:04:13.731 +01:00 [INF] Executed endpoint 'HomeCareApp.Controllers.NotificationController.GetUnreadCount (api)'
+2025-12-03 21:04:13.731 +01:00 [INF] Request finished HTTP/1.1 GET http://localhost:5090/api/Notification/unread-count - 200 1 application/json; charset=utf-8 3.2292ms
