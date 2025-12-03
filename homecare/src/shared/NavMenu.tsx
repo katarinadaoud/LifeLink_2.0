@@ -12,14 +12,30 @@ const NavMenu: React.FC = () => {
   const [unreadCount, setUnreadCount] = useState<number>(0);
 
   // Load unread notification count
-  useEffect(() => {
-    if (user) {
-      loadUnreadCount();
-      // Refresh count every 30 seconds
-      const interval = setInterval(loadUnreadCount, 30000);
-      return () => clearInterval(interval);
+    useEffect(() => {
+    if (!user) {
+      setUnreadCount(0);
+      return;
     }
+
+    // initial load when user logs in / changes
+    loadUnreadCount();
+
+    // refresh every 30 seconds
+    const interval = setInterval(loadUnreadCount, 30000);
+
+    const handler = () => {
+      loadUnreadCount();
+    };
+
+    window.addEventListener('notifications-updated', handler);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('notifications-updated', handler);
+    };
   }, [user]);
+
 
   const loadUnreadCount = async () => {
     try {

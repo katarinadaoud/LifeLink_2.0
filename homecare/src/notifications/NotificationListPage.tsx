@@ -15,6 +15,7 @@ const NotificationListPage: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const { user } = useAuth();
   const navigate = useNavigate();
+  const notifyNavbar = () => { window.dispatchEvent(new CustomEvent('notifications-updated')); }
 
   useEffect(() => {
     if (!user) {
@@ -54,6 +55,7 @@ const NotificationListPage: React.FC = () => {
             : n
         )
       );
+      notifyNavbar();
     } catch (err) {
       console.error('Error marking notification as read:', err);
     }
@@ -64,6 +66,7 @@ const NotificationListPage: React.FC = () => {
       await NotificationService.markAllAsRead();
       //update all notifications as read
       setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      notifyNavbar();
     } catch (err) {
       console.error('Error marking all notifications as read:', err);
     }
@@ -74,6 +77,7 @@ const NotificationListPage: React.FC = () => {
       await NotificationService.deleteNotification(notificationId);
       //remove notification from list
       setNotifications(prev => prev.filter(n => n.notificationId !== notificationId));
+      notifyNavbar();
     } catch (err) {
       console.error('Error deleting notification:', err);
     }
