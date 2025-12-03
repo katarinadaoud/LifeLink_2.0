@@ -1,0 +1,21 @@
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# .NET
+bin/
+obj/
+*.user
+
+# Node
+node_modules/
+dist/
+.env
+.env.local
+
+# IDE
+.vs/
+.vscode/
+*.suo
+*.swp
