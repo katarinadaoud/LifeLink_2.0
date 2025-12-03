@@ -19,9 +19,14 @@ const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppoi
 
   return (
     <div>
-      {/* Responsive grid: 1 column on mobile, up to 4 on large screens */}
-      <Row xs={1} sm={2} md={3} lg={4} className="g-4">
-        {appointments.map(appointment => (
+      {appointments.length === 0 ? (
+        <div className="text-center text-muted py-4">
+          <p>No appointments found.</p>
+        </div>
+      ) : (
+        /* Responsive grid: 1 column on mobile, up to 4 on large screens */
+        <Row xs={1} sm={2} md={3} lg={4} className="g-4">
+          {appointments.map(appointment => (
           <Col key={appointment.appointmentId}>
             <Card className="h-100">
               {/* Make the card body fill the height so buttons can stick to the bottom */}
@@ -89,8 +94,9 @@ const AppointmentGrid: React.FC<AppointmentGridProps> = ({ appointments, onAppoi
               </Card.Body>
             </Card>
           </Col>
-        ))}
-      </Row>
+          ))}
+        </Row>
+      )}
     </div>
   );
 };

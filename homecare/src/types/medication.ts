@@ -1,4 +1,5 @@
 export interface Medication {
+  medicationId?: number;
   medicationName: string;        
   dosage: string;                
   frequency?: string; // optional since backend doesn't have this
@@ -8,7 +9,7 @@ export interface Medication {
   patientName?: string;          
   patientId?: number;           
   indication?: string;          
- 
+ }
 }
 
 export type NewMedication = Medication;

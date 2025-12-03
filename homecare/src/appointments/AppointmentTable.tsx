@@ -45,23 +45,31 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({ appointments, onApp
             </tr>
           </thead>
           <tbody>
-            {appointments.map(appointment => (
-              <tr key={appointment.appointmentId}>
-                <td>{appointment.subject}</td>
-                <td>
-                  {appointment.isConfirmed ? (
-                    <Badge bg="success">Confirmed</Badge>
-                  ) : (
-                    <Badge bg="warning" text="dark">Pending</Badge>
-                  )}
+            {appointments.length === 0 ? (
+              <tr>
+                {/* if no appointments, show message*/}
+                <td colSpan={userRole !== 'Patient' ? (showDescriptions ? 7 : 6) : (showDescriptions ? 6 : 5)} className="text-center text-muted">
+                  No appointments found.
                 </td>
+              </tr>
+            ) : (
+              appointments.map(appointment => (
+                <tr key={appointment.appointmentId}>
+                  <td>{appointment.subject}</td>
+                  <td>
+                    {appointment.isConfirmed ? (
+                      <Badge bg="success">Confirmed</Badge>
+                    ) : (
+                      <Badge bg="warning" text="dark">Pending</Badge>
+                    )}
+                  </td>
 
-                {/* Format the stored date into a readable local date/time string */}
-                <td>{new Date(appointment.date).toLocaleString()}</td>
-                {userRole !== 'Patient' && <td>{appointment.patientName || `Patient ID: ${appointment.patientId}`}</td>}
-                <td>{appointment.employeeName || `Employee ID: ${appointment.employeeId}`}</td>
-                {showDescriptions && <td>{appointment.description}</td>}
-                <td className="text-center appointment-actions">
+                  {/* Format the stored date into a readable local date/time string */}
+                  <td>{new Date(appointment.date).toLocaleString()}</td>
+                  {userRole !== 'Patient' && <td>{appointment.patientName || `Patient ID: ${appointment.patientId}`}</td>}
+                  <td>{appointment.employeeName || `Employee ID: ${appointment.employeeId}`}</td>
+                  {showDescriptions && <td>{appointment.description}</td>}
+                  <td className="text-center appointment-actions">
                   <div className="appointment-actions-vertical">
                     {userRole === 'Employee' && !appointment.isConfirmed && onAppointmentConfirmed && currentEmployeeId === appointment.employeeId && (
                       /* Confirm button for employees */
@@ -97,7 +105,8 @@ const AppointmentTable: React.FC<AppointmentTableProps> = ({ appointments, onApp
                   </div>
                 </td>
               </tr>
-            ))}
+              ))
+            )}
           </tbody>
         </Table>
       </div>

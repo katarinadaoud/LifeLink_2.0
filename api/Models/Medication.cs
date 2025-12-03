@@ -7,8 +7,10 @@ namespace HomeCareApp.Models
     // Medication entity representing a patient's medication details
     public class Medication
     {
-
-        [Key] // Primary key
+        [Key] // Primary key - this creates the UNIQUE constraint issue
+        public int MedicationId { get; set; }
+        
+        [Required, MaxLength(100)] // MedicineName is required and has a maximum length of 100 characters
         public string MedicineName { get; set; } = string.Empty;
 
         [Required] // PatientId is required when creating or updating a medication

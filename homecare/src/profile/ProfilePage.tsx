@@ -54,6 +54,9 @@ const ProfilePage: React.FC = () => {
     };
 
     const validateDateOfBirth = (date: string): string | null => {
+        if (!date.trim()) {
+            return 'Date of birth is required';
+        }
         if (date) {
             const birthDate = new Date(date);
             const today = new Date();
@@ -181,18 +184,24 @@ const ProfilePage: React.FC = () => {
             
             const fullNameError = validateFullName(formData.fullName);
             if (fullNameError) errors.fullName = fullNameError;
-            
-            const phoneError = validatePhoneNumber(formData.phonenumber);
-            if (phoneError) errors.phonenumber = phoneError;
-            
-            const dateError = validateDateOfBirth(formData.dateOfBirth);
-            if (dateError) errors.dateOfBirth = dateError;
 
             const addressError = validateRequired(formData.address, 'Address');
             if (addressError) errors.address = addressError;  
 
-            const healthInfoError = validateRequired(formData.healthRelated_info, 'Health Related Information');
-            if (healthInfoError) errors.healthRelated_info = healthInfoError;
+            // Role-specific validation
+            if (user?.role === 'Patient') {
+                const phoneError = validatePhoneNumber(formData.phonenumber);
+                if (phoneError) errors.phonenumber = phoneError;
+                
+                const dateError = validateDateOfBirth(formData.dateOfBirth);
+                if (dateError) errors.dateOfBirth = dateError;
+
+                const healthInfoError = validateRequired(formData.healthRelated_info, 'Health Related Information');
+                if (healthInfoError) errors.healthRelated_info = healthInfoError;
+            } else if (user?.role === 'Employee') {
+                const departmentError = validateRequired(formData.department, 'Department');
+                if (departmentError) errors.department = departmentError;
+            }
             
             if (Object.keys(errors).length > 0) {
                 setValidationErrors(errors);
@@ -214,7 +223,8 @@ const ProfilePage: React.FC = () => {
                 EmployeeId: userInfo?.employeeId,
                 FullName: formData.fullName,
                 Address: formData.address,
-                Department: formData.department
+                Department: formData.department,
+                UserId: userInfo?.userId
             } : {
                 ...userInfo,
                 fullName: formData.fullName,

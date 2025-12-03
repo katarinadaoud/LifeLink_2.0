@@ -8,8 +8,8 @@ import "./Medication.css";
 export interface MedicationTableProps {
   rows: Medication[];
   userRole?: string;
-  onEdit?: (name: string) => void;
-  onDelete?: (name: string) => void;
+  onEdit?: (id: number) => void;
+  onDelete?: (id: number, name: string) => void;
 }
 
 export const MedicationTable: React.FC<MedicationTableProps> = ({
@@ -49,7 +49,7 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
         ) : (
           // Map through medication rows and display data
           rows.map((m) => ( 
-            <tr key={m.medicationName}>
+            <tr key={m.medicationId}>
               <td>{m.patientName ?? m.patientId ?? "—"}</td>
               <td>{m.medicationName}</td>
               <td>{m.indication ?? "—"}</td>
@@ -63,13 +63,13 @@ export const MedicationTable: React.FC<MedicationTableProps> = ({
                   <div className="appointment-actions-vertical">
                     <Button
                       className="btn btn-teal"
-                      onClick={() => onEdit?.(m.medicationName)}
+                      onClick={() => onEdit?.(m.medicationId!)}
                     >
                       Update
                     </Button>
                     <Button
                       className="btn btn-delete"
-                      onClick={() => onDelete?.(m.medicationName)}
+                      onClick={() => onDelete?.(m.medicationId!, m.medicationName)}
                     >
                       Delete
                     </Button>

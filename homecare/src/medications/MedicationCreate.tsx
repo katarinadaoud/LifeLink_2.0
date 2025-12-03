@@ -32,6 +32,15 @@ export default function MedicationCreatePage() {
   const [loading, setLoading] = useState(true); // this indicates if we are loading patients
   const [saving, setSaving] = useState(false); // saving state for form submission
   const [err, setErr] = useState<string | null>(null); // function to hold error messages
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
+
+  // Validation functions
+  const validateEndDate = (endDate: string | null, startDate: string): string | null => {
+    if (endDate && startDate && endDate < startDate) {
+      return 'End date cannot be before start date';
+    }
+    return null;
+  };
 
   // Load patients when component mounts
   useEffect(() => {
@@ -55,7 +64,19 @@ export default function MedicationCreatePage() {
   const set = <K extends keyof NewMedicationDto>(
     key: K,
     value: NewMedicationDto[K]
-  ) => setForm((f) => ({ ...f, [key]: value })); // update one field without updating the others
+  ) => {
+    const newForm = { ...form, [key]: value };
+    setForm(newForm);
+    
+    // Real-time validation for end date
+    if (key === 'endDate' || key === 'startDate') {
+      const endDateError = validateEndDate(
+        key === 'endDate' ? value as string | null : form.endDate ?? null,
+        key === 'startDate' ? value as string : form.startDate ?? ''
+      );
+      setValidationErrors(prev => ({ ...prev, endDate: endDateError || '' }));
+    }
+  };
 
   // submitting the form
 
@@ -64,11 +85,19 @@ export default function MedicationCreatePage() {
     setErr(null); // clear previous errors
 
     // validation: ensure a patient is selected
-
     if (!form.patientId || form.patientId <= 0) {
       setErr("Please select a patient.");
       return;
     }
+    
+    // Validate end date
+    const endDateError = validateEndDate(form.endDate ?? null, form.startDate ?? '');
+    if (endDateError) {
+      setValidationErrors({ endDate: endDateError });
+      setErr("Please fix the validation errors before submitting.");
+      return;
+    }
+    
     //try to create the medication
     setSaving(true); // 
     try {
@@ -164,7 +193,11 @@ export default function MedicationCreatePage() {
                 type="date"
                 value={form.endDate ?? ""}
                 onChange={(e) => set("endDate", e.target.value || null)}
+                isInvalid={!!validationErrors.endDate}
               />
+              <Form.Control.Feedback type="invalid">
+                {validationErrors.endDate}
+              </Form.Control.Feedback>
             </Form.Group>
 
             {err && <p className="error-text">{err}</p>}

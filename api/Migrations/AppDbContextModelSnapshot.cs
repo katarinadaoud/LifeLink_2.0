@@ -28,16 +28,23 @@ namespace api.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsConfirmed")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("PatientId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Subject")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("AppointmentId");
@@ -132,8 +139,9 @@ namespace api.Migrations
 
             modelBuilder.Entity("HomeCareApp.Models.Medication", b =>
                 {
-                    b.Property<string>("medicineName")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("MedicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Dosage")
                         .IsRequired()
@@ -148,6 +156,11 @@ namespace api.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("MedicineName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -159,7 +172,7 @@ namespace api.Migrations
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("medicineName");
+                    b.HasKey("MedicationId");
 
                     b.HasIndex("PatientId");
 
@@ -243,11 +256,15 @@ namespace api.Migrations
                 {
                     b.HasOne("HomeCareApp.Models.Employee", "Employee")
                         .WithMany("Appointments")
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("HomeCareApp.Models.Patient", "Patient")
                         .WithMany("Appointments")
-                        .HasForeignKey("PatientId");
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
 

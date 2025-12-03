@@ -3,8 +3,10 @@ using HomeCareApp.Models;
 
 namespace HomeCareApp.DTOs
 {
-    public sealed class MedicationDto
+    public class MedicationDto
     {
+        public int MedicationId { get; set; }
+        
         [Required(ErrorMessage = "The Medication Name field is required.")] // Medication name is required when creating or updating a medication
         [StringLength(100, ErrorMessage = "Medication name cannot exceed 100 characters.")]
         [Display(Name = "Medication Name")]
@@ -31,6 +33,7 @@ namespace HomeCareApp.DTOs
         //create a DTO from the Medication entity
         public static MedicationDto FromEntity(Medication m) => new()
         {
+            MedicationId = m.MedicationId,
             MedicationName = m.MedicineName,
             PatientId = m.PatientId,
             PatientName = m.Patient?.FullName ?? "",
@@ -43,6 +46,7 @@ namespace HomeCareApp.DTOs
         //convert the DTO back to a Medication entity
         public Medication ToEntity() => new()
         {
+            MedicationId = MedicationId,
             MedicineName = MedicationName,
             PatientId = PatientId,
             Indication = Indication,

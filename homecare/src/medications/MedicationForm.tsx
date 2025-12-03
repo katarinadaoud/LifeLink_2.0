@@ -45,19 +45,72 @@ export default function MedicationForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  // setter for all form fields
+  // setter for all form fields with real-time validation
   function set<K extends keyof MedicationFormValues>(key: K, v: MedicationFormValues[K]) {
-    setValues(prev => ({ ...prev, [key]: v }));
+    const newValues = { ...values, [key]: v };
+    setValues(newValues);
+    
+    // Real-time validation
+    const newErrors = { ...errors };
+    
+    // Validate the changed field
+    if (key === 'medicationName') {
+      if (!(v as string).trim()) {
+        newErrors.medicationName = 'Medication name is required';
+      } else {
+        delete newErrors.medicationName;
+      }
+    }
+    
+    if (key === 'dosage') {
+      if (!(v as string).trim()) {
+        newErrors.dosage = 'Dosage is required';
+      } else {
+        delete newErrors.dosage;
+      }
+    }
+    
+    if (key === 'startDate') {
+      if (!(v as string)) {
+        newErrors.startDate = 'Start date is required';
+      } else {
+        delete newErrors.startDate;
+        // Also revalidate end date when start date changes
+        if (newValues.endDate && newValues.endDate < (v as string)) {
+          newErrors.endDate = 'End date cannot be before start date';
+        } else {
+          delete newErrors.endDate;
+        }
+      }
+    }
+    
+    if (key === 'endDate') {
+      if ((v as string) && newValues.startDate && (v as string) < newValues.startDate) {
+        newErrors.endDate = 'End date cannot be before start date';
+      } else {
+        delete newErrors.endDate;
+      }
+    }
+    
+    if (key === 'patientId') {
+      if (scope === 'employee' && ((v as number | string) === '' || (v as number | string) === undefined || (v as number | string) === 0)) {
+        newErrors.patientId = 'Patient ID is required';
+      } else {
+        delete newErrors.patientId;
+      }
+    }
+    
+    setErrors(newErrors);
   }
 
   // validate form values and return errors
   function validate(v: MedicationFormValues) {
     const e: Record<string, string> = {};
-    if (scope === 'employee' && (v.patientId === '' || v.patientId === undefined)) e.patientId = 'Påkrevd';
-    if (!v.medicationName.trim()) e.medicationName = 'Påkrevd';
-    if (!v.dosage.trim()) e.dosage = 'Påkrevd';
-    if (!v.startDate) e.startDate = 'Påkrevd';
-    if (v.endDate && v.startDate && v.endDate < v.startDate) e.endDate = 'Kan ikke være før start';
+    if (scope === 'employee' && (v.patientId === '' || v.patientId === undefined || v.patientId === 0)) e.patientId = 'Patient ID is required';
+    if (!v.medicationName.trim()) e.medicationName = 'Medication name is required';
+    if (!v.dosage.trim()) e.dosage = 'Dosage is required';
+    if (!v.startDate) e.startDate = 'Start date is required';
+    if (v.endDate && v.startDate && v.endDate < v.startDate) e.endDate = 'End date cannot be before start date';
     return e;
   }
 

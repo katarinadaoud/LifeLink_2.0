@@ -1,0 +1,5 @@
+2025-12-03 20:29:04.063 +01:00 [INF] Applying migration '20251203192820_ChangeMedicationPrimaryKeyToId'.
+2025-12-03 20:29:04.112 +01:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "ef_temp_Medications" ("MedicationId", "Dosage", "EndDate", "Indication", "MedicineName", "Name", "PatientId", "StartDate")
+SELECT "MedicationId", "Dosage", "EndDate", "Indication", "MedicineName", "Name", "PatientId", "StartDate"
+FROM "Medications";

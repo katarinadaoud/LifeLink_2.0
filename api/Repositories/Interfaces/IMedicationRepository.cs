@@ -12,7 +12,7 @@ namespace HomeCareApp.Repositories.Interfaces
     {
         Task<List<Medication>> GetAllAsync(); // get all medications
         Task<List<Medication>> GetByPatientAsync(int patientId); // get medications for a specific patient
-        Task<Medication?> GetByNameAsync(string medicinenName);
+        Task<Medication?> GetByIdAsync(int medicationId);
 
         Task<Medication> AddAsync(Medication med);
         Task DeleteAsync(Medication med);

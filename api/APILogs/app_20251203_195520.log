@@ -1,0 +1,3 @@
+2025-12-03 19:55:20.830 +01:00 [INF] Applying migration '20251203185420_RemoveMedicationUniqueConstraint'.
+2025-12-03 19:55:20.883 +01:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "Appointments" ADD "IsConfirmed" INTEGER NOT NULL DEFAULT 0;
