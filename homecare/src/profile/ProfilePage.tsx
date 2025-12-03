@@ -82,8 +82,11 @@ const ProfilePage: React.FC = () => {
                 return validateRequired(value, 'Address');
             case 'department':
                 return validateRequired(value, 'Department');
+            case 'healthRelated_info':
+                return validateRequired(value, 'Health Related Information');
             default:
                 return null;
+            
         }
     };
 
@@ -184,6 +187,12 @@ const ProfilePage: React.FC = () => {
             
             const dateError = validateDateOfBirth(formData.dateOfBirth);
             if (dateError) errors.dateOfBirth = dateError;
+
+            const addressError = validateRequired(formData.address, 'Address');
+            if (addressError) errors.address = addressError;  
+
+            const healthInfoError = validateRequired(formData.healthRelated_info, 'Health Related Information');
+            if (healthInfoError) errors.healthRelated_info = healthInfoError;
             
             if (Object.keys(errors).length > 0) {
                 setValidationErrors(errors);
@@ -488,13 +497,19 @@ const ProfilePage: React.FC = () => {
                                                         <Form.Group className="mb-3">
                                                             <Form.Label><strong>Health Related Information:</strong></Form.Label>
                                                             {isEditing ? (
+                                                                <>
                                                                 <Form.Control
                                                                     as="textarea"
                                                                     rows={3}
                                                                     name="healthRelated_info"
                                                                     value={formData.healthRelated_info}
                                                                     onChange={handleInputChange}
+                                                                    isInvalid={!!validationErrors.healthRelated_info}
                                                                 />
+                                                                <Form.Control.Feedback type="invalid">
+                                                                    {validationErrors.healthRelated_info}
+                                                                </Form.Control.Feedback>
+                                                                </>
                                                             ) : (
                                                                 <p className="mt-1">{userInfo.healthRelated_info}</p>
                                                             )}
