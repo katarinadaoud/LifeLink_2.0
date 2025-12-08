@@ -1,0 +1,7 @@
+homecare/
+Homecare.Api.Tests/
+.git/
+.gitignore
+README.md
+AzureCLI.msi
+*.md
