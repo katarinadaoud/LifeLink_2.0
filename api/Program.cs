@@ -177,7 +177,7 @@ if (app.Environment.IsDevelopment())
         var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var authDbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
         
-        // Apply any pending migrations
+        // Apply any pending migration
         await appDbContext.Database.MigrateAsync();
         await authDbContext.Database.MigrateAsync();
     }

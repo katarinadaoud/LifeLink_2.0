@@ -29,8 +29,9 @@ const LoginPage: React.FC = () => {
             
             if (endpoint) {
                 try {
-                    //Check if user already has a profile
-                    const profileResponse = await fetch(`http://localhost:5090${endpoint}`, {
+                    //Check if user already has a profile (use env base URL)
+                    const baseUrl = import.meta.env.VITE_API_URL;
+                    const profileResponse = await fetch(`${baseUrl}${endpoint}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
@@ -42,11 +43,11 @@ const LoginPage: React.FC = () => {
                         navigate('/profile-setup');
                         return;
                     } else if (profileResponse.ok) {
-                        const profileData = await profileResponse.json();
-                        // Check if profile has minimal required data
-                        const isProfileComplete = profileData.fullName && 
-                                                profileData.fullName !== user.username &&
-                                                profileData.address;
+                                    const profileData = await profileResponse.json();                                    
+                                    // Backend DTOs use PascalCase (FullName, Address). Accept both casings.
+                                    const hasName = !!(profileData?.fullName ?? profileData?.FullName);
+                                    const hasAddress = !!(profileData?.address ?? profileData?.Address);
+                                    const isProfileComplete = hasName && hasAddress;
                         
                         if (!isProfileComplete) {
                             navigate('/profile-setup');
