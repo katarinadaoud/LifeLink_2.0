@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import './Auth.css';
+import { get as httpGet } from '../shared/http';
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -18,7 +19,6 @@ const LoginPage: React.FC = () => {
             // Attempt to log in and get user details
             const user = await login({ username, password });
             //Determine which profile to check based on role
-            const token = localStorage.getItem('token');
             let endpoint = '';
             
             if (user.role === 'Patient') {

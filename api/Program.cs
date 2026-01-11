@@ -12,7 +12,9 @@ using Microsoft.OpenApi.Models;
 using HomeCareApp.Repositories.Interfaces;
 using HomeCareApp.Repositories.Implementations;
 using System.Security.Claims;
-using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Mvc;
 
 // Create the application builder (entry point for configuring services and middleware)
 var builder = WebApplication.CreateBuilder(args);
@@ -78,21 +80,47 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 });
 
 // Configure ASP.NET Core Identity using AuthUser and the identity DbContext
-builder.Services.AddIdentity<AuthUser, IdentityRole>()
+builder.Services.AddIdentity<AuthUser, IdentityRole>(options =>
+{
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+    // Demo password policy: strong but pragmatic
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+})
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 
 // Configure CORS so the React frontends can talk to this API during development
 builder.Services.AddCors(options =>
 {
-    // Development policy for local frontends
-    options.AddPolicy("CorsPolicy", policy =>
+    options.AddPolicy("CorsPolicy", policyBuilder =>
     {
-        policy
-            .WithOrigins("http://localhost:3000", "http://localhost:4000", "http://localhost:5173", "http://localhost:5174")
+        // Read allowed origins from configuration. In Development, fall back to common localhost ports if not configured.
+        var originsCsv = builder.Configuration["Cors:AllowedOrigins"];
+        var configuredOrigins = string.IsNullOrWhiteSpace(originsCsv)
+            ? Array.Empty<string>()
+            : originsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        var defaultDevOrigins = new[]
+        {
+            "http://localhost:3000",
+            "http://localhost:4000",
+            "http://localhost:5173",
+            "http://localhost:5174"
+        };
+
+        var originsToUse = configuredOrigins;
+
+        policyBuilder
+            .WithOrigins(originsToUse)
             .WithMethods("GET", "POST", "PUT", "DELETE")
-            .WithHeaders("Content-Type", "Authorization");
-            // No AllowCredentials since we use JWT tokens in Authorization header
+            .WithHeaders("Content-Type", "Authorization")
+            .AllowCredentials();
     });
 
     // Production policy for Vercel frontend
@@ -123,7 +151,7 @@ builder.Services.AddAuthentication(options =>
 .AddJwtBearer(options =>
 {
     options.SaveToken = true;                  // Store the token in the authentication properties
-    options.RequireHttpsMetadata = false;      // For development: do not require HTTPS for metadata (should be true in production)
+    options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();      // Require HTTPS in non-development environments
     options.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidateIssuer = true,                 // Validate the token issuer
@@ -144,6 +172,34 @@ builder.Services.AddAuthentication(options =>
 
 // Clear default claims mapping to preserve JWT claims exactly as they appear in the token
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+// ProblemDetails for standardized error responses
+builder.Services.AddProblemDetails();
+
+// Rate limiting: protect login endpoint
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("Login", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+    options.AddPolicy("Register", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 3,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0
+            }));
+});
 
 // Configure Serilog for file-based logging of the API
 var loggerConfiguration = new LoggerConfiguration()
@@ -195,6 +251,12 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
     app.UseHsts();
+    // Basic CSP headers in production
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.TryAdd("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'");
+        await next();
+    });
 }
 
 // Serve static files (e.g. images, Swagger assets, etc.)
@@ -202,17 +264,15 @@ app.UseStaticFiles();
 
 // Set up the HTTP request pipeline: routing, CORS, authentication, authorization, controllers
 app.UseRouting();
-if (app.Environment.IsDevelopment())
-{
-    app.UseCors("CorsPolicy");
-}
-else
-{
-    app.UseCors("Vercel");
-}
+app.UseCors("CorsPolicy");
+app.UseRateLimiter();
+app.UseExceptionHandler("/error");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+// Global error endpoint returning ProblemDetails
+app.Map("/error", (HttpContext httpContext) => Results.Problem());
 
 
 app.Run();
