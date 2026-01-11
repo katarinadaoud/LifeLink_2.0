@@ -122,6 +122,13 @@ builder.Services.AddCors(options =>
             .WithHeaders("Content-Type", "Authorization")
             .AllowCredentials();
     });
+
+    // Production policy for Vercel frontend
+    var allowedOrigins = new[] { "https://life-link-2-0.vercel.app" };
+    options.AddPolicy("Vercel", policy =>
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod());
 });
 
 // Register repository services (dependency injection for data access layer)
@@ -207,6 +214,15 @@ builder.Logging.AddSerilog(logger);
 
 // Build the configured application (services are now ready and pipeline can be set up)
 var app = builder.Build();
+
+// Ensure correct scheme/host behind proxies like Render
+var forwarded = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwarded.KnownNetworks.Clear();
+forwarded.KnownProxies.Clear();
+app.UseForwardedHeaders(forwarded);
 
 // Development-only configuration: migrations, seeding and Swagger UI
 if (app.Environment.IsDevelopment())
