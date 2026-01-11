@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import type { User } from '../types/user';
 import type { LoginDto } from '../types/auth';
 import * as authService from './AuthService';
+import { setToken as storeToken, clearToken as clearTokenStore } from './tokenStore';
 
 interface AuthContextType { // Define the shape of the auth context
     user: User | null;
@@ -28,12 +29,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 // Check if the token is expired
                 if (decodedUser.exp * 1000 > Date.now()) {
                     setUser(decodedUser);
+                    // Sync token to shared store for HTTP wrapper
+                    storeToken(token);
                 } else {
                     // Token is expired, clear it
                     console.warn("Token expired");
                     localStorage.removeItem('token');
                     setUser(null);
                     setToken(null);
+                    clearTokenStore();
                 }
             } catch (error) {
                 // Invalid token format -> clear everything
@@ -41,10 +45,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 localStorage.removeItem('token');
                 setUser(null);
                 setToken(null);
+                clearTokenStore();
             }
         } else {
             // No token -> ensure user is cleared
             setUser(null);
+            clearTokenStore();
         }
         setIsLoading(false);
     }, [token]);
@@ -57,6 +63,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
         setUser(decodedUser);
         setToken(token);
+        storeToken(token);
         return decodedUser;
     };
 
@@ -64,6 +71,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem('token');
         setUser(null);
         setToken(null);
+        clearTokenStore();
     };
 
     const deleteAccount = async (): Promise<void> => { // Delete account and clear token and user data
@@ -71,6 +79,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem('token');
         setUser(null);
         setToken(null);
+        clearTokenStore();
     };
 
     return ( // Provide context to children

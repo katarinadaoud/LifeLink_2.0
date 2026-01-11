@@ -22,7 +22,12 @@ export const login = async (credentials: LoginDto): Promise<{ token: string }> =
             throw new Error(responseText || `Login failed with status ${response.status}`);
         }
     }
-    return response.json();
+    const data = await response.json() as any;
+    const token = data?.token ?? data?.Token;
+    if (!token) {
+        throw new Error('Login response did not include a token');
+    }
+    return { token };
 };
 
 //Register new user

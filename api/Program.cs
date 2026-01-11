@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.HttpOverrides;
 
 // Create the application builder (entry point for configuring services and middleware)
 var builder = WebApplication.CreateBuilder(args);

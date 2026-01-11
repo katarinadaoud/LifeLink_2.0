@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import * as authService from './AuthService';
+import { useAuth } from './AuthContext';
 import './Auth.css';
 
 const RegisterPage: React.FC = () => { // Registration page component
@@ -15,6 +16,7 @@ const RegisterPage: React.FC = () => { // Registration page component
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     //Update form data state on input change
         const handleChange = (
@@ -30,8 +32,10 @@ const RegisterPage: React.FC = () => { // Registration page component
         try {
             //Attempt to register user
             await authService.register(formData);
-            setSuccess('Registration successful! Please complete your profile.');
-            setTimeout(() => navigate('/profile-setup'), 2000); // Redirect to profile setup
+            // Auto-login immediately after successful registration
+            await login({ username: formData.username, password: formData.password });
+            // Redirect to profile setup (first-time only; protected route, now authenticated)
+            navigate('/profile-setup');
         } catch (err) {
             //Display error message if available
             if (err instanceof Error) {
