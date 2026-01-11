@@ -29,13 +29,30 @@ const LoginPage: React.FC = () => {
             
             if (endpoint) {
                 try {
-                    //Check if user already has a profile using shared HTTP wrapper
-                    const profileData = await httpGet(endpoint) as any;
-                    const isProfileComplete = !!profileData.fullName && !!profileData.address;
-
-                    if (!isProfileComplete) {
+                    //Check if user already has a profile (use env base URL)
+                    const baseUrl = import.meta.env.VITE_API_URL;
+                    const profileResponse = await fetch(`${baseUrl}${endpoint}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (profileResponse.status === 404) {
+                        // Profile not complete, redirect to profile setup
                         navigate('/profile-setup');
                         return;
+                    } else if (profileResponse.ok) {
+                                    const profileData = await profileResponse.json();                                    
+                                    // Backend DTOs use PascalCase (FullName, Address). Accept both casings.
+                                    const hasName = !!(profileData?.fullName ?? profileData?.FullName);
+                                    const hasAddress = !!(profileData?.address ?? profileData?.Address);
+                                    const isProfileComplete = hasName && hasAddress;
+                        
+                        if (!isProfileComplete) {
+                            navigate('/profile-setup');
+                            return;
+                        }
                     }
                 } catch (profileErr) {
                     console.error('Error checking profile:', profileErr);
