@@ -9,16 +9,19 @@ namespace HomeCareApp.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AppointmentController : ControllerBase
 {
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly INotificationRepository _notificationRepository;
+    private readonly IPatientRepository _patientRepository;
     private readonly ILogger<AppointmentController> _logger;
 
-    public AppointmentController(IAppointmentRepository appointmentRepository, INotificationRepository notificationRepository, ILogger<AppointmentController> logger)
+    public AppointmentController(IAppointmentRepository appointmentRepository, INotificationRepository notificationRepository, IPatientRepository patientRepository, ILogger<AppointmentController> logger)
     {
         _appointmentRepository = appointmentRepository;
         _notificationRepository = notificationRepository;
+        _patientRepository = patientRepository;
         _logger = logger;
     }
 
@@ -26,13 +29,35 @@ public class AppointmentController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAppointments()
     {
-        //Retrieve all appointments: return empty list if no appointments found
+        var currentUserId = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+
         var appointments = await _appointmentRepository.GetAll();
-        
-        //Map the appointments to DTO
-        var appointmentDtos = appointments.Select(AppointmentDto.FromEntity);
-        
-        _logger.LogInformation("[AppointmentController] Retrieved {Count} appointments", appointments.Count());
+
+        IEnumerable<Appointment> visible;
+
+        // Employees see all; patients see only their own
+        if (userRoles.Contains("Employee"))
+        {
+            visible = appointments;
+        }
+        else
+        {
+            // For patients, limit to their own appointments
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                return Unauthorized("User not found");
+            }
+            var patient = (await _patientRepository.GetAll()).FirstOrDefault(p => p.UserId == currentUserId);
+            if (patient == null)
+            {
+                return Forbid();
+            }
+            visible = appointments.Where(a => a.Patient?.UserId == currentUserId || a.Employee?.UserId == currentUserId);
+        }
+
+        var appointmentDtos = visible.Select(AppointmentDto.FromEntity);
+        _logger.LogInformation("[AppointmentController] Retrieved {Count} appointments", appointmentDtos.Count());
         return Ok(appointmentDtos);
     }
 
@@ -41,13 +66,30 @@ public class AppointmentController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetAppointmentsByPatientId(int patientId)
     {
+        var currentUserId = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        if (string.IsNullOrEmpty(currentUserId))
+        {
+            return Unauthorized("User not found");
+        }
+
+        var patient = await _patientRepository.GetPatientById(patientId);
+        if (patient == null)
+        {
+            return NotFound("Patient not found");
+        }
+        if (userRoles.Contains("Patient") && patient.UserId != currentUserId)
+        {
+            return Forbid("You can only access your own appointments");
+        }
+
         var appointments = await _appointmentRepository.GetAll();
         var patientAppointments = appointments.Where(a => a.PatientId == patientId);
-        
+
         var appointmentDtos = patientAppointments.Select(AppointmentDto.FromEntity);
-        
+
         _logger.LogInformation("[AppointmentController] Found {Count} appointments for PatientId: {PatientId}", patientAppointments.Count(), patientId);
-        
+
         return Ok(appointmentDtos);
     }
 
@@ -60,6 +102,18 @@ public class AppointmentController : ControllerBase
         {
             _logger.LogWarning("[AppointmentController] Appointment with ID {AppointmentId} not found", id);
             return NotFound($"Appointment with ID {id} not found");
+        }
+
+        // Ownership/role check: patients can only access their own; employees allowed
+        var currentUserId = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        var isEmployee = userRoles.Contains("Employee");
+        var isOwner = !string.IsNullOrEmpty(currentUserId) && (appointment.Patient?.UserId == currentUserId || appointment.Employee?.UserId == currentUserId);
+
+        if (!isEmployee && !isOwner)
+        {
+            _logger.LogWarning("[AppointmentController] Forbidden access to appointment {AppointmentId} by user {UserId}", id, currentUserId);
+            return Forbid();
         }
 
         var appointmentDto = AppointmentDto.FromEntity(appointment);
@@ -133,10 +187,17 @@ public class AppointmentController : ControllerBase
             return NotFound("Appointment not found");
         }
         
-        // Check if the user updating is the patient who owns this appointment
-        // The current user ID is retrieved from the JWT token claims
+        // Authorization: only the patient owner or the assigned employee can update
         var currentUserId = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        var isEmployee = userRoles.Contains("Employee");
         bool isPatientUpdate = !string.IsNullOrEmpty(currentUserId) && existingAppointment.Patient?.UserId == currentUserId;
+        bool isAssignedEmployeeUpdate = isEmployee && existingAppointment.Employee?.UserId == currentUserId;
+        if (!isPatientUpdate && !isAssignedEmployeeUpdate)
+        {
+            _logger.LogWarning("[AppointmentController] Forbidden update of appointment {AppointmentId} by user {UserId}", id, currentUserId);
+            return Forbid();
+        }
         
         //Use ToEntity method for consistent mapping
         var updatedAppointment = appointmentDto.ToEntity();
@@ -183,6 +244,17 @@ public class AppointmentController : ControllerBase
         if (appointmentToDelete == null)
         {
             return NotFound("Appointment not found");
+        }
+
+        // Authorization: only the patient owner or the assigned employee can delete
+        var currentUserId = User.FindFirst("sub")?.Value ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        var isEmployee = userRoles.Contains("Employee");
+        var isOwner = !string.IsNullOrEmpty(currentUserId) && (appointmentToDelete.Patient?.UserId == currentUserId || appointmentToDelete.Employee?.UserId == currentUserId);
+        if (!isEmployee && !isOwner)
+        {
+            _logger.LogWarning("[AppointmentController] Forbidden delete of appointment {AppointmentId} by user {UserId}", id, currentUserId);
+            return Forbid();
         }
 
         bool returnOk = await _appointmentRepository.Delete(id);

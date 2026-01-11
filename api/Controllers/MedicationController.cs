@@ -8,30 +8,42 @@ namespace HomeCareApp.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class MedicationController : ControllerBase
     {
         private readonly IMedicationRepository _medicationRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IPatientRepository _patientRepository;
         private readonly ILogger<MedicationController> _logger;
 
-        public MedicationController(IMedicationRepository medicationRepository, INotificationRepository notificationRepository, ILogger<MedicationController> logger)
+        public MedicationController(IMedicationRepository medicationRepository, INotificationRepository notificationRepository, IPatientRepository patientRepository, ILogger<MedicationController> logger)
         {
             _medicationRepository = medicationRepository;
             _notificationRepository = notificationRepository;
+            _patientRepository = patientRepository;
             _logger = logger;
         }
 
         // Get all medications, returns it as a list//
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<MedicationDto>>> GetAll()
         {
             //find medication list
             var medications = await _medicationRepository.GetAllAsync();
-            
-            //Map medication to DTOs
-            var medicationDtos = medications.Select(MedicationDto.FromEntity);
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
+            var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
 
-            _logger.LogInformation("[MedicationController] Retrieved {Count} medications", medications.Count());
+            // Employees see all; patients see only their own
+            var visible = userRoles.Contains("Employee") || string.IsNullOrEmpty(currentUserId)
+                ? medications
+                : medications.Where(m => m.Patient?.UserId == currentUserId);
+
+            //Map medication to DTOs
+            var medicationDtos = visible.Select(MedicationDto.FromEntity);
+
+            _logger.LogInformation("[MedicationController] Retrieved {Count} medications (filtered by role)", medicationDtos.Count());
             return Ok(medicationDtos);
         }
 
@@ -43,8 +55,46 @@ namespace HomeCareApp.Controllers
             _logger.LogInformation("[MedicationController] Getting medications for PatientId: {PatientId}", patientId);
             
             var medications = await _medicationRepository.GetByPatientAsync(patientId);
+            // Ownership/role check: patients can only access their own patientId; employees allowed
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
+            var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+            var isEmployee = userRoles.Contains("Employee");
+            var owned = medications.Any(m => m.Patient?.UserId == currentUserId);
+            if (!isEmployee && !owned)
+            {
+                _logger.LogWarning("[MedicationController] Forbidden access to medications for PatientId {PatientId} by user {UserId}", patientId, currentUserId);
+                return Forbid();
+            }
             
             _logger.LogInformation("[MedicationController] Found {Count} medications for PatientId: {PatientId}", medications.Count(), patientId);
+            return Ok(medications.Select(MedicationDto.FromEntity));
+        }
+
+        // Get current user's medications (patient convenience endpoint)
+        [HttpGet("my")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<MedicationDto>>> GetMyMedications()
+        {
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+                _logger.LogWarning("[MedicationController] Unauthorized access attempt for my medications - User not found");
+                return Unauthorized("User not found");
+            }
+
+            // Resolve patient by current user
+            var allPatients = await _patientRepository.GetAll();
+            var patient = allPatients.FirstOrDefault(p => p.UserId == currentUserId);
+            if (patient == null)
+            {
+                _logger.LogWarning("[MedicationController] Patient record not found for current user {UserId}", currentUserId);
+                return NotFound("Patient record not found");
+            }
+
+            var medications = await _medicationRepository.GetByPatientAsync(patient.PatientId);
+            _logger.LogInformation("[MedicationController] Retrieved {Count} medications for current user {UserId}", medications.Count(), currentUserId);
             return Ok(medications.Select(MedicationDto.FromEntity));
         }
 
@@ -59,6 +109,17 @@ namespace HomeCareApp.Controllers
             {
                 _logger.LogWarning("[MedicationController] Medication not found: {MedicationId}", id);
                 return NotFound();
+            }
+            // Ownership/role check: patients can only access their own; employees allowed
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
+            var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+            var isEmployee = userRoles.Contains("Employee");
+            var isOwner = medication.Patient?.UserId == currentUserId;
+            if (!isEmployee && !isOwner)
+            {
+                _logger.LogWarning("[MedicationController] Forbidden access to medication {MedicationId} by user {UserId}", id, currentUserId);
+                return Forbid();
             }
             
             return Ok(MedicationDto.FromEntity(medication));
@@ -113,11 +174,24 @@ namespace HomeCareApp.Controllers
                     return NotFound("Medication not found");
                 }
 
+                // Authorization: only employee or patient owner can update
+                var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                                   ?? User.FindFirst("sub")?.Value;
+                var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+                var isEmployee = userRoles.Contains("Employee");
+                var isOwner = existingMedication.Patient?.UserId == currentUserId;
+                if (!isEmployee && !isOwner)
+                {
+                    _logger.LogWarning("[MedicationController] Forbidden update of medication {MedicationId} by user {UserId}", id, currentUserId);
+                    return Forbid();
+                }
+
                 //Update medication properties
                 existingMedication.Dosage = medicationDto.Dosage;
                 existingMedication.StartDate = medicationDto.StartDate;
                 existingMedication.EndDate = medicationDto.EndDate;
-                existingMedication.PatientId = medicationDto.PatientId;
+                // Prevent patient from reassigning to another patient
+                existingMedication.PatientId = isEmployee ? medicationDto.PatientId : existingMedication.PatientId;
                 existingMedication.Indication = medicationDto.Indication;
                 existingMedication.MedicineName = medicationDto.MedicationName;
 
@@ -151,6 +225,18 @@ namespace HomeCareApp.Controllers
                 {
                     _logger.LogWarning("[MedicationController] Medication not found for deletion: {MedicationId}", id);
                     return NotFound("Medication not found");
+                }
+
+                // Authorization: only employee or patient owner can delete
+                var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                                   ?? User.FindFirst("sub")?.Value;
+                var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+                var isEmployee = userRoles.Contains("Employee");
+                var isOwner = medicationToDelete.Patient?.UserId == currentUserId;
+                if (!isEmployee && !isOwner)
+                {
+                    _logger.LogWarning("[MedicationController] Forbidden deletion of medication {MedicationId} by user {UserId}", id, currentUserId);
+                    return Forbid();
                 }
 
                 //Create notification before deletion
