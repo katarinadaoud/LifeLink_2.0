@@ -22,8 +22,20 @@ public class PatientController : ControllerBase
 
     //Get all patients and returns as a list//
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<PatientDto>>> GetPatients()
     {
+        // Robust role check supporting various JWT role claim types
+        var roleClaims = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        roleClaims.AddRange(User.FindAll("role").Select(c => c.Value));
+        roleClaims.AddRange(User.FindAll("roles").Select(c => c.Value));
+
+        var isEmployee = roleClaims.Any(r => string.Equals(r, "Employee", StringComparison.OrdinalIgnoreCase));
+        if (!isEmployee)
+        {
+            _logger.LogWarning("[PatientController] Non-employee attempted to list patients");
+            return Forbid();
+        }
         //Find patient list
         var patients = await _patientRepository.GetAll();
         if (patients == null)
@@ -45,6 +57,15 @@ public class PatientController : ControllerBase
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<PatientDto>> GetPatientByUserId(string userId)
     {
+        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                           ?? User.FindFirst("sub")?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        var isEmployee = userRoles.Contains("Employee");
+        if (!isEmployee && currentUserId != userId)
+        {
+            _logger.LogWarning("[PatientController] Forbidden access to patient by UserId {UserId} by user {CurrentUserId}", userId, currentUserId);
+            return Forbid();
+        }
         _logger.LogInformation("[PatientController] Getting patient by UserId: {UserId}", userId);
         var patients = await _patientRepository.GetAll();
         _logger.LogInformation("[PatientController] Total patients in database: {Count}", patients.Count());
@@ -87,6 +108,17 @@ public class PatientController : ControllerBase
         if (existing == null)
         {
             return NotFound("Patient not found.");
+        }
+
+        // Ownership/role check: patients can only update their own record; employees allowed
+        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                           ?? User.FindFirst("sub")?.Value;
+        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
+        var isEmployee = userRoles.Contains("Employee");
+        if (!isEmployee && existing.UserId != currentUserId)
+        {
+            _logger.LogWarning("[PatientController] Forbidden update of patient {PatientId} by user {UserId}", id, currentUserId);
+            return Forbid();
         }
 
         // Check if phone number is already in use by another patient

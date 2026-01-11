@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert, Card } from 'react-bootstrap';
 import { useAuth } from '../auth/AuthContext';
 import './ProfilePage.css';
+import { post as httpPost } from '../shared/http';
 
 interface PatientProfileData { //data structure for patient profile
     fullName: string;
@@ -158,50 +159,15 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
         setIsSubmitting(true);
 
         try {
-            const token = localStorage.getItem('token');
-            
-            // Map frontend fields to server DTO field names
             const serverData = {
                 fullName: patientData.fullName,
                 address: patientData.address,
                 dateOfBirth: patientData.dateOfBirth,
-                phonenumber: patientData.phoneNumber, //frontend: phoneNumber -> server: phonenumber
-                HealthRelated_info: patientData.healthRelatedInfo //frontend: healthRelatedInfo -> server: HealthRelated_info
+                phonenumber: patientData.phoneNumber,
+                HealthRelated_info: patientData.healthRelatedInfo
             };
-            
-            //send POST request to complete patient profile
-            const response = await fetch(`http://localhost:5090/api/Auth/complete-patient-profile`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(serverData)
-            });
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                
-                // Try to parse as JSON validation error
-                try {
-                    const errorData = JSON.parse(errorText);
-                    if (errorData.errors) {
-                        const errorMessages = Object.entries(errorData.errors)
-                            .map(([_, messages]: [string, any]) => 
-                                Array.isArray(messages) ? messages.join(', ') : messages
-                            )
-                            .join('. ');
-                        throw new Error(errorMessages);
-                    } else if (errorData.title) {
-                        throw new Error(errorData.title);
-                    }
-                } catch (parseError) {
-                    // If JSON parsing fails, use raw error text
-                }
-                
-                throw new Error(errorText || 'Failed to create profile');
-            }
-
+            await httpPost('/api/Auth/complete-patient-profile', serverData);
             setSuccess('Patient profile created successfully!');
             setTimeout(() => navigate('/appointments'), 2000);
         } catch (err) {
@@ -236,21 +202,7 @@ const ProfileSetupPage: React.FC = () => { //main functional component for profi
         setIsSubmitting(true);
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5090/api/Auth/complete-employee-profile`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(employeeData)
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Failed to create profile');
-            }
-
+            await httpPost('/api/Auth/complete-employee-profile', employeeData);
             setSuccess('Employee profile created successfully!');
             setTimeout(() => navigate('/appointments'), 2000);
         } catch (err) {
