@@ -100,13 +100,21 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policyBuilder =>
     {
-        var devOrigins = new[] { "http://localhost:3000", "http://localhost:4000", "http://localhost:5173", "http://localhost:5174" };
-        var prodOriginsCsv = builder.Configuration["Cors:AllowedOrigins"];
-        var prodOrigins = string.IsNullOrWhiteSpace(prodOriginsCsv)
+        // Read allowed origins from configuration. In Development, fall back to common localhost ports if not configured.
+        var originsCsv = builder.Configuration["Cors:AllowedOrigins"];
+        var configuredOrigins = string.IsNullOrWhiteSpace(originsCsv)
             ? Array.Empty<string>()
-            : prodOriginsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            : originsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        var originsToUse = builder.Environment.IsDevelopment() ? devOrigins : prodOrigins;
+        var defaultDevOrigins = new[]
+        {
+            "http://localhost:3000",
+            "http://localhost:4000",
+            "http://localhost:5173",
+            "http://localhost:5174"
+        };
+
+        var originsToUse = configuredOrigins;
 
         policyBuilder
             .WithOrigins(originsToUse)
