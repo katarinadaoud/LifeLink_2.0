@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using HomeCareApp.Repositories.Interfaces;
 using HomeCareApp.Repositories.Implementations;
 using System.Security.Claims;
+using Microsoft.AspNetCore.HttpOverrides;
 
 // Create the application builder (entry point for configuring services and middleware)
 var builder = WebApplication.CreateBuilder(args);
@@ -84,18 +85,22 @@ builder.Services.AddIdentity<AuthUser, IdentityRole>()
 // Configure CORS so the React frontends can talk to this API during development
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
+    // Development policy for local frontends
+    options.AddPolicy("CorsPolicy", policy =>
     {
-        builder
-            // Whitelist frontend origins
+        policy
             .WithOrigins("http://localhost:3000", "http://localhost:4000", "http://localhost:5173", "http://localhost:5174")
-            // Explicitly allow only the methods your API exposes
             .WithMethods("GET", "POST", "PUT", "DELETE")
-            // Explicitly allow only necessary headers
-            .WithHeaders("Content-Type", "Authorization")
-            // Allow cookies/auth headers if you later switch to cookies
-            .AllowCredentials();
+            .WithHeaders("Content-Type", "Authorization");
+            // No AllowCredentials since we use JWT tokens in Authorization header
     });
+
+    // Production policy for Vercel frontend
+    var allowedOrigins = new[] { "https://life-link-2-0.vercel.app" };
+    options.AddPolicy("Vercel", policy =>
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod());
 });
 
 // Register repository services (dependency injection for data access layer)
@@ -154,6 +159,15 @@ builder.Logging.AddSerilog(logger);
 // Build the configured application (services are now ready and pipeline can be set up)
 var app = builder.Build();
 
+// Ensure correct scheme/host behind proxies like Render
+var forwarded = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwarded.KnownNetworks.Clear();
+forwarded.KnownProxies.Clear();
+app.UseForwardedHeaders(forwarded);
+
 // Development-only configuration: migrations, seeding and Swagger UI
 if (app.Environment.IsDevelopment())
 {
@@ -188,7 +202,14 @@ app.UseStaticFiles();
 
 // Set up the HTTP request pipeline: routing, CORS, authentication, authorization, controllers
 app.UseRouting();
-app.UseCors("CorsPolicy");
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors("CorsPolicy");
+}
+else
+{
+    app.UseCors("Vercel");
+}
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
