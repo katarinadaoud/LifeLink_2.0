@@ -33,9 +33,7 @@ const handleResponse = async (response: Response) => {
 
 // Get appointment list
 export const fetchAppointments = async () => {
-  const response = await fetch(`${API_URL}/api/Appointment`, {
-    headers: getAuthHeaders(),
-  });
+  const response = await fetch(`${API_URL}/api/Appointment`);
   return handleResponse(response);
 };
 
@@ -48,9 +46,7 @@ export const fetchAppointmentsByPatientId = async (patientId: number) => {
 };
 // Get appointment by id
 export const fetchAppointmentById = async (appointmentId: string) => {
-  const response = await fetch(`${API_URL}/api/Appointment/${appointmentId}`, {
-    headers: getAuthHeaders(),
-  });
+  const response = await fetch(`${API_URL}/api/Appointment/${appointmentId}`);
   return handleResponse(response);
 };
 // Post create appointment

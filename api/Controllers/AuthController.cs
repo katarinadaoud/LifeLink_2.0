@@ -8,7 +8,6 @@ using HomeCareApp.Repositories.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.RateLimiting;
 
 namespace HomeCareApp.Controllers
 {
@@ -38,7 +37,6 @@ namespace HomeCareApp.Controllers
 
         // Creates a user with role Patient or Employee//
         [HttpPost("register")]
-        [EnableRateLimiting("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             // Validate role
@@ -93,30 +91,19 @@ namespace HomeCareApp.Controllers
 
         //Method for user login//
         [HttpPost("login")]
-        [EnableRateLimiting("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             //Check if the user exists
             var user = await _userManager.FindByNameAsync(loginDto.Username);
 
-            if (user != null)
+            // Validate the password
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                // Use Identity lockout on failure without issuing cookies
-                var signInResult = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: true);
-                if (signInResult.Succeeded)
-                {
-                    _logger.LogInformation("[AuthAPIController] user authorised for {@username}", loginDto.Username);
-                    var token = await GenerateJwtToken(user);
-                    return Ok(new { Token = token });
-                }
-
-                if (signInResult.IsLockedOut)
-                {
-                    _logger.LogWarning("[AuthAPIController] account locked out for {@username}", loginDto.Username);
-                    return Unauthorized("Account temporarily locked. Please try again later.");
-                }
+                _logger.LogInformation("[AuthAPIController] user authorised for {@username}", loginDto.Username);
+                var token = await GenerateJwtToken(user);
+                return Ok(new { Token = token });
             }
-
+            
             _logger.LogWarning("[AuthAPIController] user not authorised for {@username}", loginDto.Username);
             return Unauthorized();
         }
@@ -287,7 +274,11 @@ namespace HomeCareApp.Controllers
                           User.FindFirst("username")?.Value ??
                           User.Identity?.Name;
             
-            // Avoid dumping claims to logs to reduce PII exposure
+            //Log all available claims for debugging
+            var allClaims = User.Claims.Select(c => $"{c.Type}={c.Value}").ToArray();
+            _logger.LogInformation("[AuthAPIController] All Claims: {Claims}", string.Join(", ", allClaims));
+            _logger.LogInformation("[AuthAPIController] All NameIdentifier claims: {NameIdentifiers}, nameid: {NameId}, sub: {Sub}, userid: {UserId}, username: {Username}", 
+                string.Join(", ", allNameIdentifierClaims), userIdFromNameId, userIdFromSub, userIdFromUserid, username);
             
             AuthUser? user = null;
             string? actualUserId = null;
@@ -445,10 +436,11 @@ namespace HomeCareApp.Controllers
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30), // shorter token lifetime
+                expires: DateTime.Now.AddMinutes(120), //token expiration time set to 120 minutes
                 signingCredentials: credentials); //signing the token with the specified credentials
 
-            _logger.LogInformation("[AuthAPIController] JWT token created for {@username}", user.UserName);
+            _logger.LogInformation("[AuthAPIController] JWT token created for {@username} with roles {@roles}", user.UserName, string.Join(", ", roles));
+            _logger.LogInformation("[AuthAPIController] JWT token claims: {Claims}", string.Join(", ", claims.Select(c => $"{c.Type}={c.Value}")));
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

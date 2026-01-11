@@ -7,8 +7,6 @@
 bin/
 obj/
 *.user
-APILogs/
-api/APILogs/
 
 # Node
 node_modules/
@@ -23,4 +21,3 @@ dist/
 *.swp
 .vercel
 .env*.local
-*.log

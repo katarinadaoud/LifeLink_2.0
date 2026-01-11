@@ -44,8 +44,10 @@ const LoginPage: React.FC = () => {
                     } else if (profileResponse.ok) {
                         const profileData = await profileResponse.json();
                         // Check if profile has minimal required data
-                        const isProfileComplete = !!profileData.fullName && !!profileData.address;
-
+                        const isProfileComplete = profileData.fullName && 
+                                                profileData.fullName !== user.username &&
+                                                profileData.address;
+                        
                         if (!isProfileComplete) {
                             navigate('/profile-setup');
                             return;

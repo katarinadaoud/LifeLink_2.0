@@ -26,7 +26,6 @@ public class EmployeeController : ControllerBase
 
     //Get all employees and returns as a list//
     [HttpGet]
-    [Authorize]
     public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees()
     {
         //Find employee list
@@ -89,17 +88,6 @@ public class EmployeeController : ControllerBase
         {
             _logger.LogWarning("[EmployeeController] Employee with ID {EmployeeId} not found for update", id);
             return NotFound();
-        }
-
-        // Ownership/role check: employees can update; otherwise only owner can update own record
-        var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
-                           ?? User.FindFirst("sub")?.Value;
-        var userRoles = User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).ToList();
-        var isEmployee = userRoles.Contains("Employee");
-        if (!isEmployee && existingEmployee.UserId != currentUserId)
-        {
-            _logger.LogWarning("[EmployeeController] Forbidden update of employee {EmployeeId} by user {UserId}", id, currentUserId);
-            return Forbid();
         }
 
         if (!ModelState.IsValid) //Validate the incoming model
