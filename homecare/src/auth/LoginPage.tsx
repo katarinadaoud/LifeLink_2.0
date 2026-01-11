@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import './Auth.css';
+import { get as httpGet } from '../shared/http';
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -18,7 +19,6 @@ const LoginPage: React.FC = () => {
             // Attempt to log in and get user details
             const user = await login({ username, password });
             //Determine which profile to check based on role
-            const token = localStorage.getItem('token');
             let endpoint = '';
             
             if (user.role === 'Patient') {
@@ -29,29 +29,13 @@ const LoginPage: React.FC = () => {
             
             if (endpoint) {
                 try {
-                    //Check if user already has a profile
-                    const profileResponse = await fetch(`http://localhost:5090${endpoint}`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    if (profileResponse.status === 404) {
-                        // Profile not complete, redirect to profile setup
+                    //Check if user already has a profile using shared HTTP wrapper
+                    const profileData = await httpGet(endpoint) as any;
+                    const isProfileComplete = !!profileData.fullName && !!profileData.address;
+
+                    if (!isProfileComplete) {
                         navigate('/profile-setup');
                         return;
-                    } else if (profileResponse.ok) {
-                        const profileData = await profileResponse.json();
-                        // Check if profile has minimal required data
-                        const isProfileComplete = profileData.fullName && 
-                                                profileData.fullName !== user.username &&
-                                                profileData.address;
-                        
-                        if (!isProfileComplete) {
-                            navigate('/profile-setup');
-                            return;
-                        }
                     }
                 } catch (profileErr) {
                     console.error('Error checking profile:', profileErr);
