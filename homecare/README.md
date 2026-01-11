@@ -76,14 +76,15 @@ Start the backend:
 cd api
 dotnet watch run
 
-backend runs at: https://localhost:7174
-                 http://localhost:5090"
+Backend base-URL konfigureres via `VITE_API_URL` i miljøfiler.
+For lokal utvikling: opprett/bruk [homecare/.env.development](homecare/.env.development) med
+`VITE_API_URL=http://localhost:5090`.
 
 Start the frontend:
 cd homecare
 npm run dev
 
-frontend runs at:  http://localhost:5173/
+Frontend nås vanligvis på `http://localhost:5173/`. Klienten bruker `VITE_API_URL` for alle API-kall.
 
 # UNIT TESTING (Backend)
 

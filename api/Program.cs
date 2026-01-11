@@ -86,10 +86,24 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
     {
-        builder
-            // Whitelist frontend origins
-            .WithOrigins("http://localhost:3000", "http://localhost:4000", "http://localhost:5173", "http://localhost:5174")
-            // Explicitly allow only the methods your API exposes
+        // Read allowed origins from configuration. In Development, fall back to common localhost ports if not configured.
+        var originsCsv = builder.Configuration["Cors:AllowedOrigins"];
+        var configuredOrigins = string.IsNullOrWhiteSpace(originsCsv)
+            ? Array.Empty<string>()
+            : originsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        var defaultDevOrigins = new[]
+        {
+            "http://localhost:3000",
+            "http://localhost:4000",
+            "http://localhost:5173",
+            "http://localhost:5174"
+        };
+
+        var originsToUse = configuredOrigins;
+
+        policyBuilder
+            .WithOrigins(originsToUse)
             .WithMethods("GET", "POST", "PUT", "DELETE")
             // Explicitly allow only necessary headers
             .WithHeaders("Content-Type", "Authorization")
