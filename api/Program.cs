@@ -102,7 +102,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("CorsPolicy", policyBuilder =>
     {
         // Read allowed origins from configuration.
+        // Support both hierarchical config (Cors:AllowedOrigins) and flat env var (CORS_ALLOWED_ORIGINS).
         var originsCsv = builder.Configuration["Cors:AllowedOrigins"];
+        if (string.IsNullOrWhiteSpace(originsCsv) || originsCsv.Contains("${"))
+        {
+            originsCsv = builder.Configuration["CORS_ALLOWED_ORIGINS"];
+        }
         var configuredOrigins = string.IsNullOrWhiteSpace(originsCsv)
             ? Array.Empty<string>()
             : originsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
