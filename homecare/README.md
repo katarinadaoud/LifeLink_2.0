@@ -86,6 +86,11 @@ npm run dev
 
 Frontend nås vanligvis på `http://localhost:5173/`. Klienten bruker `VITE_API_URL` for alle API-kall.
 
+## Deployment (Vercel)
+- Set environment variable `VITE_API_URL` in your Vercel project to the full API base URL (e.g. `https://your-api.example.com`).
+- Trigger a redeploy so the frontend picks up the variable at build time.
+- No code changes are required between environments; the app will use the configured base URL.
+
 # UNIT TESTING (Backend)
 
 The project includes a dedicated test project: /Homecare.Api.Tests

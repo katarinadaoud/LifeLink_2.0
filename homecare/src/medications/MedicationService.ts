@@ -1,8 +1,5 @@
 import type { Medication } from "../types/medication";
-
-
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_BASE_URL } from "../shared/apiBase";
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token');
@@ -35,7 +32,7 @@ const handleResponse = async (response: Response) => {
 
 // employee: get all medications
 export async function getAllMedications(): Promise<Medication[]> {
-  const response = await fetch(`${API_URL}/api/medication`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -44,7 +41,7 @@ export async function getAllMedications(): Promise<Medication[]> {
 
 // Get medications by patientID
 export async function getMedicationsByPatientId(patientId: number): Promise<Medication[]> {
-  const response = await fetch(`${API_URL}/api/medication/patient/${patientId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication/patient/${patientId}`, {
     headers: getAuthHeaders(),
   });
   return handleResponse(response);
@@ -52,7 +49,7 @@ export async function getMedicationsByPatientId(patientId: number): Promise<Medi
 
 // Patient: get my medications. d
 export async function getMyMedications(): Promise<Medication[]> {
-  const response = await fetch(`${API_URL}/api/medication/my`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication/my`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -61,7 +58,7 @@ export async function getMyMedications(): Promise<Medication[]> {
 
 // get medication by ID 
 export async function getMedication(medicationId: string): Promise<Medication> {
-  const response = await fetch(`${API_URL}/api/medication/${medicationId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication/${medicationId}`, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -70,7 +67,7 @@ export async function getMedication(medicationId: string): Promise<Medication> {
 
 // create new medication
 export async function createMedication(data: Partial<Medication>): Promise<Medication> {
-  const response = await fetch(`${API_URL}/api/medication`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication`, {
     method: "POST",
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -83,7 +80,7 @@ export async function updateMedication(
   medicationId: number,
   data: Partial<Medication>
 ): Promise<void> {
-  const response = await fetch(`${API_URL}/api/medication/${medicationId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication/${medicationId}`, {
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify(data),
@@ -93,7 +90,7 @@ export async function updateMedication(
 
 // delete medication by ID
 export async function deleteMedication(medicationId: number): Promise<void> {
-  const response = await fetch(`${API_URL}/api/medication/${medicationId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/medication/${medicationId}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });
@@ -102,7 +99,7 @@ export async function deleteMedication(medicationId: number): Promise<void> {
 
 // Get patient by userId (for current user)
 export async function fetchPatientByUserId(userId: string) {
-  const response = await fetch(`${API_URL}/api/Patient/user/${userId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/Patient/user/${userId}`, {
     headers: getAuthHeaders(),
   });
   return handleResponse(response);
@@ -110,7 +107,7 @@ export async function fetchPatientByUserId(userId: string) {
 
 // Get all patients
 export async function fetchPatients() {
-  const response = await fetch(`${API_URL}/api/Patient`, {
+  const response = await fetch(`${API_BASE_URL}/api/Patient`, {
     headers: getAuthHeaders(),
   });
   return handleResponse(response);
