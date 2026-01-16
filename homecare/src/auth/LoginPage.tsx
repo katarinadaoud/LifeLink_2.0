@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Form, Button, Container, Alert } from 'react-bootstrap';
 import './Auth.css';
+import { API_BASE_URL } from '../shared/apiBase';
 
 const LoginPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -28,9 +29,8 @@ const LoginPage: React.FC = () => {
             
             if (endpoint) {
                 try {
-                    //Check if user already has a profile (use env base URL)
-                    const baseUrl = import.meta.env.VITE_API_URL;
-                    const profileResponse = await fetch(`${baseUrl}${endpoint}`, {
+                    // Check if user already has a profile using centralized base URL
+                    const profileResponse = await fetch(`${API_BASE_URL}${endpoint}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'

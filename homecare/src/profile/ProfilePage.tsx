@@ -4,8 +4,7 @@ import '../appointments/AppointmentCalendar.css';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_BASE_URL } from '../shared/apiBase';
 
 const ProfilePage: React.FC = () => { 
     //component state management, handles variables that change over time
@@ -119,7 +118,7 @@ const ProfilePage: React.FC = () => {
             
             const token = localStorage.getItem('token');
             
-            const response = await fetch(`${API_URL}${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -235,7 +234,7 @@ const ProfilePage: React.FC = () => {
             };
 
             console.log('Profile update payload', payload);
-            const response = await fetch(`${API_URL}${endpoint}`, {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -287,7 +286,7 @@ const ProfilePage: React.FC = () => {
                 
                 if (endpoint) {
                     const token = localStorage.getItem('token');
-                    await fetch(`${API_URL}${endpoint}`, {
+                    await fetch(`${API_BASE_URL}${endpoint}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,

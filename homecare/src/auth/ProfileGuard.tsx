@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
+import { API_BASE_URL } from '../shared/apiBase';
 
 interface ProfileGuardProps { // Props for ProfileGuard component
     children: React.ReactNode;
@@ -33,12 +34,12 @@ const ProfileGuard: React.FC<ProfileGuardProps> = ({ children }) => {
                 // Determine which endpoint to check: try Patient then Employee
                 const userId = user.sub || user.nameid;
                 if (userId) {
-                    const patientResp = await fetch(`${import.meta.env.VITE_API_URL}/api/patient/user/${userId}`, {
+                    const patientResp = await fetch(`${API_BASE_URL}/api/patient/user/${userId}`, {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });
                     if (patientResp.ok) profileExists = true;
-                    const employeeResp = await fetch(`${import.meta.env.VITE_API_URL}/api/employee/user/${userId}`, {
+                    const employeeResp = await fetch(`${API_BASE_URL}/api/employee/user/${userId}`, {
                         method: 'GET',
                         headers: { 'Authorization': `Bearer ${token}` }
                     });

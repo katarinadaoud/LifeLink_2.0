@@ -1,6 +1,5 @@
 import { getToken, clearToken } from '../auth/tokenStore';
-
-const API_URL = import.meta.env.VITE_API_URL as string;
+import { buildApiUrl } from './apiBase';
 
 export class HttpError extends Error {
   status: number;
@@ -44,7 +43,7 @@ const handleResponse = async (res: Response) => {
 };
 
 const request = async (path: string, init?: RequestInit) => {
-  const url = `${API_URL}${path.startsWith('/') ? '' : '/'}${path}`;
+  const url = buildApiUrl(path);
   const res = await fetch(url, {
     ...init,
     headers: buildHeaders(init?.headers),

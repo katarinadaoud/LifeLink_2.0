@@ -1,10 +1,9 @@
 import type { LoginDto, RegisterDto } from '../types/auth';
-
-const API_URL = import.meta.env.VITE_API_URL; //Base URL from environment variables
+import { API_BASE_URL } from '../shared/apiBase';
 
 //Send login request and return JWT token
 export const login = async (credentials: LoginDto): Promise<{ token: string }> => {
-    const response = await fetch(`${API_URL}/api/Auth/login`, {
+    const response = await fetch(`${API_BASE_URL}/api/Auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -32,7 +31,7 @@ export const login = async (credentials: LoginDto): Promise<{ token: string }> =
 
 //Register new user
 export const register = async (userData: RegisterDto): Promise<any> => {
-    const response = await fetch(`${API_URL}/api/Auth/register`, {
+    const response = await fetch(`${API_BASE_URL}/api/Auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +61,7 @@ export const createProfile = async (): Promise<{ message: string }> => {
         throw new Error('No authentication token found');
     }
 
-    const response = await fetch(`${API_URL}/api/Auth/create-profile`, {
+    const response = await fetch(`${API_BASE_URL}/api/Auth/create-profile`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -92,7 +91,7 @@ export const deleteAccount = async (): Promise<{ message: string }> => {
         throw new Error('No authentication token found');
     }
 
-    const response = await fetch(`${API_URL}/api/Auth/delete-account`, {
+    const response = await fetch(`${API_BASE_URL}/api/Auth/delete-account`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`,
