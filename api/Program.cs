@@ -101,35 +101,34 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policyBuilder =>
     {
-        // Read allowed origins from configuration. In Development, fall back to common localhost ports if not configured.
+        // Read allowed origins from configuration.
         var originsCsv = builder.Configuration["Cors:AllowedOrigins"];
         var configuredOrigins = string.IsNullOrWhiteSpace(originsCsv)
             ? Array.Empty<string>()
             : originsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        var defaultDevOrigins = new[]
-        {
-            "http://localhost:3000",
-            "http://localhost:4000",
-            "http://localhost:5173",
-            "http://localhost:5174"
-        };
-
-        var originsToUse = configuredOrigins;
-
+        // Allow either explicitly configured origins, or any *.vercel.app host when none provided.
         policyBuilder
-            .WithOrigins(originsToUse)
-            .WithMethods("GET", "POST", "PUT", "DELETE")
-            .WithHeaders("Content-Type", "Authorization")
+            .SetIsOriginAllowed(origin =>
+            {
+                try
+                {
+                    var o = origin?.Trim();
+                    if (string.IsNullOrEmpty(o)) return false;
+                    if (configuredOrigins.Length > 0)
+                        return configuredOrigins.Any(co => string.Equals(co, o, StringComparison.OrdinalIgnoreCase));
+                    var host = new Uri(o).Host;
+                    return host.EndsWith(".vercel.app", StringComparison.OrdinalIgnoreCase);
+                }
+                catch
+                {
+                    return false;
+                }
+            })
+            .AllowAnyHeader()   // include all requested headers in preflight
+            .AllowAnyMethod()   // includes OPTIONS for preflight
             .AllowCredentials();
     });
-
-    // Production policy for Vercel frontend
-    var allowedOrigins = new[] { "https://life-link-2-0.vercel.app" };
-    options.AddPolicy("Vercel", policy =>
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod());
 });
 
 // Register repository services (dependency injection for data access layer)
